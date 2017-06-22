@@ -1,4 +1,4 @@
-package com.ray.stormragemq.netty;
+package com.ray.stormrage.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -12,6 +12,7 @@ import java.net.InetSocketAddress;
 
 /**
  * Created by Ray on 2017/6/22.
+ * 用来开启Netty服务
  */
 @Component
 public class TCPServer {
@@ -26,6 +27,7 @@ public class TCPServer {
         this.serverBootstrap = serverBootstrap;
         this.tcpPort = tcpPort;
     }
+
 
 
     private Channel serverChannel;
