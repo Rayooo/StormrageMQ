@@ -22,8 +22,8 @@ public class MasterClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-//        System.out.println("----Ray----");
-//        ctx.writeAndFlush(Unpooled.copiedBuffer("Ray", CharsetUtil.UTF_8));
+        System.out.println("----Ray----");
+        ctx.writeAndFlush(Unpooled.copiedBuffer("Ray", CharsetUtil.UTF_8));
     }
 
     @Override

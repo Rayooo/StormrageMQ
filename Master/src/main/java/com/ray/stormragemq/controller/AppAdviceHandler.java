@@ -2,6 +2,7 @@ package com.ray.stormragemq.controller;
 
 import com.ray.stormragemq.util.BaseResponse;
 import com.ray.stormragemq.util.BaseResponseCode;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,10 +22,15 @@ public class AppAdviceHandler {
 
     @ExceptionHandler({Exception.class})
     @ResponseBody
-    public BaseResponse<?> hanleException(Exception e, HttpServletRequest request){
+    public BaseResponse<?> handleException(Exception e, HttpServletRequest request){
         BaseResponse<?> response = new BaseResponse<>();
         response.setCode(BaseResponseCode.ERROR.getCode());
-        response.setMessage(BaseResponseCode.ERROR.getDescribe());
+        if(StringUtils.isNoneEmpty(e.getMessage())){
+            response.setMessage(e.getMessage());
+        }
+        else {
+            response.setMessage(BaseResponseCode.ERROR.getDescribe());
+        }
         return response;
     }
 

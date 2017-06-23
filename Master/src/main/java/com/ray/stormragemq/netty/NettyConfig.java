@@ -7,14 +7,17 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Ray on 2017/6/22.
@@ -23,10 +26,9 @@ import java.util.Map;
 
 @Configuration
 @PropertySource("classpath:netty.properties")
+@Component
+@Qualifier("nettyConfig")
 public class NettyConfig {
-
-    @Value("${tcp.port}")
-    private int port;
 
     @Value("${boss.thread.count}")
     private int bossCount;
@@ -36,9 +38,6 @@ public class NettyConfig {
 
     @Value("${so.backlog}")
     private int backlog;
-
-    @Value("${tcp.remoteHost}")
-    private String remoteHost;
 
     private final MasterChannelInitializer masterChannelInitializer;
 
@@ -62,22 +61,22 @@ public class NettyConfig {
         return options;
     }
 
-    //配置bootstrap
-    @Bean(name = "bootstrap")
-    public Bootstrap bootstrap(){
+
+    //配置bootstrap，输入远程ip和端口
+    public Bootstrap bootstrap(String remoteHost, int port){
         Bootstrap b = new Bootstrap();
         b.group(group())
                 .channel(NioSocketChannel.class)
-                .remoteAddress(tcpAddress())
+                .remoteAddress( new InetSocketAddress(remoteHost, port))
                 .handler(masterChannelInitializer);
 
         return b;
     }
 
-    //配置端口
-    @Bean(name = "tcpSocketAddress")
-    public InetSocketAddress tcpAddress(){
-        return new InetSocketAddress(remoteHost, port);
+
+    @Bean(name = "mqMap")
+    public ConcurrentHashMap<String, TCPClient> mqMap(){
+        return new ConcurrentHashMap<>();
     }
 
 
