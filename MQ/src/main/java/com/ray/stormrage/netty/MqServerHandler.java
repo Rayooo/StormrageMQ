@@ -28,13 +28,13 @@ public class MqServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf in = (ByteBuf) msg;
         System.out.println("Server received:" + in.toString(CharsetUtil.UTF_8));
-        ctx.write(in + "哈哈哈哈哈哈");          //将接收到的消息写给发送者，不冲刷出战消息
+        ctx.writeAndFlush(Unpooled.copiedBuffer(in.toString(CharsetUtil.UTF_8) + "哈哈哈哈哈哈", CharsetUtil.UTF_8));          //将接收到的消息写给发送者，不冲刷出战消息
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         //通知ChannelInboundHandler 最后一次对channelRead()的调用是当前批量读取中的最后一条消息
-        ctx.writeAndFlush(Unpooled.copiedBuffer("Ray22222222", CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("channelReadComplete", CharsetUtil.UTF_8));
     }
 
 }

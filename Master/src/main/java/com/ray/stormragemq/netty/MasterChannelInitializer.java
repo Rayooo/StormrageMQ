@@ -2,9 +2,12 @@ package com.ray.stormragemq.netty;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Ray on 2017/6/22.
@@ -25,7 +28,7 @@ public class MasterChannelInitializer extends ChannelInitializer<SocketChannel> 
     protected void initChannel(SocketChannel ch) throws Exception {
 
         ch.pipeline().addLast(masterClientHandler);
-
+        //addLast("ping", new IdleStateHandler(5, 5, 5, TimeUnit.SECONDS))          心跳只要加上这句话
     }
 
 
