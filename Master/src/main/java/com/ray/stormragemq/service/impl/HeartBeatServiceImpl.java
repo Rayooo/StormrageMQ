@@ -43,9 +43,11 @@ public class HeartBeatServiceImpl implements HeartBeatService {
                     }
                 }
                 if(!isConnected){
+                    tcpClient.stop();
                     mqMap.remove(s);
                 }
             } catch (Exception e) {
+                tcpClient.stop();
                 mqMap.remove(s);
             }
         });

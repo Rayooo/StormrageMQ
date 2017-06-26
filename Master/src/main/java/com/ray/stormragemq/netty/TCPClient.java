@@ -18,13 +18,17 @@ public class TCPClient {
         this.bootstrap = bootstrap;
     }
 
-
     private SocketChannel socketChannel;
+
+    private String address;
 
     public void start() throws InterruptedException {
         ChannelFuture future = bootstrap.connect().sync();
         if (future.isSuccess()) {
             socketChannel = (SocketChannel)future.channel();
+            address = future.channel().remoteAddress().toString();
+            address = address.replaceAll("/", "");
+            System.out.println(address);
         }
     }
 
@@ -35,5 +39,9 @@ public class TCPClient {
 
     public SocketChannel getSocketChannel() {
         return socketChannel;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }

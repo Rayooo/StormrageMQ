@@ -74,10 +74,7 @@ public class NettyConfig {
     }
 
 
-    @Bean(name = "mqMap")
-    public ConcurrentHashMap<String, TCPClient> mqMap(){
-        return new ConcurrentHashMap<>();
-    }
+
 
 
 
