@@ -27,7 +27,6 @@ public class MasterBeans {
     @Bean(name = "mqNameMap")
     public Map<String, Set<String>> mqNameMap() {
         Map<String, Set<String>> map = new ConcurrentHashMap<>();
-        map.put(null, new ConcurrentSet<>());
         return map;
     }
 }
