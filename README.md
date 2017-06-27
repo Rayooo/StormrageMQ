@@ -9,6 +9,8 @@ redis端口号6379
 
 mysql端口号3306
 
+前端Vue + Element UI
+
 ## 流程
 
 1.启动master节点

@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import HomePage from '@/components/HomePage'
 import Ray from '@/components/Ray'
 import Another from '@/components/Another'
+import PageNotFound from '@/components/PageNotFound'
 
 Vue.use(Router);
 
@@ -10,8 +11,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      name: 'HomePage',
+      component: HomePage
     },
     {
       path: '/ray',
@@ -22,6 +23,8 @@ export default new Router({
       path: '/another',
       name: "hhh",
       component: Another
-    }
+    },
+
+    { path: "*", component: PageNotFound }
   ]
 })

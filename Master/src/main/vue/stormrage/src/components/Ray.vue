@@ -1,6 +1,7 @@
 <template>
   <div>
     {{aa}}
+    <el-button type="primary">按钮</el-button>
   </div>
 </template>
 
