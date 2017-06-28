@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <div class="line"></div>
-    <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect" v-show="isShowMenuBar">
       <el-menu-item index="1">处理中心</el-menu-item>
       <el-submenu index="2">
         <template slot="title">我的工作台</template>
@@ -11,17 +10,24 @@
       </el-submenu>
       <el-menu-item index="3">订单管理</el-menu-item>
     </el-menu>
+
     <router-view></router-view>
+
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'app',
   data() {
     return {
+      isShowMenuBar: true,
       activeIndex2: '1'
     };
+  },
+  mounted:function(){
+    this.isShowMenuBar = this.$route.path !== "/";
   },
   methods: {
     handleSelect(key, keyPath) {

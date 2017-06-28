@@ -2,17 +2,58 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
 import ElementUI from 'element-ui'
+import Router from 'vue-router'
+import PageNotFound from '@/components/PageNotFound'
 
 Vue.config.productionTip = false;
 
+Vue.use(Router);
 Vue.use(ElementUI);
 
-/* eslint-disable no-new */
-new Vue({
+function view(name) {
+  return function(resolve) {
+    require(['@/components/' + name + '.vue'], resolve);
+  }
+}
+
+//路由
+const router = new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'HomePage',
+      component: view("HomePage")
+    },
+    {
+      path: '/ray',
+      name: 'myRay',
+      component: view("Ray")
+    },
+    {
+      path: '/another',
+      name: "hhh",
+      component: view("Another")
+    },
+
+    { path: "*", component: PageNotFound }
+  ]
+});
+
+
+
+const vm = new Vue({
   el: '#app',
   router,
-  template: '<App/>',
-  components: { App }
+  template: '<App ref="app"/>',
+  components: {App}
 });
+
+
+router.beforeEach((to, from, next) => {
+  vm.$refs.app.isShowMenuBar = to.path !== "/";
+  next();
+});
+
+
+export {router, vm};
