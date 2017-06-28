@@ -5,8 +5,4 @@ package com.ray.stormragemq.service;
  */
 public interface MQService {
 
-    String getMqServerName(String mqName);
-
-
-
 }

@@ -22,16 +22,5 @@ public class MQServiceImpl implements MQService {
     }
 
 
-    @Override
-    public String getMqServerName(String mqName) {
-        for(Map.Entry<String, Set<String>> entry : mqNameMap.entrySet()){
-            if(entry.getValue().contains(mqName)){
-                return entry.getKey();
-            }
-        }
-        return null;        //默认值
-    }
-
-
 
 }

@@ -21,18 +21,18 @@ import java.util.concurrent.ConcurrentHashMap;
 @EnableScheduling
 public class HeartBeatServiceImpl implements HeartBeatService {
 
-    private final ConcurrentHashMap<String, TCPClient> mqMap;
+    private final ConcurrentHashMap<String, TCPClient> customersMap;
 
     @Autowired
-    public HeartBeatServiceImpl(@Qualifier("mqMap") ConcurrentHashMap<String, TCPClient> mqMap) {
-        this.mqMap = mqMap;
+    public HeartBeatServiceImpl(@Qualifier("customersMap") ConcurrentHashMap<String, TCPClient> customersMap) {
+        this.customersMap = customersMap;
     }
 
     //发送心跳
     @Scheduled(cron = "*/10 * * * * *")
     @Override
     public void sendHeartBeat() {
-        mqMap.forEach((s, tcpClient) -> {
+        customersMap.forEach((s, tcpClient) -> {
             try {
                 boolean isConnected = false;
                 for (int i = 0;i < 3; ++i){
@@ -44,11 +44,11 @@ public class HeartBeatServiceImpl implements HeartBeatService {
                 }
                 if(!isConnected){
                     tcpClient.stop();
-                    mqMap.remove(s);
+                    customersMap.remove(s);
                 }
             } catch (Exception e) {
                 tcpClient.stop();
-                mqMap.remove(s);
+                customersMap.remove(s);
             }
         });
     }

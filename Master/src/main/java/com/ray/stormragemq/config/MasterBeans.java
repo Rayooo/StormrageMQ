@@ -17,9 +17,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Configuration
 public class MasterBeans {
 
-    //存放mq服务器名称与Netty Channel的对应关系
-    @Bean(name = "mqMap")
-    public ConcurrentHashMap<String, TCPClient> mqMap(){
+    //存放消费者服务器名称与Netty Channel的对应关系
+    @Bean(name = "customersMap")
+    public ConcurrentHashMap<String, TCPClient> customersMap(){
         return new ConcurrentHashMap<>();
     }
 

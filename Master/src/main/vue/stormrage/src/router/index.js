@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HomePage from '@/components/HomePage'
-import Ray from '@/components/Ray'
-import Another from '@/components/Another'
 import PageNotFound from '@/components/PageNotFound'
+
+function view(name) {
+  return function(resolve) {
+    require(['@/components/' + name + '.vue'], resolve);
+  }
+}
 
 Vue.use(Router);
 
@@ -12,17 +15,17 @@ export default new Router({
     {
       path: '/',
       name: 'HomePage',
-      component: HomePage
+      component: view("HomePage")
     },
     {
       path: '/ray',
       name: 'myRay',
-      component: Ray
+      component: view("Ray")
     },
     {
       path: '/another',
       name: "hhh",
-      component: Another
+      component: view("Another")
     },
 
     { path: "*", component: PageNotFound }

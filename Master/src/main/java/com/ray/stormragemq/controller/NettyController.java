@@ -23,13 +23,13 @@ import java.util.regex.Pattern;
 @RequestMapping("/netty")
 public class NettyController {
 
-    private final ConcurrentHashMap<String, TCPClient> mqMap;
+    private final ConcurrentHashMap<String, TCPClient> customersMap;
 
     private final NettyConfig config;
 
     @Autowired
-    public NettyController(@Qualifier("mqMap") ConcurrentHashMap<String, TCPClient> mqMap,@Qualifier("nettyConfig") NettyConfig config) {
-        this.mqMap = mqMap;
+    public NettyController(@Qualifier("customersMap") ConcurrentHashMap<String, TCPClient> customersMap,@Qualifier("nettyConfig") NettyConfig config) {
+        this.customersMap = customersMap;
         this.config = config;
     }
 
@@ -41,8 +41,8 @@ public class NettyController {
 //        return new BaseResponse<>();
 //    }
 
-    //当mq启动的时候注册
-    @RequestMapping("/mqRegister")
+    //当消费者启动的时候注册
+    @RequestMapping("/customerRegister")
     public BaseResponse<?> mqRegister(String host, String port, String name) throws Exception {
         Pattern PATTERN = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$"); //检查IP合法性
         if(!PATTERN.matcher(host).matches() || !StringUtils.isNumeric(port)){
@@ -52,7 +52,7 @@ public class NettyController {
         Bootstrap b = config.bootstrap(host, Integer.parseInt(port));
         TCPClient client = new TCPClient(b);
         client.start();
-        mqMap.put(name, client);
+        customersMap.put(name, client);
         BaseResponse<TCPClient> response = new BaseResponse<>();
         response.setResult(client);
         return response;
