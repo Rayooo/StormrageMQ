@@ -27,12 +27,12 @@ const router = new Router({
     },
     {
       path: '/ray',
-      name: 'myRay',
+      name: 'Ray',
       component: view("Ray")
     },
     {
       path: '/another',
-      name: "hhh",
+      name: "Another",
       component: view("Another")
     },
 
