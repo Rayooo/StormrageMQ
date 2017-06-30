@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ray.stormragemq.dao.UserAccountDao">
+
+    <resultMap id="BaseResultMap" type="UserAccountEntity">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="username" property="userName" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="headimage" property="headImage" jdbcType="VARCHAR"/>
+        <result column="createtime" property="createTime" jdbcType="DATE"/>
+        <result column="logintoken" property="loginToken" jdbcType="VARCHAR"/>
+        <result column="ispassed" property="isPassed" jdbcType="INTEGER"/>
+        <result column="isdeleted" property="isDeleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="BaseColumnList">username, password, headimage, logintoken</sql>
+
+    <select id="getUserByUserName" parameterType="UserAccountEntity" resultMap="BaseResultMap">
+        SELECT * FROM UserAccount WHERE username=#{userName}
+    </select>
+
+    <insert id="insertUser" parameterType="UserAccountEntity">
+        INSERT INTO UserAccount (<include refid="BaseColumnList"/>) VALUES
+        (#{userName}, #{password}, #{headImage}, #{loginToken})
+    </insert>
+
+
+</mapper>

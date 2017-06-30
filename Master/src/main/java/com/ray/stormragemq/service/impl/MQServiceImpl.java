@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Created by Ray on 2017/6/25.
  */
-@Service("mqServiceImpl")
+@Service("mqService")
 public class MQServiceImpl implements MQService {
 
     private final Map<String, Set<String>> mqNameMap;

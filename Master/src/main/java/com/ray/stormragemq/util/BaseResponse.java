@@ -10,6 +10,12 @@ public class BaseResponse<T> implements Serializable {
 
     private static final long serialVersionUID = -4810442863193796645L;
 
+    public BaseResponse() {}
+
+    public BaseResponse(T result) {
+        this.result = result;
+    }
+
     private String message = BaseResponseCode.SUCCESS.getDescribe();
 
     private Integer code = BaseResponseCode.SUCCESS.getCode();

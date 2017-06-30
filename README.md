@@ -26,3 +26,25 @@ mysql端口号3306
 Netty启动服务后会阻塞进程，所以无法执行到.start()方法后的register()代码。
 
 @EventListener(ContextRefreshedEvent.class)这句话在spring启动的时候会调用，但是启用netty时并不好用。我最终的解决办法是开启两个线程，一个调用.start()方法启动netty服务，另一个调用register()方法在master上注册MQ。
+
+
+
+## SQL
+
+```mysql
+CREATE DATABASE StormrageMQ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+USE StormrageMQ;
+
+CREATE TABLE UserAccount(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(30) NOT NULL UNIQUE ,
+  password TEXT NOT NULL ,
+  headimage VARCHAR(255),
+  createtime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  logintoken VARCHAR(100),
+  ispassed SMALLINT NOT NULL DEFAULT 0,
+  isdeleted SMALLINT NOT NULL DEFAULT 0
+);
+```
+

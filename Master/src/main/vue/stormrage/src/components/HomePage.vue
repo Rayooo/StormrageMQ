@@ -12,8 +12,8 @@
       <div style="width: 30%;margin-left: 35%" >
         <transition name="el-fade-in">
           <div v-show="showInputs" class="transition-box">
-            <el-input  v-model="userName" placeholder="用户名"></el-input>
-            <el-input  type="password" v-model="password" placeholder="密码" style="margin-top: 10px"></el-input>
+            <el-input  v-model="userName" placeholder="请输入用户名"></el-input>
+            <el-input  type="password" v-model="password" placeholder="请输入密码" style="margin-top: 10px"></el-input>
           </div>
         </transition>
       </div>
@@ -48,16 +48,16 @@
     methods:{
       login: function () {
         if(!this.showInputs){
-          var length = 153;
-          var move = setInterval(()=>{
-            this.buttonTop+=1;
+          const length = 153;
+          const move = setInterval(() => {
+            this.buttonTop += 1;
             this.buttonStyle = {'margin-top': this.buttonTop + 'px'};
-            if(this.buttonTop == length){
+            if (this.buttonTop === length) {
               clearInterval(move);
               this.showInputs = true;
               this.buttonStyle = {'margin-top': 20 + 'px'};
             }
-          },5);
+          }, 5);
         }
         else{
           router.push({ name: 'Ray', params: { userId: 123 }});
