@@ -25,9 +25,9 @@
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://myserver:3306/StormrageMQ?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false" />
-        <property name="username" value="root" />
-        <property name="password" value="N9sLsEhi3EejndytqpvqxQzaNd8r" />
+        <property name="url" value="jdbc:mysql://${database.host}:${database.port}/${database.database}?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false" />
+        <property name="username" value="${database.username}" />
+        <property name="password" value="${database.password}" />
         <!-- 初始化连接大小 -->
         <property name="initialSize" value="10"/>
         <!-- 连接池最大数量 -->

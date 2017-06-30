@@ -4,7 +4,6 @@ import com.ray.stormragemq.netty.TCPClient;
 import com.ray.stormragemq.service.HeartBeatService;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
 import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,10 +27,11 @@ public class HeartBeatServiceImpl implements HeartBeatService {
         this.customersMap = customersMap;
     }
 
-    //发送心跳
-    @Scheduled(cron = "*/10 * * * * *")
+    //发送心跳50分钟一次
+    @Scheduled(cron = "* */50 * * * *")
     @Override
     public void sendHeartBeat() {
+        System.out.println("心跳");
         customersMap.forEach((s, tcpClient) -> {
             try {
                 boolean isConnected = false;

@@ -5,6 +5,7 @@ import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Ray on 2017/6/30.
@@ -25,6 +26,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    @Transactional
     public void addUser(UserAccountEntity user) {
         userAccountDao.insertUser(user);
     }

@@ -1,15 +1,12 @@
 package com.ray.stormragemq.config;
 
 import com.ray.stormragemq.netty.TCPClient;
-import io.netty.util.internal.ConcurrentSet;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Created by Ray on 2017/6/25.

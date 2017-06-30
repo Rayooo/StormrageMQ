@@ -34,7 +34,7 @@ public class UserAccountController {
     public BaseResponse<String> addUser(){
         UserAccountEntity user = new UserAccountEntity();
         user.setUserName("212133");
-        user.setPassword("123asd陈枭磊😂");
+        user.setPassword("123asd哈哈哈😂");
         userAccountService.addUser(user);
         return new BaseResponse<>("Success");
     }

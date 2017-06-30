@@ -4,13 +4,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import java.nio.charset.Charset;
 
 /**
  * Created by Ray on 2017/6/22.

@@ -1,10 +1,8 @@
 package com.ray.stormragemq.netty;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Ray on 2017/6/22.
@@ -25,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 @Configuration
-@PropertySource("classpath:netty.properties")
+@PropertySource("classpath:customer.properties")
 @Component
 @Qualifier("nettyConfig")
 public class NettyConfig {
