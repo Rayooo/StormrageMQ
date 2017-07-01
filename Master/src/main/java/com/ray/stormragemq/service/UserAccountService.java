@@ -9,5 +9,5 @@ public interface UserAccountService {
 
     UserAccountEntity login(UserAccountEntity user);
 
-    void addUser(UserAccountEntity user);
+    void addUser(UserAccountEntity user) throws Exception;
 }

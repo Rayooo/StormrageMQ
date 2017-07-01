@@ -4,10 +4,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui'
 import Router from 'vue-router'
+import Resource from 'vue-resource'
 import PageNotFound from '@/components/PageNotFound'
 
 Vue.config.productionTip = false;
 
+Vue.use(Resource);
 Vue.use(Router);
 Vue.use(ElementUI);
 
@@ -21,21 +23,15 @@ function view(name) {
 const router = new Router({
   routes: [
     {
-      path: '/',
-      name: 'HomePage',
+      path: "/",
+      name: "HomePage",
       component: view("HomePage")
     },
     {
-      path: '/ray',
-      name: 'Ray',
-      component: view("Ray")
+      path: "/register",
+      name: "Register",
+      component: view("Register")
     },
-    {
-      path: '/another',
-      name: "Another",
-      component: view("Another")
-    },
-
     { path: "*", component: PageNotFound }
   ]
 });
@@ -56,4 +52,4 @@ router.beforeEach((to, from, next) => {
 });
 
 
-export {router, vm};
+export {router, vm, Vue};

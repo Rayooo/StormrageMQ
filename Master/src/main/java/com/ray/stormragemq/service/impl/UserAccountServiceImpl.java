@@ -3,6 +3,7 @@ package com.ray.stormragemq.service.impl;
 import com.ray.stormragemq.dao.UserAccountDao;
 import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.UserAccountService;
+import com.ray.stormragemq.util.Password;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     @Transactional
-    public void addUser(UserAccountEntity user) {
+    public void addUser(UserAccountEntity user) throws Exception {
+        user.setPassword(Password.getSaltedHash(user.getPassword()));
         userAccountDao.insertUser(user);
     }
 

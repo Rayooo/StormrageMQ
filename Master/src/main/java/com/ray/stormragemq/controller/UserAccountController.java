@@ -4,6 +4,7 @@ import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.UserAccountService;
 import com.ray.stormragemq.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,11 +31,8 @@ public class UserAccountController {
     }
 
 
-    @RequestMapping("addUser")
-    public BaseResponse<String> addUser(){
-        UserAccountEntity user = new UserAccountEntity();
-        user.setUserName("212133");
-        user.setPassword("123asd哈哈哈😂");
+    @RequestMapping("register")
+    public BaseResponse<String> register(@RequestBody UserAccountEntity user) throws Exception {
         userAccountService.addUser(user);
         return new BaseResponse<>("Success");
     }
