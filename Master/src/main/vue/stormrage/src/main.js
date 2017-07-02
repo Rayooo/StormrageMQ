@@ -14,41 +14,45 @@ Vue.use(Router);
 Vue.use(ElementUI);
 
 function view(name) {
-  return function(resolve) {
-    require(['@/components/' + name + '.vue'], resolve);
-  }
+    return function (resolve) {
+        require(['@/components/' + name + '.vue'], resolve);
+    }
 }
 
 //路由
 const router = new Router({
-  routes: [
-    {
-      path: "/",
-      name: "HomePage",
-      component: view("HomePage")
-    },
-    {
-      path: "/register",
-      name: "Register",
-      component: view("Register")
-    },
-    { path: "*", component: PageNotFound }
-  ]
+    routes: [
+        {
+            path: "/",
+            name: "HomePage",
+            component: view("HomePage")
+        },
+        {
+            path: "/register",
+            name: "Register",
+            component: view("Register")
+        },
+        {
+            path: "/admin",
+            name: "Admin",
+            component: view("Admin")
+        },
+        {path: "*", component: PageNotFound}
+    ]
 });
 
 
-
 const vm = new Vue({
-  el: '#app',
-  router,
-  template: '<App ref="app"/>',
-  components: {App}
+    el: '#app',
+    router,
+    template: '<App ref="app"/>',
+    components: {App}
 });
 
 
 router.beforeEach((to, from, next) => {
-  vm.$refs.app.isShowMenuBar = to.path !== "/";
-  next();
+    vm.$refs.app.isShowMenuBar = to.path !== "/";
+    next();
 });
 
 

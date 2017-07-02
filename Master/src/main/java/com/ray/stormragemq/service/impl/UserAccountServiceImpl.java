@@ -22,8 +22,15 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccountEntity login(UserAccountEntity user) {
-        return userAccountDao.getUserByUserName(user);
+    public UserAccountEntity login(UserAccountEntity user) throws Exception {
+        UserAccountEntity databaseUser = userAccountDao.getUserByUserName(user);
+        if(databaseUser != null && Password.check(user.getPassword(), databaseUser.getPassword())){
+            return databaseUser;
+        }
+        else{
+            throw new Exception("用户名或密码错误");
+        }
+
     }
 
     @Override

@@ -24,9 +24,7 @@ public class UserAccountController {
 
 
     @RequestMapping("login")
-    public BaseResponse<UserAccountEntity> login(){
-        UserAccountEntity user = new UserAccountEntity();
-        user.setUserName("212133");
+    public BaseResponse<UserAccountEntity> login(@RequestBody UserAccountEntity user) throws Exception {
         return new BaseResponse<>(userAccountService.login(user));
     }
 

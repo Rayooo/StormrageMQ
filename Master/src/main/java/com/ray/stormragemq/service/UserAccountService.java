@@ -7,7 +7,7 @@ import com.ray.stormragemq.domain.UserAccountEntity;
  */
 public interface UserAccountService {
 
-    UserAccountEntity login(UserAccountEntity user);
+    UserAccountEntity login(UserAccountEntity user) throws Exception;
 
     void addUser(UserAccountEntity user) throws Exception;
 }

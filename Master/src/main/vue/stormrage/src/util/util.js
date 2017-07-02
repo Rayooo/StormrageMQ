@@ -1,7 +1,7 @@
 export default{
 
-  getHost() {
-    return "http://localhost:3000/";
-  }
+    getHost() {
+        return "http://localhost:3000/";
+    }
 
 }

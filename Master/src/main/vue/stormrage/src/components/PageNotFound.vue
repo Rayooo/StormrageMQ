@@ -1,17 +1,17 @@
 <template>
-  <div id="PageNotFound">
-    404 Not Found
-  </div>
+    <div id="pageNotFound">
+        404 Not Found
+    </div>
 </template>
 
 <script>
-  export default {
-      name:"PageNotFound"
-  }
+    export default {
+        name: "PageNotFound"
+    }
 </script>
 
-<style>
-  #PageNotFound{
-    text-align: center;
-  }
+<style scoped>
+    #pageNotFound {
+        text-align: center;
+    }
 </style>
