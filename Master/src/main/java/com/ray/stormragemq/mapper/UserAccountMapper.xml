@@ -24,5 +24,13 @@
         (#{userName}, #{password}, #{headImage}, #{loginToken})
     </insert>
 
+    <update id="updateUser" parameterType="UserAccountEntity">
+        UPDATE UserAccount SET
+            <if test="loginToken != null and loginToken != ''">
+                logintoken = #{loginToken}
+            </if>
+        WHERE id = #{id}
+    </update>
+
 
 </mapper>

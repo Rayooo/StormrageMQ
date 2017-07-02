@@ -9,8 +9,7 @@
 <script>
     import ElInput from "../../node_modules/element-ui/packages/input/src/input";
     import ElButton from "../../node_modules/element-ui/packages/button/src/button";
-    import util from "@/util/util"
-    import {Vue} from '../main'
+    import Global from "./Global.vue"
 
     export default {
         components: {
@@ -27,8 +26,8 @@
         methods: {
             register(){
                 const param = {userName: this.userName, password: this.password};
-                Vue.http.post(util.getHost() + "userAccount/register", param).then((response) => {
-//            console.log(response);
+                Global.post("userAccount/register", param, (response) => {
+                    //console.log(response);
                 })
             }
         }

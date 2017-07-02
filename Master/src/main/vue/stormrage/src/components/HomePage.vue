@@ -21,7 +21,7 @@
         </div>
 
         <div id="buttons" v-bind:style="buttonStyle">
-            <el-button type="primary" id="login" v-on:click="login()">登录</el-button>
+            <el-button type="primary" id="login" v-on:click="login()" :loading="loading">登录</el-button>
         </div>
     </div>
 </template>
@@ -31,7 +31,7 @@
     import {router} from '../main'
     import ElRow from "element-ui/packages/row/src/row";
     import {Vue} from "../main"
-    import util from "../util/util";
+    import Global from "./Global.vue"
 
     export default {
         components: {
@@ -45,7 +45,8 @@
                 showInputs: false,
                 buttonStyle: {'margin-top': this.buttonTop + 'px'},
                 userName: '',
-                password: ''
+                password: '',
+                loading: false
             }
         },
         methods: {
@@ -66,13 +67,18 @@
                 else {
                     //第二次嗯下登录
                     const param = {userName:this.userName, password:this.password};
-                    Vue.http.post(util.getHost() + "userAccount/login", param).then((response) => {
+                    this.loading = true;
+                    Global.post("userAccount/login", param, (response) => {
+                        this.loading = false;
                         if(response.body.code === 0){
+                            Global.userInfo = response.body.result;
+                            Global.setSessionStorage("user",response.body.result);
                             router.push({name: 'Admin'});
                         }else{
                             this.$message.error(response.body.message);
                         }
-                    },() => {
+                    }, () => {
+                        this.loading = false;
                         this.$message.error("服务器异常");
                     });
 

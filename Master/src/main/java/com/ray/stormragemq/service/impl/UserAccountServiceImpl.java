@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 /**
  * Created by Ray on 2017/6/30.
  */
@@ -25,6 +27,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccountEntity login(UserAccountEntity user) throws Exception {
         UserAccountEntity databaseUser = userAccountDao.getUserByUserName(user);
         if(databaseUser != null && Password.check(user.getPassword(), databaseUser.getPassword())){
+            //返回token
+            databaseUser.setLoginToken(UUID.randomUUID().toString().replaceAll("-", ""));
+            userAccountDao.updateUser(databaseUser);
             return databaseUser;
         }
         else{

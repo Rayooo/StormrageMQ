@@ -14,4 +14,6 @@ public interface UserAccountDao {
 
     void insertUser(UserAccountEntity user);
 
+    void updateUser(UserAccountEntity user);
+
 }
