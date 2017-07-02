@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserAccountDao {
 
+    UserAccountEntity getUserByToken(UserAccountEntity user);
+
     UserAccountEntity getUserByUserName(UserAccountEntity user);
 
     void insertUser(UserAccountEntity user);

@@ -7,8 +7,11 @@ import io.netty.channel.ChannelFuture;
 import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,8 +30,14 @@ public class HeartBeatServiceImpl implements HeartBeatService {
         this.customersMap = customersMap;
     }
 
+
+    @Bean
+    public TaskScheduler taskScheduler() {
+        return new ConcurrentTaskScheduler(); //single threaded by default
+    }
+
     //发送心跳50分钟一次
-    @Scheduled(cron = "* */50 * * * *")
+    @Scheduled(cron = "1 */50 * * * *")
     @Override
     public void sendHeartBeat() {
         System.out.println("心跳");

@@ -15,6 +15,11 @@
 
     <sql id="BaseColumnList">username, password, headimage, logintoken</sql>
 
+    <select id="getUserByToken" parameterType="UserAccountEntity" resultMap="BaseResultMap">
+        SELECT * FROM UserAccount WHERE id = #{id} AND logintoken = #{loginToken}
+    </select>
+
+
     <select id="getUserByUserName" parameterType="UserAccountEntity" resultMap="BaseResultMap">
         SELECT * FROM UserAccount WHERE username=#{userName}
     </select>

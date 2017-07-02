@@ -22,7 +22,23 @@
         return getSessionStorage("user")
     }
 
+    const unCheckUrl = [
+        "",
+        "userAccount/login",
+        "userAccount/register"
+    ];
+
     function post(api, param, callback, errCallback) {
+        let addToken = true;
+        for (let i = 0; i < unCheckUrl.length; ++i){
+            if(unCheckUrl[i] === api){
+                addToken = false;
+            }
+        }
+        if(addToken){
+            Vue.http.headers.common['token'] = userInfo.loginToken;
+            Vue.http.headers.common['userid'] = userInfo.id;
+        }
         Vue.http.post(getHost() + api, param).then(callback,errCallback);
     }
 

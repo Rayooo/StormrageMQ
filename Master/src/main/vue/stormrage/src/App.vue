@@ -1,6 +1,7 @@
 <template>
     <div id="app">
-        <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
+        <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @se
+                 lect="handleSelect"
                  v-show="isShowMenuBar">
             <el-menu-item index="2">Ray</el-menu-item>
             <el-submenu index="3">

@@ -52,7 +52,42 @@ Unexpected token: operator (>) ./~/element-ui/src/mixins/emitter.js:2,0
 }
 ```
 
+5.跨域请求在spring中很容易处理
 
+```java
+//spring mvc跨域支持
+@Bean
+public WebMvcConfigurer webMvcConfigurer(){
+    return new WebMvcConfigurerAdapter() {
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**")
+                    .allowedOrigins("*");
+        }
+
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+            registry.addInterceptor(new HandlerInterceptorAdapter() {
+                @Override
+                public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                    if(request.getMethod().equals("OPTIONS")) return true;      //跨域的请求
+                    if(xxxx)return false;
+                    else return true
+                }
+            }).addPathPatterns("/**");
+        }
+
+    };
+}
+```
+
+重写addCorsMappings() 这个方法就好了，但是要注意下面的拦截器，跨域会发送两个请求，第一个是OPTIONS类型的，如下图
+
+![1](README_IMG/1.png)
+
+![2](README_IMG/2.png)
+
+第一个请求是发起跨域的请求，请求类型为OPTIONS，主要是Access-Controller-Allow-xxxxx这些，第二个请求才是自己定义的请求，真正的类型为POST，所以在拦截器中一定要处理好对第一个请求的事件，我第一次就是因为忽略了第一个请求才一直获取不到请求头header中的内容（token和userid）
 
 ## SQL
 
