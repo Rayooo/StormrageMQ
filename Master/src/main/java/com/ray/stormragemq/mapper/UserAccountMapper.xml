@@ -7,7 +7,7 @@
         <result column="username" property="userName" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="headimage" property="headImage" jdbcType="VARCHAR"/>
-        <result column="createtime" property="createTime" jdbcType="DATE"/>
+        <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="logintoken" property="loginToken" jdbcType="VARCHAR"/>
         <result column="ispassed" property="isPassed" jdbcType="INTEGER"/>
         <result column="isdeleted" property="isDeleted" jdbcType="INTEGER"/>

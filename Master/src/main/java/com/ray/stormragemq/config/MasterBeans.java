@@ -51,8 +51,7 @@ public class MasterBeans {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*");
+                registry.addMapping("/**");
             }
 
             @Override
@@ -72,7 +71,10 @@ public class MasterBeans {
                         UserAccountEntity dataBaseUser = userAccountDao.getUserByToken(user);
                         return dataBaseUser != null;
                     }
-                }).addPathPatterns("/**");
+                }).excludePathPatterns(
+                        "/userAccount/login",
+                        "/userAccount/register"
+                        );
             }
 
         };
