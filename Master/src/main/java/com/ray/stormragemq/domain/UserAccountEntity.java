@@ -20,10 +20,7 @@ public class UserAccountEntity extends BaseEntity implements Serializable{
 
     private String loginToken;
     
-    private Integer isPassed;
-    
     private Integer isDeleted;
-    
 
     public String getUserName() {
         return userName;
@@ -63,14 +60,6 @@ public class UserAccountEntity extends BaseEntity implements Serializable{
 
     public void setLoginToken(String loginToken) {
         this.loginToken = loginToken;
-    }
-
-    public Integer getIsPassed() {
-        return isPassed;
-    }
-
-    public void setIsPassed(Integer isPassed) {
-        this.isPassed = isPassed;
     }
 
     public Integer getIsDeleted() {

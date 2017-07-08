@@ -9,7 +9,6 @@
         <result column="headimage" property="headImage" jdbcType="VARCHAR"/>
         <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="logintoken" property="loginToken" jdbcType="VARCHAR"/>
-        <result column="ispassed" property="isPassed" jdbcType="INTEGER"/>
         <result column="isdeleted" property="isDeleted" jdbcType="INTEGER"/>
     </resultMap>
 
