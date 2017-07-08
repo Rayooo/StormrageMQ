@@ -37,6 +37,22 @@ const router = new Router({
             name: "Admin",
             component: view("Admin")
         },
+        {
+            path: "/exchanger",
+            name: "Exchanger",
+            component: view("exchanger/Exchanger")
+        },
+        {
+            path: "/message",
+            name: "Message",
+            component: view("message/Message")
+        },
+        {
+            path: "/queue",
+            name: "Queue",
+            component: view("queue/Queue")
+        },
+
         {path: "*", component: PageNotFound}
     ]
 });

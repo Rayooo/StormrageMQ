@@ -14,14 +14,14 @@
                     <div v-show="showInputs" class="transition-box">
                         <el-input v-model="userName" placeholder="请输入用户名"></el-input>
                         <el-input type="password" v-model="password" placeholder="请输入密码"
-                                  style="margin-top: 10px"></el-input>
+                                  style="margin-top: 10px" @keyup.enter.native="login()"></el-input>
                     </div>
                 </transition>
             </div>
         </div>
 
         <div id="buttons" v-bind:style="buttonStyle">
-            <el-button type="primary" id="login" v-on:click="login()" :loading="loading">登录</el-button>
+            <el-button type="primary" id="login"  v-on:click="login()" :loading="loading">登录</el-button>
         </div>
     </div>
 </template>
@@ -32,6 +32,7 @@
     import ElRow from "element-ui/packages/row/src/row";
     import {Vue} from "../main"
     import Global from "./Global.vue"
+    import App from "../App.vue"
 
     export default {
         components: {
@@ -73,6 +74,9 @@
                         if(response.body.code === 0){
                             Global.userInfo = response.body.result;
                             Global.setSessionStorage("user",response.body.result);
+                            App.userInfo = Global.userInfo;
+//                            window.location.reload(false);
+                            router.app.$emit("loginMessage");
                             router.push({name: 'Admin'});
                         }else{
                             this.$message.error(response.body.message);

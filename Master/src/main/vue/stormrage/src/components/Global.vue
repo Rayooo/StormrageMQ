@@ -1,6 +1,6 @@
 <script>
 
-    import {Vue} from "../main"
+    import {Vue, router} from "../main"
 
     const globalVariable = {};
 
@@ -8,6 +8,10 @@
 
     function getHost() {
         return "http://localhost:3000/";
+    }
+
+    function isLogin() {
+        return  userInfo !== null ;
     }
 
     function getSessionStorage(name) {
@@ -42,6 +46,12 @@
         Vue.http.post(getHost() + api, param).then(callback,errCallback);
     }
 
+    function logout() {
+        sessionStorage.clear();
+        router.push({name:"HomePage"});
+    }
+
+
     export default {
         globalVariable,
         userInfo,
@@ -49,7 +59,9 @@
         getSessionStorage,
         setSessionStorage,
         getUserInfoFromSessionStorage,
-        post
+        post,
+        isLogin,
+        logout
     }
 
 
