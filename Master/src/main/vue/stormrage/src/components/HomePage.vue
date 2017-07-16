@@ -21,7 +21,7 @@
         </div>
 
         <div id="buttons" v-bind:style="buttonStyle">
-            <el-button type="primary" id="login"  v-on:click="login()" :loading="loading">登录</el-button>
+            <el-button type="primary" id="login"  v-on:click="login()" :loading="loading" >登录</el-button>
         </div>
     </div>
 </template>
