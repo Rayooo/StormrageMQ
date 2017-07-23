@@ -5,9 +5,11 @@ import App from './App.vue'
 import router from './router'
 import store from "./store/index"
 import ElementUI from "element-ui"
+import Resource from "vue-resource"
 import "element-ui/lib/theme-default/index.css"
 
 Vue.use(ElementUI);
+Vue.use(Resource);
 
 Vue.config.productionTip = false
 
