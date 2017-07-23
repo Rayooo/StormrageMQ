@@ -2,17 +2,11 @@
 
     import Vue from "vue"
     import router from "../router"
-
-    const globalVariable = {};
-
-    const userInfo =  getUserInfoFromSessionStorage();
+    import {mapState, mapMutations} from "vuex"
+    import store from "../store/index"
 
     function getHost() {
         return "http://localhost:3000/";
-    }
-
-    function isLogin() {
-        return  userInfo !== null ;
     }
 
     function getSessionStorage(name) {
@@ -41,8 +35,8 @@
             }
         }
         if(addToken){
-            Vue.http.headers.common['token'] = userInfo.loginToken;
-            Vue.http.headers.common['userid'] = userInfo.id;
+            Vue.http.headers.common['token'] = mapState.userInfo.loginToken;
+            Vue.http.headers.common['userid'] = mapState.userInfo.id;
         }
         Vue.http.post(getHost() + api, param).then(callback,errCallback);
     }
@@ -50,18 +44,15 @@
     function logout() {
         sessionStorage.clear();
         router.push({name:"Login"});
+        store.commit("RESET");
     }
 
-
     export default {
-        globalVariable,
-        userInfo,
         getHost,
         getSessionStorage,
         setSessionStorage,
         getUserInfoFromSessionStorage,
         post,
-        isLogin,
         logout
     }
 

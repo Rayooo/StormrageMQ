@@ -38,8 +38,8 @@
     import ElRow from "element-ui/packages/row/src/row";
     import Vue from "vue"
     import Global from "../components/Global.vue"
-    import App from "../App.vue"
     import Navigation from "../components/Navigation.vue";
+    import {mapMutations} from "vuex"
 
     export default {
         components: {
@@ -59,6 +59,9 @@
             }
         },
         methods: {
+            ...mapMutations([
+                "SET_USER_INFO"
+            ]),
             login: function () {
                 //第一次嗯下
                 if (!this.showInputs) {
@@ -80,10 +83,7 @@
                     Global.post("userAccount/login", param, (response) => {
                         this.loading = false;
                         if(response.body.code === 0){
-                            Global.userInfo = response.body.result;
-                            Global.setSessionStorage("user",response.body.result);
-                            App.userInfo = Global.userInfo;
-//                            window.location.reload(false);
+                            this.SET_USER_INFO(response.body.result);
                             router.push({name: 'Admin'});
                         }else{
                             this.$message.error(response.body.message);
