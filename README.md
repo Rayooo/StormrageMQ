@@ -1,17 +1,30 @@
 # StormrageMQ
 Master主节点 ：服务端口号3000
 
-MQ节点：服务端口号3001，Netty端口号4001
-
-Web服务节点：服务端口号8080
-
 redis端口号6379
 
 mysql端口号3306
 
 前端Vue + Element UI
 
+#### Build & Run
 
+```shell
+# 先打包前端页面 注意换前端地址
+cd Master/src/main/vue/front
+npm install
+npm run dev
+
+# 再打包后端jar，注意换后端数据库地址
+cd Master
+mvn install 
+mvn package
+
+#docker 部署
+cd Master
+docker build -t master .
+docker run --name master -d -p 3000:3000 master
+```
 
 ## 坑点
 
