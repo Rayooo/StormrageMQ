@@ -26,7 +26,7 @@
         methods: {
             register(){
                 const param = {userName: this.userName, password: this.password};
-                Global.post("userAccount/register", param, (response) => {
+                Global.post("/userAccount/register", param, (response) => {
                     //console.log(response);
                 })
             }

@@ -6,7 +6,7 @@
     import store from "../store/index"
 
     function getHost() {
-        return "http://localhost:3000/";
+        return "http://localhost:3000";
     }
 
     function getSessionStorage(name) {
@@ -21,20 +21,21 @@
         return getSessionStorage("user")
     }
 
-    const unCheckUrl = [
-        "",
-        "userAccount/login",
-        "userAccount/register"
-    ];
+    let unCheckUrl = [];
+
+    function setUnCheckUrl(newUnCheckUrl) {
+        unCheckUrl = newUnCheckUrl;
+    }
 
     function post(api, param, callback, errCallback) {
         let addToken = true;
         for (let i = 0; i < unCheckUrl.length; ++i){
             if(unCheckUrl[i] === api){
                 addToken = false;
+                break;
             }
         }
-        if(addToken){
+        if(addToken && unCheckUrl.length > 0){
             Vue.http.headers.common['token'] = mapState.userInfo.loginToken;
             Vue.http.headers.common['userid'] = mapState.userInfo.id;
         }
@@ -47,7 +48,10 @@
         store.commit("RESET");
     }
 
+
+
     export default {
+        setUnCheckUrl,
         getHost,
         getSessionStorage,
         setSessionStorage,

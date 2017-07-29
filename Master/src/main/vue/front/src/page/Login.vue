@@ -80,7 +80,7 @@
                     //第二次嗯下登录
                     const param = {userName:this.userName, password:this.password};
                     this.loading = true;
-                    Global.post("userAccount/login", param, (response) => {
+                    Global.post("/userAccount/login", param, (response) => {
                         this.loading = false;
                         if(response.body.code === 0){
                             this.SET_USER_INFO(response.body.result);

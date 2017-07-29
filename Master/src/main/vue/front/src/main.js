@@ -7,11 +7,13 @@ import store from "./store/index"
 import ElementUI from "element-ui"
 import Resource from "vue-resource"
 import "element-ui/lib/theme-default/index.css"
+import Global from "./components/Global.vue"
+
 
 Vue.use(ElementUI);
 Vue.use(Resource);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
@@ -19,5 +21,10 @@ new Vue({
     store,
     router,
     template: '<App/>',
-    components: {App}
+    components: {App},
+    mounted() {
+        Global.post("/constants/getExcludePathPatterns", {}, (response) => {
+            Global.setUnCheckUrl(response.body.result);
+        })
+    }
 });

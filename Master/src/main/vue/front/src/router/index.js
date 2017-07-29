@@ -42,6 +42,7 @@ export default new Router({
             name: "Admin",
             component: view("Admin.vue")
         },
+        {path: "/error", component: view("Error.vue")},
         {path: "*", component: view("PageNotFound.vue")}
     ]
 })

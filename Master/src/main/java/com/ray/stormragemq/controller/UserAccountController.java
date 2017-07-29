@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by Ray on 2017/6/30.
  */
 @RestController
-@RequestMapping("userAccount")
+@RequestMapping("/userAccount")
 public class UserAccountController {
 
     private final UserAccountService userAccountService;
@@ -23,13 +23,13 @@ public class UserAccountController {
     }
 
 
-    @RequestMapping("login")
+    @RequestMapping("/login")
     public BaseResponse<UserAccountEntity> login(@RequestBody UserAccountEntity user) throws Exception {
         return new BaseResponse<>(userAccountService.login(user));
     }
 
 
-    @RequestMapping("register")
+    @RequestMapping("/register")
     public BaseResponse<String> register(@RequestBody UserAccountEntity user) throws Exception {
         userAccountService.addUser(user);
         return new BaseResponse<>("Success");
