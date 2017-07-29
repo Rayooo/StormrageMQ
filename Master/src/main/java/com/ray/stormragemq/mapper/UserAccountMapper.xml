@@ -3,7 +3,7 @@
 <mapper namespace="com.ray.stormragemq.dao.UserAccountDao">
 
     <resultMap id="BaseResultMap" type="UserAccountEntity">
-        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="id" property="id" jdbcType="INTEGER"/>
         <result column="username" property="userName" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="headimage" property="headImage" jdbcType="VARCHAR"/>

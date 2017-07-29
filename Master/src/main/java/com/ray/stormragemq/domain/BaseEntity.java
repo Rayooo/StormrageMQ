@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class BaseEntity {
 
-    private String id;
+    private Integer id;
 
     @JsonIgnore
     private Integer pageSize;        //分页查询条数
@@ -14,11 +14,11 @@ public class BaseEntity {
     @JsonIgnore
     private Integer pageNo;         //页码
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

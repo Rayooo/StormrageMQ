@@ -23,6 +23,7 @@ public class AppAdviceHandler {
     @ExceptionHandler({Exception.class})
     @ResponseBody
     public BaseResponse<?> handleException(Exception e, HttpServletRequest request){
+        e.printStackTrace();
         BaseResponse<?> response = new BaseResponse<>();
         response.setCode(BaseResponseCode.ERROR.getCode());
         if(StringUtils.isNoneEmpty(e.getMessage())){

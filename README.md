@@ -105,52 +105,53 @@ public WebMvcConfigurer webMvcConfigurer(){
 ## SQL
 
 ```mysql
-CREATE DATABASE StormrageMQ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE stormragemq;
 
-USE StormrageMQ;
+\c stormragemq;
 
-CREATE TABLE UserAccount(
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  username VARCHAR(30) NOT NULL UNIQUE ,	#用户名
-  password TEXT NOT NULL ,					#密码
-  headimage VARCHAR(255),					#头像
-  createtime DATETIME DEFAULT CURRENT_TIMESTAMP,	#创建时间
-  logintoken VARCHAR(100),						#登录token
-  isdeleted SMALLINT NOT NULL DEFAULT 0			#是否被删除
+CREATE TABLE useraccount(
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(30) NOT NULL UNIQUE ,	--用户名
+  password VARCHAR(255) NOT NULL ,					--密码
+  headimage VARCHAR(255),					--头像
+  createtime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,	--创建时间
+  logintoken VARCHAR(100),						--登录token
+  isdeleted SMALLINT NOT NULL DEFAULT 0			--是否被删除
 );
 
-CREATE TABLE Exchanger (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  type VARCHAR(20) NOT NULL ,         #交换机类型
-  name VARCHAR(100) NOT NULL ,        #交换机名称
-  content TEXT,                       #交换机匹配规则，如果是fanout就是队列名称，topic就是正则表达式
-  createtime DATETIME DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE exchanger (
+  id SERIAL PRIMARY KEY,
+  type VARCHAR(20) NOT NULL ,         --交换机类型
+  name VARCHAR(100) NOT NULL ,        --交换机名称
+  content TEXT,                       --交换机匹配规则，如果是fanout就是队列名称，topic就是正则表达式
+  createtime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   createuserid INT
 );
 
-CREATE TABLE Queue (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(100) NOT NULL ,                    #队列名称
-  addresslist TEXT,                               #推送的主机名称列表
-  createtime DATETIME DEFAULT current_timestamp,  #创建时间
-  createuserid INT                                #创建者id
+CREATE TABLE queue (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL ,                    --队列名称
+  addresslist TEXT,                               --推送的主机名称列表
+  createtime TIMESTAMP DEFAULT current_timestamp,  --创建时间
+  createuserid INT                                --创建者id
 );
 
-CREATE TABLE Message (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  exchangename VARCHAR(100),          #交换机名称
-  producer VARCHAR(100),              #生产者名称或ip地址
-  content TEXT,                       #消息内容
-  createtime DATETIME DEFAULT current_timestamp
+CREATE TABLE message (
+  id SERIAL PRIMARY KEY,
+  exchangename VARCHAR(100),          --交换机名称
+  producer VARCHAR(100),              --生产者名称或ip地址
+  content TEXT,                       --消息内容
+  createtime TIMESTAMP DEFAULT current_timestamp
 );
 
-CREATE TABLE MessageQueue (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  messageid INT,                      #消息id
-  queueid INT,                        #队列id
-  consumer VARCHAR(100),              #消费者地址
-  isreceived INT                      #是否接收
+CREATE TABLE messagequeue (
+  id SERIAL PRIMARY KEY,
+  messageid INT,                      --消息id
+  queueid INT,                        --队列id
+  consumer VARCHAR(100),              --消费者地址
+  isreceived INT                      --是否接收
 );
+
 
 ```
 

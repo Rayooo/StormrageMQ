@@ -62,12 +62,12 @@ public class MasterBeans {
                         if(request.getMethod().equals("OPTIONS")) return true;      //跨域的请求
                         String token = request.getHeader("token");
                         String id = request.getHeader("userid");
-                        if(StringUtils.isEmpty(token) || StringUtils.isEmpty(id)){
+                        if(StringUtils.isEmpty(token) || StringUtils.isEmpty(id) || !StringUtils.isNumeric(id)){
                             return false;
                         }
                         UserAccountEntity user = new UserAccountEntity();
                         user.setLoginToken(token);
-                        user.setId(id);
+                        user.setId(Integer.parseInt(id));
                         UserAccountEntity dataBaseUser = userAccountDao.getUserByToken(user);
                         return dataBaseUser != null;
                     }
