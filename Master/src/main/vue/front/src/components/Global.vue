@@ -36,8 +36,8 @@
             }
         }
         if(addToken && unCheckUrl.length > 0){
-            Vue.http.headers.common['token'] = mapState.userInfo.loginToken;
-            Vue.http.headers.common['userid'] = mapState.userInfo.id;
+            Vue.http.headers.common["token"] = store.state.token;
+            Vue.http.headers.common["userid"] = (store.state.userInfo.id).toString();
         }
         Vue.http.post(getHost() + api, param).then(callback,errCallback);
     }

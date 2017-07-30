@@ -25,6 +25,7 @@ new Vue({
     mounted() {
         Global.post("/constants/getExcludePathPatterns", {}, (response) => {
             Global.setUnCheckUrl(response.body.result);
-        })
+        });
+        const info = store.getters.getUserInfo;
     }
 });

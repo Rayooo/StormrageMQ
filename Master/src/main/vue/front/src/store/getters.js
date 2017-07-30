@@ -12,4 +12,5 @@ export default {
             return mapState.userInfo;
         }
     }
+
 }

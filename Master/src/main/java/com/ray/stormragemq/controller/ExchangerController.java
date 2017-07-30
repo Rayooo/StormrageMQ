@@ -2,12 +2,14 @@ package com.ray.stormragemq.controller;
 
 import com.ray.stormragemq.constant.ExchangerEnum;
 import com.ray.stormragemq.domain.ExchangerEntity;
+import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.ExchangerService;
+import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,11 +34,10 @@ public class ExchangerController {
     }
 
     @RequestMapping("/addExchanger")
-    public BaseResponse addExchanger(ExchangerEntity exchanger){
-
-
-
-        return new BaseResponse();
+    public BaseResponse<String> addExchanger(@RequestBody ExchangerEntity exchanger, @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
+        exchanger.setCreateUserId(user.getId());
+        exchangerService.addExchanger(exchanger);
+        return new BaseResponse<>("SUCCESS");
     }
 
 }

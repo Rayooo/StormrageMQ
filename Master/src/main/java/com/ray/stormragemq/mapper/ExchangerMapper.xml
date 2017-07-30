@@ -15,6 +15,9 @@
             (#{type}, #{name}, #{content}, #{createUserId})
     </insert>
 
+    <select id="countExchangerByName" parameterType="ExchangerEntity" resultType="java.lang.Integer">
+        SELECT count(*) FROM exchanger WHERE name = #{name} AND createuserid = #{createUserId}
+    </select>
 
 
 

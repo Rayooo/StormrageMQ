@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SpringMvcConfig {
 
     private static final String[] excludePathPatterns = {
-            "/exchanger/*",
+            "/exchanger/listExchangerTypes",
             "/constants/*",
             "/userAccount/login",
             "/userAccount/register"
@@ -58,7 +58,11 @@ public class SpringMvcConfig {
                         user.setLoginToken(token);
                         user.setId(Integer.parseInt(id));
                         UserAccountEntity dataBaseUser = userAccountDao.getUserByToken(user);
-                        return dataBaseUser != null;
+                        if(dataBaseUser != null){
+                            request.setAttribute("userInfo", dataBaseUser);
+                            return true;
+                        }
+                        return false;
                     }
                 }).excludePathPatterns(excludePathPatterns);
             }

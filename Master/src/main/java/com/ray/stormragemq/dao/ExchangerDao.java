@@ -8,4 +8,6 @@ public interface ExchangerDao {
 
     void insertExchanger(ExchangerEntity exchanger);
 
+    int countExchangerByName(ExchangerEntity exchanger);
+
 }

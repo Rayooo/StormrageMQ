@@ -12,7 +12,6 @@ export default {
     },
     RESET (s) {
         const initial = initState;
-        console.log(initState);
         Object.keys(initial).forEach(key => { s[key] = initial[key] });
     }
 }
