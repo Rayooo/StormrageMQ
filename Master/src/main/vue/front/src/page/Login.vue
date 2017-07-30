@@ -55,7 +55,8 @@
                 buttonStyle: {'margin-top': this.buttonTop + 'px'},
                 userName: '',
                 password: '',
-                loading: false
+                loading: false,
+                clickCount: 0           //登录按钮的按下次数
             }
         },
         methods: {
@@ -64,8 +65,9 @@
             ]),
             login: function () {
                 //第一次嗯下
-                if (!this.showInputs) {
+                if (!this.showInputs && this.clickCount === 0) {
                     const length = 153;
+                    this.clickCount++;
                     const move = setInterval(() => {
                         this.buttonTop += 1;
                         this.buttonStyle = {'margin-top': this.buttonTop + 'px'};

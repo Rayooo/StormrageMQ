@@ -12,8 +12,6 @@
         <result column="isdeleted" property="isDeleted" jdbcType="INTEGER"/>
     </resultMap>
 
-    <sql id="BaseColumnList">username, password, headimage, logintoken</sql>
-
     <select id="getUserByToken" parameterType="UserAccountEntity" resultMap="BaseResultMap">
         SELECT * FROM UserAccount WHERE id = #{id} AND logintoken = #{loginToken}
     </select>
@@ -24,7 +22,7 @@
     </select>
 
     <insert id="insertUser" parameterType="UserAccountEntity">
-        INSERT INTO UserAccount (<include refid="BaseColumnList"/>) VALUES
+        INSERT INTO UserAccount (username, password, headimage, logintoken) VALUES
         (#{userName}, #{password}, #{headImage}, #{loginToken})
     </insert>
 

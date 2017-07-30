@@ -9,7 +9,7 @@
     
     <typeAliases>
         <typeAlias type="com.ray.stormragemq.domain.UserAccountEntity" alias="UserAccountEntity"/>
-        
+        <typeAlias type="com.ray.stormragemq.domain.ExchangerEntity" alias="ExchangerEntity"/>
     </typeAliases>
     
 </configuration>

@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SpringMvcConfig {
 
     private static final String[] excludePathPatterns = {
+            "/exchanger/*",
             "/constants/*",
             "/userAccount/login",
             "/userAccount/register"

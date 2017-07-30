@@ -10,17 +10,17 @@ public class UserAccountEntity extends BaseEntity implements Serializable{
 
     private static final long serialVersionUID = -4352289535055795726L;
 
-    private String userName;
+    private String userName;                //用户名
     
-    private String password;
+    private String password;                //密码
     
-    private String headImage;
+    private String headImage;               //头像
     
-    private Date createTime;
+    private Date createTime;                //创建时间
 
-    private String loginToken;
+    private String loginToken;              //登录Token
     
-    private Integer isDeleted;
+    private Integer isDeleted;              //是否被删除了
 
     public String getUserName() {
         return userName;
