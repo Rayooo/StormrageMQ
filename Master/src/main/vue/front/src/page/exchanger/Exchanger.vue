@@ -3,27 +3,30 @@
         <navigation father-component="exchanger"></navigation>
 
         <div style="margin-top: 20px;margin-bottom: 20px" >
-            <el-button @click="dialogFormVisible = true">添加交换器</el-button>
+            <el-button type="info" @click="dialogFormVisible = true">添加交换器</el-button>
         </div>
 
-        <el-table
-            :data="tableData"
-            stripe
-            style="width: 100%">
-            <el-table-column
-                prop="date"
-                label="日期"
-                width="180">
+        <div v-if="tableData.length < 1" style="text-align: center">您还没有创建交换器</div>
+
+        <h4 v-if="tableData.length > 0" style="text-align: center">交换器列表</h4>
+        <el-table v-if="tableData.length > 0" :data="tableData" stripe style="width: 100%" >
+            <el-table-column prop="name" label="名称" ></el-table-column>
+            <el-table-column prop="type" label="类型" ></el-table-column>
+            <el-table-column prop="content" label="内容"></el-table-column>
+            <el-table-column label="创建时间">
+                <template scope="scope">
+                    <el-icon name="time"></el-icon>
+                    <span style="margin-left: 10px">{{scope.row.createTimeFormat}}</span>
+                </template>
             </el-table-column>
-            <el-table-column
-                prop="name"
-                label="姓名"
-                width="180">
+
+            <el-table-column label="操作">
+                <template scope="scope">
+                    <el-button size="small" type="primary" @click="hanleEdit(scopt.id)">修改</el-button>
+                    <el-button size="small" type="danger" @click="hanleDelete(scopt.id)">删除</el-button>
+                </template>
             </el-table-column>
-            <el-table-column
-                prop="address"
-                label="地址">
-            </el-table-column>
+
         </el-table>
 
 
@@ -54,7 +57,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false;addExchanger()">确 定</el-button>
+                <el-button type="primary" @click="addExchanger()">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -64,30 +67,14 @@
 <script>
     import Global from "@/components/Global.vue"
     import Navigation from "../../components/Navigation.vue";
+    import moment from "moment"
 
     export default {
         components: {Navigation},
         name:"Exchanger",
         data() {
             return {
-                tableData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }],
-
+                tableData: [],
                 dialogFormVisible: false,
                 form: {
                     name: "",
@@ -100,21 +87,43 @@
         mounted() {
             Global.post("/exchanger/listExchangerTypes", {}, (response)=> {
                 this.exchangerTypeList = response.body.result;
-            }, ()=>{})
+            });
+            this.getExchangerList()
+
+
         },
         methods: {
             addExchanger(){
+                if(!this.form.type || !this.form.name || !this.form.content){
+                    this.$message.warning("请填写完所有的内容");
+                    return;
+                }
                 Global.post("/exchanger/addExchanger", this.form, (response) => {
+                    this.dialogFormVisible = false;
                     if(response.body.code === 0){
                         this.$message.success("添加成功");
+                        this.form = {name: "", type: "", content: ""}
+                        this.getExchangerList()
                     }
                     else{
                         this.$message.error(response.body.message);
                     }
                 }, ()=>{
+                    this.dialogFormVisible = false;
                     this.$message.error("服务器异常");
                 })
+            },
+            getExchangerList(){
+                Global.post("/exchanger/getExchangerList", {}, (res) => {
+                    if(res.body.code === 0){
+                        this.tableData = res.body.result;
+                        for(let i = 0; i < this.tableData.length; ++i){
+                            this.tableData[i].createTimeFormat = moment(this.tableData[i].createTime).format("YYYY-MM-DD HH:mm:ss");
+                        }
+                    }
+                });
             }
         }
+
     }
 </script>

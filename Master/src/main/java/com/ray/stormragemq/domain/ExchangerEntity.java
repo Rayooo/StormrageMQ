@@ -7,7 +7,7 @@ public class ExchangerEntity extends BaseEntity implements Serializable{
     
     private static final long serialVersionUID = 3951303791897018345L;
     
-    private String type;                //交换器类型 见ExchangerEnum
+    private Integer type;                //交换器类型 见ExchangerEnum
     
     private String name;                //交换器名称
     
@@ -17,11 +17,11 @@ public class ExchangerEntity extends BaseEntity implements Serializable{
     
     private Integer createUserId;       //创建用户
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

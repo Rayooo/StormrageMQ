@@ -121,7 +121,7 @@ CREATE TABLE useraccount(
 
 CREATE TABLE exchanger (
   id SERIAL PRIMARY KEY,
-  type VARCHAR(20) NOT NULL ,         --交换机类型
+  type INT NOT NULL ,                 --交换机类型
   name VARCHAR(100) NOT NULL ,        --交换机名称
   content TEXT,                       --交换机匹配规则，如果是fanout就是队列名称，topic就是正则表达式
   createtime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -151,7 +151,6 @@ CREATE TABLE messagequeue (
   consumer VARCHAR(100),              --消费者地址
   isreceived INT                      --是否接收
 );
-
 
 ```
 

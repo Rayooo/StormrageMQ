@@ -33,7 +33,7 @@
         },
         methods: {
             handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+//                console.log(key, keyPath);
             },
             go(viewName){
                 router.push({name: viewName})

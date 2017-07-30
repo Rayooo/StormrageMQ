@@ -3,7 +3,7 @@
 <mapper namespace="com.ray.stormragemq.dao.ExchangerDao">
     <resultMap id="BaseResultMap" type="ExchangerEntity">
         <result column="id" property="id" jdbcType="INTEGER"/>
-        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="content" property="content" jdbcType="VARCHAR"/>
         <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
@@ -19,6 +19,9 @@
         SELECT count(*) FROM exchanger WHERE name = #{name} AND createuserid = #{createUserId}
     </select>
 
+    <select id="getExchangerList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT * FROM exchanger WHERE createuserid = #{userId}
+    </select>
 
 
 </mapper>

@@ -6,6 +6,7 @@ import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.ExchangerService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +36,21 @@ public class ExchangerController {
 
     @RequestMapping("/addExchanger")
     public BaseResponse<String> addExchanger(@RequestBody ExchangerEntity exchanger, @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
+        if(StringUtils.isBlank(exchanger.getName()) || StringUtils.isBlank(exchanger.getContent())){
+            throw new BaseException("交换机名字或内容不可为空");
+        }
+        if(ExchangerEnum.getName(exchanger.getType()) == null){
+            throw new BaseException("交换机类型错误");
+        }
+
         exchanger.setCreateUserId(user.getId());
         exchangerService.addExchanger(exchanger);
         return new BaseResponse<>("SUCCESS");
+    }
+
+    @RequestMapping("/getExchangerList")
+    public BaseResponse<List> getExchangerList(@ModelAttribute("userInfo") UserAccountEntity user){
+        return new BaseResponse<>(exchangerService.getExchangerListByUser(user.getId()));
     }
 
 }

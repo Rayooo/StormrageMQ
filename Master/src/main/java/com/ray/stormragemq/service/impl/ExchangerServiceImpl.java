@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class ExchangerServiceImpl implements ExchangerService {
 
@@ -28,6 +32,13 @@ public class ExchangerServiceImpl implements ExchangerService {
             throw new BaseException("不能添加两个相同名字的交换器");
         }
 
+    }
+
+    @Override
+    public List<ExchangerEntity> getExchangerListByUser(int userId) {
+        Map<String, Integer> param = new HashMap<>();
+        param.put("userId", userId);
+        return exchangerDao.getExchangerList(param);
     }
 
     private boolean canAddExchanger(ExchangerEntity exchanger){
