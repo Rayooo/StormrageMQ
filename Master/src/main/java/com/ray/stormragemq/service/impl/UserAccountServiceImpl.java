@@ -3,6 +3,7 @@ package com.ray.stormragemq.service.impl;
 import com.ray.stormragemq.dao.UserAccountDao;
 import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.UserAccountService;
+import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.Password;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             return databaseUser;
         }
         else{
-            throw new Exception("用户名或密码错误");
+            throw new BaseException("用户名或密码错误");
         }
 
     }

@@ -16,12 +16,15 @@
     </insert>
 
     <select id="countExchangerByName" parameterType="ExchangerEntity" resultType="java.lang.Integer">
-        SELECT count(*) FROM exchanger WHERE name = #{name} AND createuserid = #{createUserId}
+        SELECT count(*) FROM exchanger WHERE name = #{name}
     </select>
 
     <select id="getExchangerList" parameterType="java.util.Map" resultMap="BaseResultMap">
         SELECT * FROM exchanger WHERE createuserid = #{userId}
     </select>
 
+    <select id="getAllExchanger" resultMap="BaseResultMap">
+        SELECT * FROM exchanger
+    </select>
 
 </mapper>

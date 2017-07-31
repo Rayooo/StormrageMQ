@@ -15,4 +15,7 @@ public interface ExchangerDao {
     int countExchangerByName(ExchangerEntity exchanger);
 
     List<ExchangerEntity> getExchangerList(Map param);
+
+    List<ExchangerEntity> getAllExchanger();
+
 }

@@ -2,6 +2,7 @@ package com.ray.stormragemq.controller;
 
 import com.ray.stormragemq.netty.NettyConfig;
 import com.ray.stormragemq.netty.TCPClient;
+import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
 import io.netty.bootstrap.Bootstrap;
 import org.apache.commons.lang3.StringUtils;
@@ -43,7 +44,7 @@ public class NettyController {
     public BaseResponse<?> mqRegister(String host, String port, String name) throws Exception {
         Pattern PATTERN = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$"); //检查IP合法性
         if(!PATTERN.matcher(host).matches() || !StringUtils.isNumeric(port)){
-            throw new Exception("ip或端口不合法");
+            throw new BaseException("ip或端口不合法");
         }
 
         Bootstrap b = config.bootstrap(host, Integer.parseInt(port));

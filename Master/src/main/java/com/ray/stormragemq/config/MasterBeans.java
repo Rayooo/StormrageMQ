@@ -1,6 +1,7 @@
 package com.ray.stormragemq.config;
 
 import com.ray.stormragemq.dao.UserAccountDao;
+import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.netty.TCPClient;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +36,12 @@ public class MasterBeans {
     //存放mq服务器和消息队列名称的对应关系,初始化一个空队列
     @Bean(name = "mqNameMap")
     public Map<String, Set<String>> mqNameMap() {
+        return new ConcurrentHashMap<>();
+    }
+
+    //缓存Exchanger，在启动的时候初始化
+    @Bean(name = "exchangerMap")
+    public Map<String, ExchangerEntity> exchangerMap(){
         return new ConcurrentHashMap<>();
     }
 

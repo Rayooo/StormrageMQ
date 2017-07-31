@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/exchanger")
@@ -21,9 +22,12 @@ public class ExchangerController {
 
     private final ExchangerService exchangerService;
 
+    private final Map<String, ExchangerEntity> exchangerMap;
+
     @Autowired
-    public ExchangerController(ExchangerService exchangerService) {
+    public ExchangerController(ExchangerService exchangerService, Map<String, ExchangerEntity> exchangerMap) {
         this.exchangerService = exchangerService;
+        this.exchangerMap = exchangerMap;
     }
 
 
