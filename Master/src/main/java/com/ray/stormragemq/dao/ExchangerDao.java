@@ -18,4 +18,8 @@ public interface ExchangerDao {
 
     List<ExchangerEntity> getAllExchanger();
 
+    int deleteExchangerById(ExchangerEntity exchanger);
+
+    ExchangerEntity getExchanger(ExchangerEntity exchanger);
+
 }

@@ -11,4 +11,7 @@ public interface ExchangerService {
 
     List<ExchangerEntity> getExchangerListByUser(int userId);
 
+    void deleteExchanger(ExchangerEntity exchanger);
+
+    ExchangerEntity getExchanger(ExchangerEntity exchanger);
 }

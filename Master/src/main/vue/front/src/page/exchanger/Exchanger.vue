@@ -11,7 +11,13 @@
         <h4 v-if="tableData.length > 0" style="text-align: center">交换器列表</h4>
         <el-table v-if="tableData.length > 0" :data="tableData" stripe style="width: 100%" >
             <el-table-column prop="name" label="名称" ></el-table-column>
-            <el-table-column prop="type" label="类型" ></el-table-column>
+            <el-table-column prop="type" label="类型" >
+                <template scope="scope">
+                    <span v-if="scope.row.type == '1'">Direct交换器</span>
+                    <span v-if="scope.row.type == '2'">Fanout交换器</span>
+                    <span v-if="scope.row.type == '3'">Topic交换器</span>
+                </template>
+            </el-table-column>
             <el-table-column prop="content" label="内容"></el-table-column>
             <el-table-column label="创建时间">
                 <template scope="scope">
@@ -22,8 +28,8 @@
 
             <el-table-column label="操作">
                 <template scope="scope">
-                    <el-button size="small" type="primary" @click="hanleEdit(scopt.id)">修改</el-button>
-                    <el-button size="small" type="danger" @click="hanleDelete(scopt.id)">删除</el-button>
+                    <el-button size="small" type="primary" @click="handleEdit(scope.row.id, scope.row.name)">修改</el-button>
+                    <el-button size="small" type="danger" @click="handleDelete(scope.row.id, scope.row.name)">删除</el-button>
                 </template>
             </el-table-column>
 
@@ -91,6 +97,7 @@
             this.getExchangerList()
 
 
+
         },
         methods: {
             addExchanger(){
@@ -122,6 +129,26 @@
                         }
                     }
                 });
+            },
+            handleDelete(id, name){
+                this.$confirm('此操作将删除' + name + ', 是否继续?', '提示', {
+                    confirmButtonText: '删除',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    confirmButtonClass: "el-button--danger"
+                }).then(() => {
+                    Global.post("/exchanger/deleteExchanger", {id:id}, (res) => {
+                        if(res.body.code === 0){
+                            this.$message.success("删除成功");
+                            this.getExchangerList();
+                        }
+                        else{
+                            this.message.error(res.body.message);
+                        }
+                    }, () => {
+                        this.$message.error("服务器异常");
+                    })
+                }).catch(()=>{});
             }
         }
 

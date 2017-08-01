@@ -57,4 +57,16 @@ public class ExchangerController {
         return new BaseResponse<>(exchangerService.getExchangerListByUser(user.getId()));
     }
 
+    @RequestMapping("/deleteExchanger")
+    public BaseResponse<String> deleteExchanger(@RequestBody ExchangerEntity exchanger) throws BaseException {
+        if(exchanger.getId() != null){
+            exchangerService.deleteExchanger(exchanger);
+            return new BaseResponse<>("success");
+        }
+        else{
+            throw new BaseException("Exchanger id不能为空");
+        }
+
+    }
+
 }

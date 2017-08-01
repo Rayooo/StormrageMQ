@@ -49,4 +49,17 @@ public class ExchangerServiceImpl implements ExchangerService {
         return exchangerDao.countExchangerByName(exchanger) < 1;
     }
 
+    @Transactional
+    @Override
+    public void deleteExchanger(ExchangerEntity exchanger) {
+        exchanger = getExchanger(exchanger);
+        if(exchangerDao.deleteExchangerById(exchanger) == 1){
+            exchangerMap.remove(exchanger.getName());
+        }
+    }
+
+    @Override
+    public ExchangerEntity getExchanger(ExchangerEntity exchanger) {
+        return exchangerDao.getExchanger(exchanger);
+    }
 }
