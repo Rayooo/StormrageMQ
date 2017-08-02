@@ -14,4 +14,6 @@ public interface ExchangerService {
     void deleteExchanger(ExchangerEntity exchanger);
 
     ExchangerEntity getExchanger(ExchangerEntity exchanger);
+
+    void changeExchanger(ExchangerEntity exchanger) throws BaseException;
 }

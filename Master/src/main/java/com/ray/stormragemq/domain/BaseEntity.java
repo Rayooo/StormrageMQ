@@ -14,6 +14,12 @@ public class BaseEntity {
     @JsonIgnore
     private Integer pageNo;         //页码
 
+    public BaseEntity() {}
+
+    public BaseEntity(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

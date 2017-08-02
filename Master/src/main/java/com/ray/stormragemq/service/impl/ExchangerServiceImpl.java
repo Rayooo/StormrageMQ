@@ -62,4 +62,18 @@ public class ExchangerServiceImpl implements ExchangerService {
     public ExchangerEntity getExchanger(ExchangerEntity exchanger) {
         return exchangerDao.getExchanger(exchanger);
     }
+
+    @Override
+    public void changeExchanger(ExchangerEntity exchanger) throws BaseException {
+        ExchangerEntity before = getExchanger(new ExchangerEntity(exchanger.getId()));
+        if(canAddExchanger(exchanger)){
+            if(exchangerDao.updateExchanger(exchanger) == 1){
+                exchangerMap.remove(before.getName());
+                exchangerMap.put(exchanger.getName(), exchanger);
+            }
+        }
+        else{
+            throw new BaseException("不能添加两个相同名字的交换器");
+        }
+    }
 }

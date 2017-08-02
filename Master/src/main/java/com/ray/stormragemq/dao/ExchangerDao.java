@@ -22,4 +22,5 @@ public interface ExchangerDao {
 
     ExchangerEntity getExchanger(ExchangerEntity exchanger);
 
+    int updateExchanger(ExchangerEntity exchanger);
 }

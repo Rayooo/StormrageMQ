@@ -40,6 +40,7 @@ public class ExchangerController {
 
     @RequestMapping("/addExchanger")
     public BaseResponse<String> addExchanger(@RequestBody ExchangerEntity exchanger, @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
+        exchanger.setName(exchanger.getName().trim());
         if(StringUtils.isBlank(exchanger.getName()) || StringUtils.isBlank(exchanger.getContent())){
             throw new BaseException("交换机名字或内容不可为空");
         }
@@ -67,6 +68,22 @@ public class ExchangerController {
             throw new BaseException("Exchanger id不能为空");
         }
 
+    }
+
+    @RequestMapping("/changeExchanger")
+    public BaseResponse<String> changeExchanger(@RequestBody ExchangerEntity exchanger) throws BaseException {
+        exchanger.setName(exchanger.getName().trim());
+        if(StringUtils.isBlank(exchanger.getName()) || StringUtils.isBlank(exchanger.getContent())){
+            throw new BaseException("交换机名字或内容不可为空");
+        }
+        if(ExchangerEnum.getName(exchanger.getType()) == null){
+            throw new BaseException("交换机类型错误");
+        }
+        if(exchanger.getId() == null){
+            throw new BaseException("id错误");
+        }
+        exchangerService.changeExchanger(exchanger);
+        return new BaseResponse<>("success");
     }
 
 }

@@ -17,6 +17,12 @@ public class ExchangerEntity extends BaseEntity implements Serializable{
     
     private Integer createUserId;       //创建用户
 
+    public ExchangerEntity() {}
+
+    public ExchangerEntity(Integer id) {
+        super(id);
+    }
+
     public Integer getType() {
         return type;
     }

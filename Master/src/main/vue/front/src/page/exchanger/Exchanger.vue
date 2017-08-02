@@ -28,7 +28,7 @@
 
             <el-table-column label="操作">
                 <template scope="scope">
-                    <el-button size="small" type="primary" @click="handleEdit(scope.row.id, scope.row.name)">修改</el-button>
+                    <el-button size="small" type="primary" @click="handleEdit(scope.row)">修改</el-button>
                     <el-button size="small" type="danger" @click="handleDelete(scope.row.id, scope.row.name)">删除</el-button>
                 </template>
             </el-table-column>
@@ -67,6 +67,39 @@
             </div>
         </el-dialog>
 
+
+        <el-dialog title="修改交换器" :visible.sync="dialogChangeFormVisible">
+            <el-form :model="changeForm">
+                <el-form-item label="交换器名称" >
+                    <el-input v-model="changeForm.name" auto-complete="off"></el-input>
+                </el-form-item>
+
+                <el-form-item label="交换器类型" >
+                    <el-select v-model="changeForm.type" placeholder="请选择交换器类型">
+                        <el-option v-for="exchangerType in exchangerTypeList" :label=exchangerType.describe :value=exchangerType.type :key=exchangerType.type></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="请输入Routing Key" v-if="changeForm.type == 1">
+                    <el-input v-model="changeForm.content"></el-input>
+                </el-form-item>
+
+                <el-form-item label="请依次输入MQ的名称，以英文逗号分割" v-if="changeForm.type == 2">
+                    <el-input v-model="changeForm.content"></el-input>
+                </el-form-item>
+
+                <el-form-item label="请输入匹配MQ的名称的正则表达式" v-if="changeForm.type == 3">
+                    <el-input v-model="changeForm.content"></el-input>
+                </el-form-item>
+
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogChangeFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="changeExchanger()">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
     </section>
 </template>
 
@@ -87,7 +120,9 @@
                     type: "",
                     content: ""
                 },
-                exchangerTypeList:[]
+                exchangerTypeList:[],
+                changeForm: {},
+                dialogChangeFormVisible: false
             }
         },
         mounted() {
@@ -109,7 +144,7 @@
                     this.dialogFormVisible = false;
                     if(response.body.code === 0){
                         this.$message.success("添加成功");
-                        this.form = {name: "", type: "", content: ""}
+                        this.form = {name: "", type: "", content: ""};
                         this.getExchangerList()
                     }
                     else{
@@ -149,6 +184,33 @@
                         this.$message.error("服务器异常");
                     })
                 }).catch(()=>{});
+            },
+            handleEdit(data){
+                this.changeForm = data;
+                this.dialogChangeFormVisible = true;
+            },
+            changeExchanger(){
+                if(!this.changeForm.type || !this.changeForm.name || !this.changeForm.content){
+                    this.$message.warning("请填写完所有的内容");
+                    return;
+                }
+
+                Global.post("/exchanger/changeExchanger", this.changeForm, (response) => {
+                    this.dialogChangeFormVisible = false;
+                    if(response.body.code === 0){
+                        this.$message.success("修改成功");
+                        this.changeForm = {};
+                    }
+                    else{
+                        this.$message.error(response.body.message);
+                    }
+                    this.getExchangerList()
+                }, ()=>{
+                    this.dialogChangeFormVisible = false;
+                    this.$message.error("服务器异常");
+                    this.getExchangerList()
+                })
+
             }
         }
 

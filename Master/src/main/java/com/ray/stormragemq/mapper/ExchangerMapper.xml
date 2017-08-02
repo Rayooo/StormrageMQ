@@ -17,6 +17,7 @@
 
     <select id="countExchangerByName" parameterType="ExchangerEntity" resultType="java.lang.Integer">
         SELECT count(*) FROM exchanger WHERE name = #{name}
+        <if test="id != null">AND id != #{id}</if>
     </select>
 
     <select id="getExchangerList" parameterType="java.util.Map" resultMap="BaseResultMap">
@@ -38,5 +39,15 @@
             <if test="name != null and name != ''">name = #{name}</if>
         </where>
     </select>
+
+    <update id="updateExchanger" parameterType="ExchangerEntity">
+        UPDATE exchanger
+        <set>
+            <if test="type != null">type = #{type},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
 
 </mapper>
