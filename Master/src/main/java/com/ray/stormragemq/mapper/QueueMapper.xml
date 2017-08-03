@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ray.stormragemq.dao.QueueDao">
+
+    <resultMap id="BaseResultMap" type="QueueEntity">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="addresslist" property="addressList" jdbcType="TEXT"/>
+        <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="createuserid" property="createUserId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insertQueue" parameterType="QueueEntity">
+        INSERT INTO queue (name, addresslist, createuserid) VALUES
+            (#{name}, #{addressList}, #{createUserId})
+    </insert>
+
+    <select id="countQueueByName" parameterType="QueueEntity">
+        SELECT count(*) FROM queue WHERE name = #{name}
+        <if test="id != null">AND id != #{id}</if>
+    </select>
+
+    <select id="getQueueList" parameterType="QueueEntity">
+        SELECT * FROM queue WHERE createuserid = #{createUserId}
+    </select>
+
+    <delete id="deleteQueueById" parameterType="QueueEntity">
+        DELETE FROM queue WHERE id = #{id} AND createuserid = #{createUserId}
+    </delete>
+
+    <select id="getAllQueue">
+        SELECT * FROM queue
+    </select>
+
+    <select id="getQueue" parameterType="QueueEntity">
+        SELECT * FROM queue
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="name != null and name != ''">name = #{name}</if>
+        </where>
+    </select>
+
+    <update id="updateQueue" parameterType="QueueEntity">
+        UPDATE queue
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="addressList != null and addressList != ''">addresslist = #{addressList},</if>
+        </set>
+    </update>
+
+
+</mapper>
