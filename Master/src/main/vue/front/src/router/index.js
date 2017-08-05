@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-
+import store from "../store/index"
 Vue.use(Router);
 
 function view(name) {
@@ -10,7 +9,23 @@ function view(name) {
     }
 }
 
-export default new Router({
+function isLogin() {
+   return !!store.state.token;
+}
+
+function checkUrl() {
+   if(!isLogin()){
+       let path = window.location.href.split("#")[1];
+       if(unLoginUrl.indexOf(path) === -1){        //找不到
+           window.location.href = "/";
+       }
+   }
+}
+
+let unLoginUrl = ["/", "/register"];
+
+
+let router = new Router({
     routes: [
         {
             path: '/',
@@ -45,4 +60,12 @@ export default new Router({
         {path: "/error", component: view("Error.vue")},
         {path: "*", component: view("PageNotFound.vue")}
     ]
-})
+});
+
+router.beforeEach((to, from, next) => {
+    checkUrl();
+    next();
+});
+
+export default router;
+
