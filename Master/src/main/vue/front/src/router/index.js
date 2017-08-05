@@ -10,7 +10,13 @@ function view(name) {
 }
 
 function isLogin() {
-   return !!store.state.token;
+   let user = JSON.parse(sessionStorage.getItem("user"));
+   if(!user){
+       return false;
+   }
+   else{
+       return !!user.loginToken;
+   }
 }
 
 function checkUrl() {

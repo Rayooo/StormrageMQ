@@ -15,7 +15,7 @@
             (#{name}, #{addressList}, #{createUserId})
     </insert>
 
-    <select id="countQueueByName" parameterType="QueueEntity">
+    <select id="countQueueByName" parameterType="QueueEntity" resultType="java.lang.Integer">
         SELECT count(*) FROM queue WHERE name = #{name}
         <if test="id != null">AND id != #{id}</if>
     </select>
@@ -28,11 +28,11 @@
         DELETE FROM queue WHERE id = #{id} AND createuserid = #{createUserId}
     </delete>
 
-    <select id="getAllQueue">
+    <select id="getAllQueue" resultMap="BaseResultMap">
         SELECT * FROM queue
     </select>
 
-    <select id="getQueue" parameterType="QueueEntity">
+    <select id="getQueue" parameterType="QueueEntity" resultMap="BaseResultMap">
         SELECT * FROM queue
         <where>
             <if test="id != null">id = #{id}</if>

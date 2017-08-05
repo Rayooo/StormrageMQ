@@ -1,9 +1,11 @@
 package com.ray.stormragemq.dao;
 
 import com.ray.stormragemq.domain.QueueEntity;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface QueueDao {
 
     void insertQueue(QueueEntity queue);
@@ -14,7 +16,7 @@ public interface QueueDao {
 
     int deleteQueueById(QueueEntity queue);
 
-    List<QueueEntity> getAllQueue(QueueEntity queue);
+    List<QueueEntity> getAllQueue();
 
     QueueEntity getQueue(QueueEntity queue);
 

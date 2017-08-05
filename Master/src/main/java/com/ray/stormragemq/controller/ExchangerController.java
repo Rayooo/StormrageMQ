@@ -50,7 +50,7 @@ public class ExchangerController {
 
         exchanger.setCreateUserId(user.getId());
         exchangerService.addExchanger(exchanger);
-        return new BaseResponse<>("SUCCESS");
+        return new BaseResponse<>("success");
     }
 
     @RequestMapping("/getExchangerList")

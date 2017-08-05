@@ -2,6 +2,7 @@ package com.ray.stormragemq.config;
 
 import com.ray.stormragemq.dao.UserAccountDao;
 import com.ray.stormragemq.domain.ExchangerEntity;
+import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.netty.TCPClient;
 import org.apache.commons.lang3.StringUtils;
@@ -45,5 +46,9 @@ public class MasterBeans {
         return new ConcurrentHashMap<>();
     }
 
+    @Bean(name = "queueMap")
+    public Map<String, QueueEntity> queueMap(){
+        return new ConcurrentHashMap<>();
+    }
 
 }

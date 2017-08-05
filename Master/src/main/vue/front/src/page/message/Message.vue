@@ -1,7 +1,9 @@
 <template>
     <section id="message">
         <navigation father-component="message"></navigation>
-        {{msg}}
+
+        这是消息
+
     </section>
 </template>
 
@@ -15,17 +17,16 @@
         name:"Message",
         data() {
             return {
-                msg: ""
+
             }
         },
         mounted() {
-            this.msg = "这是消息列表";
-            this.ADD(10);
+
+
         },
         methods:{
-            ...mapMutations([
-                "ADD"
-            ]),
+
+
         }
 
     }
