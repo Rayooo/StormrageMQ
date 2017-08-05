@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/queue")
 public class QueueController {
@@ -33,5 +35,9 @@ public class QueueController {
         return new BaseResponse<>("success");
     }
 
+    @RequestMapping("/getQueueList")
+    public BaseResponse<List> getQueueList(@ModelAttribute("userInfo") UserAccountEntity user){
+        return new BaseResponse<>(queueService.getQueueListByUserId(user.getId()));
+    }
 
 }

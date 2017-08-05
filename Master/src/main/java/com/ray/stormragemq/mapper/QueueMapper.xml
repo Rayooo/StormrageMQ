@@ -20,8 +20,8 @@
         <if test="id != null">AND id != #{id}</if>
     </select>
 
-    <select id="getQueueList" parameterType="QueueEntity">
-        SELECT * FROM queue WHERE createuserid = #{createUserId}
+    <select id="getQueueList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT * FROM queue WHERE createuserid = #{userid}
     </select>
 
     <delete id="deleteQueueById" parameterType="QueueEntity">

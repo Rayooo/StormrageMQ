@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,5 +40,12 @@ public class QueueServiceImpl implements QueueService {
 
     private boolean canAddQueue(QueueEntity queue){
         return queueDao.countQueueByName(queue) < 1;
+    }
+
+    @Override
+    public List getQueueListByUserId(int userid) {
+        Map<String, Integer> param = new HashMap<>();
+        param.put("userid", userid);
+        return queueDao.getQueueList(param);
     }
 }

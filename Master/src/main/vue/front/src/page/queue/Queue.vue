@@ -8,7 +8,28 @@
 
         <div v-if="tableData.length < 1" style="text-align: center">您还没有创建队列</div>
 
+        <h4 v-if="tableData.length > 0" style="text-align: center">队列(Queue) 列表</h4>
 
+        <el-table v-if="tableData.length > 0" :data="tableData" stripe style="width: 100%"  >
+            <el-table-column prop="name" label="名称" ></el-table-column>
+
+            <el-table-column prop="addressList" label="监听的消费者" ></el-table-column>
+
+            <el-table-column label="创建时间">
+                <template scope="scope">
+                    <el-icon name="time"></el-icon>
+                    <span style="margin-left: 10px">{{scope.row.createTimeFormat}}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="操作">
+                <template scope="scope">
+                    <el-button size="small" type="primary" @click="handleEdit(scope.row)">修改</el-button>
+                    <el-button size="small" type="danger" @click="handleDelete(scope.row.id, scope.row.name)">删除</el-button>
+                </template>
+            </el-table-column>
+
+        </el-table>
 
 
 
@@ -30,6 +51,7 @@
 <script>
     import Global from "@/components/Global.vue"
     import Navigation from "../../components/Navigation.vue";
+    import moment from "moment"
 
     export default {
         components: {Navigation},
@@ -44,7 +66,7 @@
             }
         },
         mounted() {
-            this.msg = "这是队列";
+            this.getQueueList()
         },
         methods:{
             addQueue(){
@@ -57,6 +79,7 @@
                     if(res.body.code === 0){
                         this.$message.success("添加成功");
                         this.form = {name: ""};
+                        this.getQueueList();
                     }
                     else{
                         this.$message.error(res.body.message);
@@ -64,6 +87,16 @@
                 },() => {
                     this.dialogFormVisible = false;
                     this.$message.error("服务器异常");
+                })
+            },
+            getQueueList(){
+                Global.post("/queue/getQueueList", {}, (res)=>{
+                    if(res.body.code === 0){
+                        this.tableData = res.body.result;
+                        for(let i = 0; i < this.tableData.length; ++i){
+                            this.tableData[i].createTimeFormat = moment(this.tableData[i].createTime).format("YYYY-MM-DD HH:mm:ss");
+                        }
+                    }
                 })
             }
         }

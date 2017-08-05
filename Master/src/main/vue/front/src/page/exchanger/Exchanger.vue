@@ -8,7 +8,8 @@
 
         <div v-if="tableData.length < 1" style="text-align: center">您还没有创建交换器</div>
 
-        <h4 v-if="tableData.length > 0" style="text-align: center">交换器列表</h4>
+        <h4 v-if="tableData.length > 0" style="text-align: center">交换器(Exchanger) 列表</h4>
+
         <el-table v-if="tableData.length > 0" :data="tableData" stripe style="width: 100%" >
             <el-table-column prop="name" label="名称" ></el-table-column>
             <el-table-column prop="type" label="类型" >
