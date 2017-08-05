@@ -5,7 +5,7 @@
     <resultMap id="BaseResultMap" type="QueueEntity">
         <result column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="addresslist" property="addressList" jdbcType="TEXT"/>
+        <result column="addresslist" property="addressList" jdbcType="VARCHAR"/>
         <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="createuserid" property="createUserId" jdbcType="INTEGER"/>
     </resultMap>
