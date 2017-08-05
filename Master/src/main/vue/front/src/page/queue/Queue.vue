@@ -45,6 +45,18 @@
             </div>
         </el-dialog>
 
+        <el-dialog title="修改队列" :visible.sync="dialogChangeFormVisible">
+            <el-form :model="form">
+                <el-form-item label="队列名称(使用类似xxx.xxx.xx的格式)" >
+                    <el-input v-model="changeForm.name"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogChangeFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="changeQueue()">确 定</el-button>
+            </div>
+        </el-dialog>
+
     </section>
 </template>
 
@@ -62,7 +74,9 @@
                 tableData:[],
                 form:{
                     name: ""
-                }
+                },
+                changeForm:{},
+                dialogChangeFormVisible:false
             }
         },
         mounted() {
@@ -98,6 +112,53 @@
                         }
                     }
                 })
+            },
+            handleEdit(data){
+                this.changeForm = data;
+                this.dialogChangeFormVisible = true;
+            },
+            handleDelete(id, name){
+                this.$confirm('此操作将删除' + name + ', 是否继续?', '提示', {
+                    confirmButtonText: '删除',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    confirmButtonClass: "el-button--danger"
+                }).then(() => {
+                    Global.post("/queue/deleteQueue", {id:id}, (res) => {
+                        if(res.body.code === 0){
+                            this.$message.success("删除成功");
+                            this.getQueueList();
+                        }
+                        else{
+                            this.$message.error(res.body.message);
+                        }
+                    }, () => {
+                        this.$message.error("服务器异常");
+                    })
+                }).catch(()=>{});
+            },
+            changeQueue(){
+                if(!this.changeForm.name){
+                    this.$message.warning("请填写队列名称");
+                    return;
+                }
+
+                Global.post("/queue/changeQueue",this.changeForm, (res)=>{
+                    this.dialogChangeFormVisible = false;
+                    if(res.body.code === 0){
+                        this.$message.success("修改成功");
+                        this.changeForm = {};
+                    }
+                    else{
+                        this.$message.error(res.body.message);
+                    }
+                    this.getQueueList();
+                }, ()=>{
+                    this.dialogChangeFormVisible = false;
+                    this.$message.error("服务器异常");
+                    this.getQueueList();
+                })
+
             }
         }
     }

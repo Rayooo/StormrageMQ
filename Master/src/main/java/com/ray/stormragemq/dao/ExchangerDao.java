@@ -1,6 +1,7 @@
 package com.ray.stormragemq.dao;
 
 import com.ray.stormragemq.domain.ExchangerEntity;
+import com.ray.stormragemq.domain.UserAccountEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

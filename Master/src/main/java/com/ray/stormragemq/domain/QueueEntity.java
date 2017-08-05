@@ -15,8 +15,10 @@ public class QueueEntity extends BaseEntity implements Serializable {
 
     private Integer createUserId;   //创建的用户id
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+    public QueueEntity() {}
+
+    public QueueEntity(Integer id) {
+        super(id);
     }
 
     public String getName() {

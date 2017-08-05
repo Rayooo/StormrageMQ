@@ -40,4 +40,30 @@ public class QueueController {
         return new BaseResponse<>(queueService.getQueueListByUserId(user.getId()));
     }
 
+    @RequestMapping("/deleteQueue")
+    public BaseResponse<String> deleteQueue(@RequestBody QueueEntity queue,  @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
+        if(queue.getId() != null){
+            queueService.deleteQueue(queue, user);
+            return new BaseResponse<>("success");
+        }
+        else {
+            throw new BaseException("Queue id不能为空");
+        }
+
+    }
+
+    @RequestMapping("/changeQueue")
+    public BaseResponse<String> changeQueue(@RequestBody QueueEntity queue) throws BaseException {
+        queue.setName(queue.getName().trim());
+        if(StringUtils.isBlank(queue.getName())){
+            throw new BaseException("队列名称不可为空");
+        }
+        if(queue.getId() == null){
+            throw new BaseException("id错误");
+        }
+        queueService.changeQueue(queue);
+        return new BaseResponse<>("success");
+    }
+
+
 }

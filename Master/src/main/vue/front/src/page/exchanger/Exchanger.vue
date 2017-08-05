@@ -179,7 +179,7 @@
                             this.getExchangerList();
                         }
                         else{
-                            this.message.error(res.body.message);
+                            this.$message.error(res.body.message);
                         }
                     }, () => {
                         this.$message.error("服务器异常");
@@ -209,7 +209,7 @@
                 }, ()=>{
                     this.dialogChangeFormVisible = false;
                     this.$message.error("服务器异常");
-                    this.getExchangerList()
+                    this.getExchangerList();
                 })
 
             }

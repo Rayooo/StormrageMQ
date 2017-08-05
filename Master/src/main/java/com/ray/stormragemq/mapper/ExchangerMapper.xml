@@ -31,7 +31,6 @@
     <delete id="deleteExchangerById" parameterType="ExchangerEntity">
         DELETE FROM exchanger WHERE id = #{id}
     </delete>
-    <!--todo 可能要增加一个userId的判断-->
 
     <select id="getExchanger" parameterType="ExchangerEntity" resultMap="BaseResultMap">
         SELECT * FROM exchanger

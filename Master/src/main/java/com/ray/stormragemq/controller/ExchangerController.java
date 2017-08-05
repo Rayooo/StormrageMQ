@@ -59,9 +59,9 @@ public class ExchangerController {
     }
 
     @RequestMapping("/deleteExchanger")
-    public BaseResponse<String> deleteExchanger(@RequestBody ExchangerEntity exchanger) throws BaseException {
+    public BaseResponse<String> deleteExchanger(@RequestBody ExchangerEntity exchanger, @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
         if(exchanger.getId() != null){
-            exchangerService.deleteExchanger(exchanger);
+            exchangerService.deleteExchanger(exchanger, user);
             return new BaseResponse<>("success");
         }
         else{

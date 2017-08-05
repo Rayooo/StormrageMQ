@@ -46,6 +46,7 @@
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="addressList != null and addressList != ''">addresslist = #{addressList},</if>
         </set>
+        WHERE id = #{id}
     </update>
 
 

@@ -2,6 +2,7 @@ package com.ray.stormragemq.service.impl;
 
 import com.ray.stormragemq.dao.ExchangerDao;
 import com.ray.stormragemq.domain.ExchangerEntity;
+import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.ExchangerService;
 import com.ray.stormragemq.util.BaseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +53,20 @@ public class ExchangerServiceImpl implements ExchangerService {
 
     @Transactional
     @Override
-    public void deleteExchanger(ExchangerEntity exchanger) {
+    public void deleteExchanger(ExchangerEntity exchanger, UserAccountEntity user) throws BaseException {
         exchanger = getExchanger(exchanger);
-        if(exchangerDao.deleteExchangerById(exchanger) == 1){
-            exchangerMap.remove(exchanger.getName());
+        if(exchanger.getCreateUserId().equals(user.getId())){
+            if(exchangerDao.deleteExchangerById(exchanger) == 1){
+                exchangerMap.remove(exchanger.getName());
+            }
+            else{
+                throw new BaseException("删除失败");
+            }
         }
+        else{
+            throw new BaseException("无法删除不是自己创建的交换器");
+        }
+
     }
 
     @Override
@@ -65,12 +75,16 @@ public class ExchangerServiceImpl implements ExchangerService {
     }
 
     @Override
+    @Transactional
     public void changeExchanger(ExchangerEntity exchanger) throws BaseException {
         ExchangerEntity before = getExchanger(new ExchangerEntity(exchanger.getId()));
         if(canAddExchanger(exchanger)){
             if(exchangerDao.updateExchanger(exchanger) == 1){
                 exchangerMap.remove(before.getName());
                 exchangerMap.put(exchanger.getName(), exchanger);
+            }
+            else {
+                throw new BaseException("更新失败");
             }
         }
         else{

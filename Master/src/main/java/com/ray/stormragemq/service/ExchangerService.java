@@ -1,6 +1,7 @@
 package com.ray.stormragemq.service;
 
 import com.ray.stormragemq.domain.ExchangerEntity;
+import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.util.BaseException;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface ExchangerService {
 
     List<ExchangerEntity> getExchangerListByUser(int userId);
 
-    void deleteExchanger(ExchangerEntity exchanger);
+    void deleteExchanger(ExchangerEntity exchanger, UserAccountEntity user) throws BaseException ;
 
     ExchangerEntity getExchanger(ExchangerEntity exchanger);
 
