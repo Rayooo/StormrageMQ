@@ -17,6 +17,16 @@ public class ExchangerEntity extends BaseEntity implements Serializable{
     
     private Integer createUserId;       //创建用户
 
+    private String[] queueList;         //存放扫描到的队列, 不序列化
+
+    public String[] getQueueList() {
+        return queueList;
+    }
+
+    public void setQueueList(String[] queueList) {
+        this.queueList = queueList;
+    }
+
     public ExchangerEntity() {}
 
     public ExchangerEntity(Integer id) {

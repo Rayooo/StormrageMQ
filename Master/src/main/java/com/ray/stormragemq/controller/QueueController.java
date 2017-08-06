@@ -27,6 +27,8 @@ public class QueueController {
 
     @RequestMapping("/addQueue")
     public BaseResponse<String> addQueue(@RequestBody QueueEntity queue, @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
+        queue.setName(StringUtils.deleteWhitespace(queue.getName()));
+
         if(StringUtils.isBlank(queue.getName())){
             throw new BaseException("队列名称不可为空");
         }
@@ -54,7 +56,8 @@ public class QueueController {
 
     @RequestMapping("/changeQueue")
     public BaseResponse<String> changeQueue(@RequestBody QueueEntity queue) throws BaseException {
-        queue.setName(queue.getName().trim());
+        queue.setName(StringUtils.deleteWhitespace(queue.getName()));
+
         if(StringUtils.isBlank(queue.getName())){
             throw new BaseException("队列名称不可为空");
         }
