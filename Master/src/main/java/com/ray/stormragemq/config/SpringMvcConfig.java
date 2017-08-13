@@ -2,6 +2,9 @@ package com.ray.stormragemq.config;
 
 import com.ray.stormragemq.dao.UserAccountDao;
 import com.ray.stormragemq.domain.UserAccountEntity;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +17,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.security.Key;
 
 @Component
 public class SpringMvcConfig {
@@ -27,9 +32,12 @@ public class SpringMvcConfig {
 
     private final UserAccountDao userAccountDao;
 
+    private final Key key;
+
     @Autowired
-    public SpringMvcConfig(UserAccountDao userAccountDao) {
+    public SpringMvcConfig(UserAccountDao userAccountDao, Key key) {
         this.userAccountDao = userAccountDao;
+        this.key = key;
     }
 
 
@@ -54,13 +62,20 @@ public class SpringMvcConfig {
                             response.sendRedirect("/#/error");
                             return false;
                         }
-                        UserAccountEntity user = new UserAccountEntity();
-                        user.setLoginToken(token);
-                        user.setId(Integer.parseInt(id));
-                        UserAccountEntity dataBaseUser = userAccountDao.getUserByToken(user);
-                        if(dataBaseUser != null){
-                            request.setAttribute("userInfo", dataBaseUser);
-                            return true;
+
+                        Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+                        String userid = claims.getBody().getId();
+                        String userName = claims.getBody().getSubject();
+                        if(userid.equals(id)){
+                            UserAccountEntity user = new UserAccountEntity();
+                            user.setUserName(userName);
+                            user.setLoginToken(token);
+                            user.setId(Integer.parseInt(id));
+                            UserAccountEntity dataBaseUser = userAccountDao.getUserByUserName(user);
+                            if(dataBaseUser != null){
+                                request.setAttribute("userInfo", dataBaseUser);
+                                return true;
+                            }
                         }
                         return false;
                     }

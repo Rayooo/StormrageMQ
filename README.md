@@ -106,7 +106,7 @@ CREATE TABLE useraccount(
   password VARCHAR(255) NOT NULL ,					--密码
   headimage VARCHAR(255),					--头像
   createtime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,	--创建时间
-  logintoken VARCHAR(100),						--登录token
+  logintoken VARCHAR(511),						--登录token
   isdeleted SMALLINT NOT NULL DEFAULT 0			--是否被删除
 );
 
@@ -142,6 +142,5 @@ CREATE TABLE messagequeue (
   consumer VARCHAR(100),              --消费者地址
   isreceived INT                      --是否接收
 );
-
 ```
 

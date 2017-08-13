@@ -20,7 +20,7 @@ public class MatchQueueUtil {
         if(listA.size() != listB.size()){         //两个长度需要一样
             return false;
         }
-        
+
         for(int i = 0; i < listA.size(); i++){
             if("*".equals(listA.get(i)) || "*".equals(listB.get(i))){
                 continue;

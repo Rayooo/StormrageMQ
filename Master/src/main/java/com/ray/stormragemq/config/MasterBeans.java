@@ -5,6 +5,7 @@ import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.netty.TCPClient;
+import io.jsonwebtoken.impl.crypto.MacProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Key;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,6 +51,11 @@ public class MasterBeans {
     @Bean(name = "queueMap")
     public Map<String, QueueEntity> queueMap(){
         return new ConcurrentHashMap<>();
+    }
+
+    @Bean(name = "key")
+    public Key key(){
+        return MacProvider.generateKey();
     }
 
 }

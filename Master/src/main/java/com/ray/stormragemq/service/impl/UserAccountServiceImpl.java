@@ -5,10 +5,15 @@ import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.UserAccountService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.Password;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Key;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -20,16 +25,25 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountDao userAccountDao;
 
     @Autowired
-    public UserAccountServiceImpl(UserAccountDao userAccountDao) {
+    private final Key key;
+
+    @Autowired
+    public UserAccountServiceImpl(UserAccountDao userAccountDao, Key key) {
         this.userAccountDao = userAccountDao;
+        this.key = key;
     }
 
     @Override
     public UserAccountEntity login(UserAccountEntity user) throws Exception {
         UserAccountEntity databaseUser = userAccountDao.getUserByUserName(user);
         if(databaseUser != null && Password.check(user.getPassword(), databaseUser.getPassword())){
+            String compactJws = Jwts.builder()
+                    .setSubject(databaseUser.getUserName())
+                    .setId(databaseUser.getId().toString())
+                    .signWith(SignatureAlgorithm.HS512, key)
+                    .compact();
             //返回token
-            databaseUser.setLoginToken(UUID.randomUUID().toString().replaceAll("-", ""));
+            databaseUser.setLoginToken(compactJws);
             userAccountDao.updateUser(databaseUser);
             return databaseUser;
         }

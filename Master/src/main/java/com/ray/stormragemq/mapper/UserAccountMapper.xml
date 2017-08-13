@@ -19,6 +19,9 @@
 
     <select id="getUserByUserName" parameterType="UserAccountEntity" resultMap="BaseResultMap">
         SELECT * FROM UserAccount WHERE username=#{userName}
+        <if test="id != null">
+            AND id = #{id}
+        </if>
     </select>
 
     <insert id="insertUser" parameterType="UserAccountEntity">
