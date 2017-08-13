@@ -6,6 +6,7 @@ import com.ray.stormragemq.dao.QueueDao;
 import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.util.MatchQueueUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -60,7 +61,7 @@ public class Refresh {
 
             if(exchangerEntity.getType() == ExchangerEnum.DIRECT.getType()){
                 for (QueueEntity queue : queueEntityList) {
-                    if(queue.getName().equals(exchangerEntity.getContent())){
+                    if(StringUtils.equals(queue.getName(), exchangerEntity.getContent()) && queue.getCreateUserId().equals(exchangerEntity.getCreateUserId())){
                         exchangerEntity.setQueueList(new ArrayList<>(Collections.singletonList(queue.getName())));
                         break;
                     }
@@ -72,7 +73,7 @@ public class Refresh {
                 ArrayList<String> add = new ArrayList<>();
                 for (QueueEntity queue : queueEntityList) {
                     for (String ss : needQueue) {
-                        if(queue.getName().equals(ss)){
+                        if(queue.getCreateUserId().equals(exchangerEntity.getCreateUserId()) && StringUtils.equals(queue.getName(), ss)){
                             add.add(ss);
                         }
                     }
@@ -82,7 +83,7 @@ public class Refresh {
             else if(exchangerEntity.getType() == ExchangerEnum.TOPIC.getType()){
                 ArrayList<String> add = new ArrayList<>();
                 for (QueueEntity queue : queueEntityList) {
-                    if(MatchQueueUtil.match(queue.getName(), exchangerEntity.getContent())){
+                    if(queue.getCreateUserId().equals(exchangerEntity.getCreateUserId()) && MatchQueueUtil.match(queue.getName(), exchangerEntity.getContent())){
                         add.add(queue.getName());
                     }
                 }
