@@ -22,7 +22,7 @@ public class ExchangerServiceImpl implements ExchangerService {
     private final Refresh refresh;
 
     @Autowired
-    public ExchangerServiceImpl(ExchangerDao exchangerDao, Refresh refresh) {
+    public ExchangerServiceImpl(ExchangerDao exchangerDao, Refresh refresh, Map<String, ExchangerEntity> exchangerMap) {
         this.exchangerDao = exchangerDao;
         this.refresh = refresh;
     }

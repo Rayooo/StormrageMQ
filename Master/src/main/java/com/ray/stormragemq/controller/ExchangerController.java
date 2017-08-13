@@ -90,4 +90,15 @@ public class ExchangerController {
         return new BaseResponse<>("success");
     }
 
+    @RequestMapping("/showExchangerDetail")
+    public BaseResponse<ExchangerEntity> showExchangerDetail(@RequestBody Map<String, String> param) throws BaseException {
+        ExchangerEntity e = exchangerMap.get(param.get("exchangerName"));
+        if(e == null){
+            throw new BaseException("Exchanger 不存在");
+        }
+        else{
+            return new BaseResponse<>(e);
+        }
+    }
+
 }

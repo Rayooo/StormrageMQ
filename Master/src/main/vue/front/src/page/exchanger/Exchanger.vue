@@ -29,6 +29,7 @@
 
             <el-table-column label="操作">
                 <template scope="scope">
+                    <el-button size="small" type="primary" @click="showQueueList(scope.row.name)">队列信息</el-button>
                     <el-button size="small" type="primary" @click="handleEdit(scope.row)">修改</el-button>
                     <el-button size="small" type="danger" @click="handleDelete(scope.row.id, scope.row.name)">删除</el-button>
                 </template>
@@ -57,7 +58,7 @@
                     <el-input v-model="form.content"></el-input>
                 </el-form-item>
 
-                <el-form-item label="请输入匹配MQ的名称的正则表达式" v-if="form.type == 3">
+                <el-form-item label="请输入匹配MQ的名称的表达式" v-if="form.type == 3">
                     <el-input v-model="form.content"></el-input>
                 </el-form-item>
 
@@ -89,7 +90,7 @@
                     <el-input v-model="changeForm.content"></el-input>
                 </el-form-item>
 
-                <el-form-item label="请输入匹配MQ的名称的正则表达式" v-if="changeForm.type == 3">
+                <el-form-item label="请输入匹配MQ的名称的表达式" v-if="changeForm.type == 3">
                     <el-input v-model="changeForm.content"></el-input>
                 </el-form-item>
 
@@ -97,6 +98,29 @@
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogChangeFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="changeExchanger()">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
+        <el-dialog title="详细信息" :visible.sync="exchangerDetailVisible">
+            <el-form :model="exchangerDetail">
+                <el-form-item label="交换器名称:" >
+                    <span>{{exchangerDetail.name}}</span>
+                </el-form-item>
+
+                <el-form-item label="匹配到的队列" >
+                    <br/>
+                    <ul>
+                        <li v-for="d in exchangerDetail.queueList">
+                            {{ d }}
+                        </li>
+                    </ul>
+                </el-form-item>
+
+
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="exchangerDetailVisible = false">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -123,7 +147,9 @@
                 },
                 exchangerTypeList:[],
                 changeForm: {},
-                dialogChangeFormVisible: false
+                dialogChangeFormVisible: false,
+                exchangerDetailVisible:false,
+                exchangerDetail:{}
             }
         },
         mounted() {
@@ -131,9 +157,6 @@
                 this.exchangerTypeList = response.body.result;
             });
             this.getExchangerList()
-
-
-
         },
         methods: {
             addExchanger(){
@@ -210,6 +233,23 @@
                     this.dialogChangeFormVisible = false;
                     this.$message.error("服务器异常");
                     this.getExchangerList();
+                })
+
+            },
+            showQueueList(exchangerName){
+                Global.post("/exchanger/showExchangerDetail", {exchangerName:exchangerName}, (response) => {
+                    this.dialogChangeFormVisible = false;
+                    if(response.body.code === 0){
+                        this.exchangerDetailVisible = true;
+                        this.exchangerDetail = response.body.result;
+
+                    }
+                    else{
+                        this.$message.error(response.body.message);
+                    }
+                }, ()=>{
+                    this.dialogChangeFormVisible = false;
+                    this.$message.error("服务器异常");
                 })
 
             }
