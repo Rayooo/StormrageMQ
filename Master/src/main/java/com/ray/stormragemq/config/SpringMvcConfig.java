@@ -2,6 +2,7 @@ package com.ray.stormragemq.config;
 
 import com.ray.stormragemq.dao.UserAccountDao;
 import com.ray.stormragemq.domain.UserAccountEntity;
+import com.ray.stormragemq.util.BaseException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -62,8 +63,16 @@ public class SpringMvcConfig {
                             response.sendRedirect("/#/error");
                             return false;
                         }
-
-                        Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+                        Jws<Claims> claims;
+                        try {
+                             claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+                        }
+                        catch (Exception e){
+                            throw new BaseException("登录已过期，请重新登录");
+                        }
+                        if(claims == null){
+                            throw new BaseException("登录已过期，请重新登录");
+                        }
                         String userid = claims.getBody().getId();
                         String userName = claims.getBody().getSubject();
                         if(userid.equals(id)){

@@ -1,5 +1,6 @@
 package com.ray.stormragemq.service.impl;
 
+import com.ray.stormragemq.config.Refresh;
 import com.ray.stormragemq.dao.ExchangerDao;
 import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.UserAccountEntity;
@@ -18,12 +19,12 @@ public class ExchangerServiceImpl implements ExchangerService {
 
     private final ExchangerDao exchangerDao;
 
-    private Map<String, ExchangerEntity> exchangerMap;
+    private final Refresh refresh;
 
     @Autowired
-    public ExchangerServiceImpl(ExchangerDao exchangerDao, Map<String, ExchangerEntity> exchangerMap) {
+    public ExchangerServiceImpl(ExchangerDao exchangerDao, Refresh refresh) {
         this.exchangerDao = exchangerDao;
-        this.exchangerMap = exchangerMap;
+        this.refresh = refresh;
     }
 
     @Transactional
@@ -31,8 +32,7 @@ public class ExchangerServiceImpl implements ExchangerService {
     public void addExchanger(ExchangerEntity exchanger) throws BaseException {
         if(canAddExchanger(exchanger)){
             exchangerDao.insertExchanger(exchanger);
-            exchanger = exchangerDao.getExchanger(exchanger);
-            exchangerMap.put(exchanger.getName(), exchanger);
+            refresh.contextRefreshEvent();
         }
         else{
             throw new BaseException("系统中已存在相同名字交换器");
@@ -57,7 +57,7 @@ public class ExchangerServiceImpl implements ExchangerService {
         exchanger = getExchanger(exchanger);
         if(exchanger.getCreateUserId().equals(user.getId())){
             if(exchangerDao.deleteExchangerById(exchanger) == 1){
-                exchangerMap.remove(exchanger.getName());
+                refresh.contextRefreshEvent();
             }
             else{
                 throw new BaseException("删除失败");
@@ -77,11 +77,9 @@ public class ExchangerServiceImpl implements ExchangerService {
     @Override
     @Transactional
     public void changeExchanger(ExchangerEntity exchanger) throws BaseException {
-        ExchangerEntity before = getExchanger(new ExchangerEntity(exchanger.getId()));
         if(canAddExchanger(exchanger)){
             if(exchangerDao.updateExchanger(exchanger) == 1){
-                exchangerMap.remove(before.getName());
-                exchangerMap.put(exchanger.getName(), exchanger);
+                refresh.contextRefreshEvent();
             }
             else {
                 throw new BaseException("更新失败");

@@ -1,5 +1,6 @@
 package com.ray.stormragemq.service.impl;
 
+import com.ray.stormragemq.config.Refresh;
 import com.ray.stormragemq.dao.QueueDao;
 import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.domain.UserAccountEntity;
@@ -18,12 +19,12 @@ public class QueueServiceImpl implements QueueService {
 
     private final QueueDao queueDao;
 
-    private Map<String, QueueEntity> queueMap;
+    private final Refresh refresh;
 
     @Autowired
-    public QueueServiceImpl(QueueDao queueDao, Map<String, QueueEntity> queueMap) {
+    public QueueServiceImpl(QueueDao queueDao, Refresh refresh) {
         this.queueDao = queueDao;
-        this.queueMap = queueMap;
+        this.refresh = refresh;
     }
 
     @Transactional
@@ -31,8 +32,7 @@ public class QueueServiceImpl implements QueueService {
     public void addQueue(QueueEntity queue) throws BaseException {
         if(canAddQueue(queue)){
             queueDao.insertQueue(queue);
-            queue = queueDao.getQueue(queue);
-            queueMap.put(queue.getName(), queue);
+            refresh.contextRefreshEvent();
         }
         else{
             throw new BaseException("系统中已存在相同名字队列");
@@ -56,7 +56,7 @@ public class QueueServiceImpl implements QueueService {
         queue = getQueue(queue);
         if(queue.getCreateUserId().equals(user.getId())){
             if(queueDao.deleteQueueById(queue) == 1){
-                queueMap.remove(queue.getName());
+                refresh.contextRefreshEvent();
             }
             else{
                 throw new BaseException("删除失败");
@@ -75,11 +75,9 @@ public class QueueServiceImpl implements QueueService {
     @Override
     @Transactional
     public void changeQueue(QueueEntity queue) throws BaseException {
-        QueueEntity before = getQueue(new QueueEntity(queue.getId()));
         if(canAddQueue(queue)){
             if(queueDao.updateQueue(queue) == 1){
-                queueMap.remove(before.getName());
-                queueMap.put(queue.getName(), queue);
+                refresh.contextRefreshEvent();
             }
             else {
                 throw new BaseException("更新失败");

@@ -1,6 +1,7 @@
 package com.ray.stormragemq.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ExchangerEntity extends BaseEntity implements Serializable{
@@ -17,13 +18,13 @@ public class ExchangerEntity extends BaseEntity implements Serializable{
     
     private Integer createUserId;       //创建用户
 
-    private String[] queueList;         //存放扫描到的队列, 不序列化
+    private ArrayList<String> queueList;         //存放扫描到的队列, 不存数据库
 
-    public String[] getQueueList() {
+    public ArrayList getQueueList() {
         return queueList;
     }
 
-    public void setQueueList(String[] queueList) {
+    public void setQueueList(ArrayList<String> queueList) {
         this.queueList = queueList;
     }
 
