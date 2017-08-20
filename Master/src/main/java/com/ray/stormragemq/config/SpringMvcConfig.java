@@ -68,9 +68,11 @@ public class SpringMvcConfig {
                              claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
                         }
                         catch (Exception e){
+                            response.sendRedirect("/");
                             throw new BaseException("登录已过期，请重新登录");
                         }
                         if(claims == null){
+                            response.sendRedirect("/");
                             throw new BaseException("登录已过期，请重新登录");
                         }
                         String userid = claims.getBody().getId();

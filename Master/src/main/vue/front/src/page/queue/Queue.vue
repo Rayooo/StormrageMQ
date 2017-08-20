@@ -13,8 +13,6 @@
         <el-table v-if="tableData.length > 0" :data="tableData" stripe style="width: 100%"  >
             <el-table-column prop="name" label="名称" ></el-table-column>
 
-            <el-table-column prop="addressList" label="监听的消费者" ></el-table-column>
-
             <el-table-column label="创建时间">
                 <template scope="scope">
                     <el-icon name="time"></el-icon>
@@ -24,6 +22,7 @@
 
             <el-table-column label="操作">
                 <template scope="scope">
+                    <el-button size="small" type="primary" @click="getQueueInfo(scope.row)">交换器信息</el-button>
                     <el-button size="small" type="primary" @click="handleEdit(scope.row)">修改</el-button>
                     <el-button size="small" type="danger" @click="handleDelete(scope.row.id, scope.row.name)">删除</el-button>
                 </template>
@@ -57,6 +56,30 @@
             </div>
         </el-dialog>
 
+
+        <el-dialog title="详细信息" :visible.sync="queueDetailDialogVisible">
+            <el-form :model="queueDetail">
+                <el-form-item label="队列名称:" >
+                    <span>{{queueDetail.name}}</span>
+                </el-form-item>
+
+                <el-form-item label="接收的交换机信息:" >
+                    <br/>
+                    <ul>
+                        <li v-for="d in queueDetail.exchangerList">
+                            {{ d }}
+                        </li>
+                    </ul>
+                </el-form-item>
+
+
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="queueDetailDialogVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
     </section>
 </template>
 
@@ -76,7 +99,9 @@
                     name: ""
                 },
                 changeForm:{},
-                dialogChangeFormVisible:false
+                dialogChangeFormVisible:false,
+                queueDetailDialogVisible: false,
+                queueDetail:{}
             }
         },
         mounted() {
@@ -159,6 +184,19 @@
                     this.getQueueList();
                 })
 
+            },
+            getQueueInfo(queue){
+                Global.post("/queue/getQueueInfo", queue, (res)=>{
+                    if(res.body.code === 0){
+                        this.queueDetailDialogVisible = true;
+                        this.queueDetail = res.body.result;
+                    }
+                    else{
+                        this.$message.error(res.body.message);
+                    }
+                }, ()=>{
+                    this.$message.error("服务器异常");
+                })
             }
         }
     }

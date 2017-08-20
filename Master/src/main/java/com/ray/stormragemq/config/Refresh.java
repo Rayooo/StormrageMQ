@@ -55,6 +55,8 @@ public class Refresh {
         queueEntityList.forEach(q -> queueMap.put(q.getName(), q));
     }
 
+
+    //将Exchanger中的queueList初始化
     private void initExchangerQueueList(){
 
         exchangerMap.forEach((s, exchangerEntity) -> {

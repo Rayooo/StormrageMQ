@@ -1,5 +1,6 @@
 package com.ray.stormragemq.controller;
 
+import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.QueueService;
@@ -12,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 @RestController
 @RequestMapping("/queue")
@@ -20,9 +24,12 @@ public class QueueController {
 
     private final QueueService queueService;
 
+    private final Map<String, ExchangerEntity> exchangerMap;
+
     @Autowired
-    public QueueController(QueueService queueService) {
+    public QueueController(QueueService queueService, Map<String, ExchangerEntity> exchangerMap) {
         this.queueService = queueService;
+        this.exchangerMap = exchangerMap;
     }
 
     @RequestMapping("/addQueue")
@@ -66,6 +73,19 @@ public class QueueController {
         }
         queueService.changeQueue(queue);
         return new BaseResponse<>("success");
+    }
+
+    //返回这个队列被哪些交换器扫描到
+    @RequestMapping("/getQueueInfo")
+    public BaseResponse<QueueEntity> getQueueInfo(@RequestBody QueueEntity queue){
+        ArrayList<String> list = new ArrayList<>();
+        exchangerMap.forEach((s, exchangerEntity) -> {
+            if(exchangerEntity.getQueueList().contains(queue.getName())){
+                list.add(s);
+            }
+        });
+        queue.setExchangerList(list);
+        return new BaseResponse<>(queue);
     }
 
 

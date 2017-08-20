@@ -108,7 +108,7 @@
                     <span>{{exchangerDetail.name}}</span>
                 </el-form-item>
 
-                <el-form-item label="匹配到的队列" >
+                <el-form-item label="匹配到的队列:" >
                     <br/>
                     <ul>
                         <li v-for="d in exchangerDetail.queueList">
