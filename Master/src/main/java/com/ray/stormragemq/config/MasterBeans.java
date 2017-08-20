@@ -4,12 +4,12 @@ import com.ray.stormragemq.dao.UserAccountDao;
 import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.domain.UserAccountEntity;
-import com.ray.stormragemq.netty.TCPClient;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -31,16 +31,16 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MasterBeans {
 
     //存放消费者服务器名称与Netty Channel的对应关系
-    @Bean(name = "customersMap")
-    public ConcurrentHashMap<String, TCPClient> customersMap(){
-        return new ConcurrentHashMap<>();
-    }
+//    @Bean(name = "customersMap")
+//    public ConcurrentHashMap<String, TCPClient> customersMap(){
+//        return new ConcurrentHashMap<>();
+//    }
 
     //存放mq服务器和消息队列名称的对应关系,初始化一个空队列
-    @Bean(name = "mqNameMap")
-    public Map<String, Set<String>> mqNameMap() {
-        return new ConcurrentHashMap<>();
-    }
+//    @Bean(name = "mqNameMap")
+//    public Map<String, Set<String>> mqNameMap() {
+//        return new ConcurrentHashMap<>();
+//    }
 
     //缓存Exchanger，在启动的时候初始化
     @Bean(name = "exchangerMap")
@@ -48,14 +48,26 @@ public class MasterBeans {
         return new ConcurrentHashMap<>();
     }
 
+    //缓存Queue
     @Bean(name = "queueMap")
     public Map<String, QueueEntity> queueMap(){
         return new ConcurrentHashMap<>();
     }
 
+    //密码验证
     @Bean(name = "key")
     public Key key(){
         return MacProvider.generateKey();
+    }
+
+    //线程池
+    @Bean
+    public ThreadPoolTaskExecutor threadPoolTaskExecutor(){
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(20);
+        executor.setQueueCapacity(1000);
+        return executor;
     }
 
 }
