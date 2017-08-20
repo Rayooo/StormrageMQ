@@ -12,7 +12,7 @@ import java.net.InetSocketAddress;
 @Component
 public class NettyServer {
 
-    @Value("${tcp.port}")
+    @Value("${netty.port}")
     private int port;
 
     private final ServerBootstrap serverBootstrap;

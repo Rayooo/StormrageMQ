@@ -1,27 +1,30 @@
-package com.ray.stormragemq.netty;
+package com.ray.demo.login.netty;
 
-import io.netty.bootstrap.ServerBootstrap;
+import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class NettyConfig {
 
+    @Value("${netty.remote.port}")
+    private int port;
+
+    @Value("${netty.remote.address}")
+    private String address;
+
     @Value("${boss.thread.count}")
     private int bossCount;
-
-    @Value("${worker.thread.count}")
-    private int workerCount;
 
     @Value("${so.keepAlive}")
     private boolean keepAlive;
@@ -29,17 +32,11 @@ public class NettyConfig {
     @Value("${so.backlog}")
     private int backlog;
 
-    @Bean(name = "bossGroup", destroyMethod = "shutdownGracefully")
-    public NioEventLoopGroup bossGroup(){
+    @Bean(name = "group", destroyMethod = "shutdownGracefully")
+    public NioEventLoopGroup group(){
         return new NioEventLoopGroup(bossCount);
     }
 
-    @Bean(name = "workerGroup", destroyMethod = "shutdownGracefully")
-    public NioEventLoopGroup workerGroup(){
-        return new NioEventLoopGroup(workerCount);
-    }
-
-    //配置TCP
     private Map<ChannelOption, Object> tcpChannelOptions() {
         Map<ChannelOption, Object> options = new HashMap<>();
         options.put(ChannelOption.SO_KEEPALIVE, keepAlive);
@@ -47,27 +44,21 @@ public class NettyConfig {
         return options;
     }
 
-    @Bean(name = "serverBootstrap")
-    public ServerBootstrap bootstrap(){
-
-        ServerBootstrap b = new ServerBootstrap();
-        b.group(bossGroup(), workerGroup())
-                .channel(NioServerSocketChannel.class)
-                .childHandler(new ChannelInitializer<SocketChannel>() {
+    @Bean
+    public Bootstrap bootstrap(){
+        Bootstrap b = new Bootstrap();
+        b.group(group())
+                .channel(NioSocketChannel.class)
+                .remoteAddress(new InetSocketAddress(address, port))
+                .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ServerHandler());
+                        ch.pipeline().addLast(new ClientHandler());
                     }
                 });
 
-        Map<ChannelOption, Object> tcpChannelOptions = tcpChannelOptions();
-        tcpChannelOptions.forEach(b::option);
-
-
         return b;
     }
-
-
 
 
 
