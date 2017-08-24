@@ -1,5 +1,6 @@
 package com.ray.stormragemq.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,6 +13,7 @@ public class UserAccountEntity extends BaseEntity implements Serializable{
 
     private String userName;                //用户名
     
+    @JsonIgnore
     private String password;                //密码
     
     private String headImage;               //头像
