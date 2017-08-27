@@ -15,10 +15,13 @@ public class StartUpServer {
 
     private final NettyServer nettyServer;
 
+    private final GatewayService gatewayService;
+
     @Autowired
-    public StartUpServer(NettyServer nettyServer, ThreadPoolTaskExecutor executor) {
+    public StartUpServer(NettyServer nettyServer, ThreadPoolTaskExecutor executor, GatewayService gatewayService) {
         this.nettyServer = nettyServer;
         this.executor = executor;
+        this.gatewayService = gatewayService;
     }
 
     @EventListener(ContextRefreshedEvent.class)
@@ -30,6 +33,7 @@ public class StartUpServer {
                 e.printStackTrace();
             }
         });
+
     }
 
 

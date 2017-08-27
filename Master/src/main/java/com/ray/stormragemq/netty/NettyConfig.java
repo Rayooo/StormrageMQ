@@ -6,9 +6,9 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -28,6 +28,13 @@ public class NettyConfig {
 
     @Value("${so.backlog}")
     private int backlog;
+
+    private final ServerHandler serverHandler;
+
+    @Autowired
+    public NettyConfig(ServerHandler serverHandler) {
+        this.serverHandler = serverHandler;
+    }
 
     @Bean(name = "bossGroup", destroyMethod = "shutdownGracefully")
     public NioEventLoopGroup bossGroup(){
@@ -56,7 +63,7 @@ public class NettyConfig {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ServerHandler());
+                        ch.pipeline().addLast(serverHandler);
                     }
                 });
 
