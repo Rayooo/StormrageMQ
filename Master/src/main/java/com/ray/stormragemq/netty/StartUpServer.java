@@ -27,6 +27,7 @@ public class StartUpServer {
     @EventListener(ContextRefreshedEvent.class)
     public void contextRefreshEvent(){
         executor.execute(() -> {
+            Thread.currentThread().setName("NettyServer");
             try {
                 nettyServer.start();
             } catch (InterruptedException e) {

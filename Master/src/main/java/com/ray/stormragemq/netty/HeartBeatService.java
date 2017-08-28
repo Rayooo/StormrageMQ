@@ -23,9 +23,9 @@ public class HeartBeatService {
 
     @Scheduled(cron = "*/5 * * * * *")
     public void sendHeartBeat(){
-        Map<String, SocketChannel> map = gatewayService.getChannels();
-        map.forEach((s, socketChannel) -> {
-            socketChannel.writeAndFlush(Unpooled.copiedBuffer("heartBeat", CharsetUtil.UTF_8));
+        Map<String, ClientChannel> map = gatewayService.getChannels();
+        map.forEach((s, ClientChannel) -> {
+            ClientChannel.getSocketChannel().writeAndFlush(Unpooled.copiedBuffer("heartBeat", CharsetUtil.UTF_8));
         });
     }
 

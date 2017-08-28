@@ -1,12 +1,16 @@
 package com.ray.stormragemq.netty;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@ChannelHandler.Sharable
 public class ServerHandler extends ChannelInboundHandlerAdapter{
 
     private final GatewayService gatewayService;
@@ -19,7 +23,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         String uuid = ctx.channel().id().asLongText();
-        gatewayService.addGatewayChannel(uuid, (SocketChannel)ctx.channel());
+        ClientChannel clientChannel = new ClientChannel();
+        clientChannel.setSocketChannel((SocketChannel)ctx.channel());
+        gatewayService.addGatewayChannel(uuid, clientChannel);
 
     }
 
@@ -29,11 +35,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
         gatewayService.removeGatewayChannel(uuid);
     }
 
-
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("aaaa");
-        super.channelRead(ctx, msg);
+        ByteBuf in = (ByteBuf) msg;
+        System.out.println("Server received:" + in.toString(CharsetUtil.UTF_8));
     }
 
     @Override

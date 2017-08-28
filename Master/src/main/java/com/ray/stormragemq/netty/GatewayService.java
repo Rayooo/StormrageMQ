@@ -9,22 +9,22 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class GatewayService {
 
-    private Map<String, SocketChannel> map = new ConcurrentHashMap<>();
+    private Map<String, ClientChannel> map = new ConcurrentHashMap<>();
 
-    public void addGatewayChannel(String name, SocketChannel channel){
-        map.put(name, channel);
+    public void addGatewayChannel(String id, ClientChannel channel){
+        map.put(id, channel);
     }
 
-    public Map<String, SocketChannel> getChannels(){
+    public Map<String, ClientChannel> getChannels(){
         return map;
     }
 
-    public SocketChannel getGatewayChannel(String name){
-        return map.get(name);
+    public ClientChannel getGatewayChannel(String id){
+        return map.get(id);
     }
 
-    public void removeGatewayChannel(String name){
-        map.remove(name);
+    public void removeGatewayChannel(String id){
+        map.remove(id);
     }
 
 }

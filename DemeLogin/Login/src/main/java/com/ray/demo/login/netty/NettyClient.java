@@ -34,7 +34,7 @@ public class NettyClient {
             socketChannel = (SocketChannel) future.channel();
             String address = future.channel().remoteAddress().toString();
             address = address.replaceAll("/", "");
-            System.out.println(address);
+//            System.out.println(address);
         }
     }
 
