@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+//存储Channel与消费者或生产者的对应关系
 @Service
 public class GatewayService {
 

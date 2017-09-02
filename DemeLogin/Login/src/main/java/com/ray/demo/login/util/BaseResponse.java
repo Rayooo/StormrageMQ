@@ -1,4 +1,4 @@
-package com.ray.stormragemq.util;
+package com.ray.demo.login.util;
 
 import java.io.Serializable;
 
@@ -50,6 +50,5 @@ public class BaseResponse<T> implements Serializable {
         code = BaseResponseCode.ERROR.getCode();
         message = BaseResponseCode.ERROR.getDescribe();
     }
-
 
 }

@@ -7,6 +7,7 @@ import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.Password;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,4 +61,20 @@ public class UserAccountServiceImpl implements UserAccountService {
         userAccountDao.insertUser(user);
     }
 
+    @Override
+    public boolean checkUser(String userName, String password) {
+        if(StringUtils.isBlank(userName) || StringUtils.isBlank(password)){
+            return false;
+        }
+
+        UserAccountEntity user = new UserAccountEntity();
+        user.setUserName(userName);
+        UserAccountEntity databaseUser = userAccountDao.getUserByUserName(user);
+
+        try {
+            return databaseUser != null && Password.check(password, databaseUser.getPassword());
+        } catch (Exception ignore) {}
+
+        return false;
+    }
 }

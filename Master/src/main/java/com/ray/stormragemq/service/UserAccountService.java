@@ -10,4 +10,6 @@ public interface UserAccountService {
     UserAccountEntity login(UserAccountEntity user) throws Exception;
 
     void addUser(UserAccountEntity user) throws Exception;
+
+    boolean checkUser(String userName, String password);
 }
