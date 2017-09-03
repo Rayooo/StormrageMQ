@@ -1,4 +1,4 @@
-package com.ray.demo.login.common;
+package com.ray.demo.login.client.common;
 
 public enum ClientTypeEnum {
 

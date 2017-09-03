@@ -1,4 +1,4 @@
-package com.ray.demo.login.config;
+package com.ray.demo.login.client.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;

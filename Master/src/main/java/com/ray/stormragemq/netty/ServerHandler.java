@@ -62,6 +62,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                 //普通消息
                 if("1".equals(message.getType())){
                     System.out.println("普通消息");
+                    System.out.println("Server received: " + message.getContent());
+
                 }
 
                 //重要消息
@@ -89,8 +91,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                     }
                 }
 
-
-
             } catch (IOException e) {
                 e.printStackTrace();
                 BaseResponse response = new BaseResponse();
@@ -98,6 +98,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                 ctx.writeAndFlush(response);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            finally {
+                in.release();
             }
         });
 

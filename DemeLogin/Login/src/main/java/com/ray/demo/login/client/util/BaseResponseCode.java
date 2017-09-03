@@ -1,4 +1,4 @@
-package com.ray.demo.login.util;
+package com.ray.demo.login.client.util;
 
 /**
  * Created by Ray on 2017/6/23.

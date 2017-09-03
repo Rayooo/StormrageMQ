@@ -1,4 +1,4 @@
-package com.ray.demo.login.util;
+package com.ray.demo.login.client.util;
 
 import java.io.Serializable;
 

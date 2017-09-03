@@ -1,9 +1,10 @@
-package com.ray.demo.login.common;
+package com.ray.demo.login.client.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Message implements Serializable {
@@ -11,7 +12,7 @@ public class Message implements Serializable {
     private static final long serialVersionUID = 876374167203513224L;
 
     //消息id
-    private String uuid;
+    private String uuid = UUID.randomUUID().toString();
 
     //消息主要内容
     private String content;
@@ -26,7 +27,7 @@ public class Message implements Serializable {
     private String exchangerName;
 
     //创建时间
-    private Date createTime;
+    private Date createTime = new Date();
 
     //消息类型  0 验证初始化消息  1 普通消息->Redis  2 重要消息->postgres
     private String type;
@@ -81,7 +82,7 @@ public class Message implements Serializable {
     }
 
     public Date getCreateTime() {
-        return createTime;
+        return (Date) createTime.clone();
     }
 
     public void setCreateTime(Date createTime) {

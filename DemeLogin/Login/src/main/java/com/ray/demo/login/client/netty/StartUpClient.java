@@ -1,4 +1,4 @@
-package com.ray.demo.login.netty;
+package com.ray.demo.login.client.netty;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
