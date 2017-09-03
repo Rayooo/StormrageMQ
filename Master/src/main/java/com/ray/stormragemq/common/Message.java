@@ -34,6 +34,12 @@ public class Message implements Serializable {
     //消息内容是那个类序列化而来的
     private String cls;
 
+    //client的name(验证时使用)
+    private String clientName;
+
+    //client的Type(验证时使用)  1 生产者  2 消费者
+    private int clientType;
+
     public String getUuid() {
         return uuid;
     }
@@ -96,5 +102,21 @@ public class Message implements Serializable {
 
     public void setCls(String cls) {
         this.cls = cls;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public int getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(int clientType) {
+        this.clientType = clientType;
     }
 }

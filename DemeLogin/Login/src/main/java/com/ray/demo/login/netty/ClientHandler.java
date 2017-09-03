@@ -1,6 +1,7 @@
 package com.ray.demo.login.netty;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ray.demo.login.common.ClientTypeEnum;
 import com.ray.demo.login.common.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -42,6 +43,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
         message.setCreateTime(new Date());
         message.setUserName("ray");
         message.setPassword("123");
+        message.setClientName("LoginProducer");
+        message.setClientType(ClientTypeEnum.PRODUCER.getType());
         ObjectMapper mapper = new ObjectMapper();
         ctx.writeAndFlush(Unpooled.copiedBuffer(mapper.writeValueAsString(message), CharsetUtil.UTF_8));
     }

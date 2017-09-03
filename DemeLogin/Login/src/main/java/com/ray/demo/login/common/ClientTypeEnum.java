@@ -1,4 +1,4 @@
-package com.ray.stormragemq.constant;
+package com.ray.demo.login.common;
 
 public enum ClientTypeEnum {
 

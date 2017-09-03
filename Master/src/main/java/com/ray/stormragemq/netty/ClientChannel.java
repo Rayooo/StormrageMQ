@@ -10,7 +10,7 @@ public class ClientChannel {
 
     private String name;
 
-    private ClientTypeEnum clientType;
+    private int clientType;
 
     public SocketChannel getSocketChannel() {
         return socketChannel;
@@ -28,11 +28,11 @@ public class ClientChannel {
         this.name = name;
     }
 
-    public ClientTypeEnum getClientType() {
+    public int getClientType() {
         return clientType;
     }
 
-    public void setClientType(ClientTypeEnum clientType) {
+    public void setClientType(int clientType) {
         this.clientType = clientType;
     }
 }

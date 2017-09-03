@@ -2,6 +2,7 @@ package com.ray.stormragemq.netty;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ray.stormragemq.common.Message;
+import com.ray.stormragemq.constant.ClientTypeEnum;
 import com.ray.stormragemq.service.UserAccountService;
 import com.ray.stormragemq.util.BaseResponse;
 import io.netty.buffer.ByteBuf;
@@ -16,6 +17,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Component
 @ChannelHandler.Sharable
@@ -76,6 +78,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                         response.setMessage("密码错误");
                         ctx.writeAndFlush(Unpooled.copiedBuffer(mapper.writeValueAsString(response), CharsetUtil.UTF_8)).sync();
                         ctx.close();
+                    }
+                    else{
+                        String uuid = ctx.channel().id().asLongText();
+                        ClientChannel clientChannel = gatewayService.getGatewayChannel(uuid);
+                        Map<String, ClientChannel> map = gatewayService.getChannels();
+                        clientChannel.setName(message.getClientName());
+                        clientChannel.setClientType(message.getClientType());
+                        map.put(uuid, clientChannel);
                     }
                 }
 
