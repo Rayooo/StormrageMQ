@@ -13,7 +13,6 @@ public class UserAccountEntity extends BaseEntity implements Serializable{
 
     private String userName;                //用户名
     
-    @JsonIgnore
     private String password;                //密码
     
     private String headImage;               //头像

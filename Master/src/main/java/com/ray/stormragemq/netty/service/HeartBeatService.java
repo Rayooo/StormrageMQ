@@ -1,7 +1,7 @@
-package com.ray.stormragemq.netty;
+package com.ray.stormragemq.netty.service;
 
+import com.ray.stormragemq.netty.ClientChannel;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;

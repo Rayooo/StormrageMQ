@@ -20,7 +20,7 @@ public class ExchangerEntity extends BaseEntity implements Serializable{
 
     private ArrayList<String> queueList;         //存放扫描到的队列, 不存数据库
 
-    public ArrayList getQueueList() {
+    public ArrayList<String> getQueueList() {
         return queueList;
     }
 

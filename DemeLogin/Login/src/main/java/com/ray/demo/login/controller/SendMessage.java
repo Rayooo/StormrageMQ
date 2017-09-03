@@ -21,7 +21,7 @@ public class SendMessage {
 
         Message message = new Message();
         message.setType("1");
-        message.setExchangerName("an exchanger");
+        message.setExchangerName("com.a.haha.*");
         message.setContent(content);
 
         channelHandlerService.sendMessage(message);

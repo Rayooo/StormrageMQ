@@ -1,5 +1,6 @@
-package com.ray.stormragemq.netty;
+package com.ray.stormragemq.netty.service;
 
+import com.ray.stormragemq.netty.ClientChannel;
 import io.netty.channel.socket.SocketChannel;
 import org.springframework.stereotype.Service;
 
