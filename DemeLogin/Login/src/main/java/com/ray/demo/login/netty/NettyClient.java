@@ -37,8 +37,9 @@ public class NettyClient {
                 socketChannel = (SocketChannel) channelFuture.channel();
             }
             else{
+                //TODO 修改延迟
                 System.out.println("连接失败，重试");
-                channelFuture.channel().eventLoop().schedule(this::reConnect, 20, TimeUnit.SECONDS);
+                channelFuture.channel().eventLoop().schedule(this::reConnect, 5, TimeUnit.SECONDS);
             }
         });
     }

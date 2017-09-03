@@ -22,14 +22,11 @@ public class StartUpClient {
 
     @EventListener(ContextRefreshedEvent.class)
     public void contextRefreshEvent(){
-        executor.execute(() -> {
-            Thread.currentThread().setName("NettyClient");
-            try {
-                nettyClient.start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
+        try {
+            nettyClient.start();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

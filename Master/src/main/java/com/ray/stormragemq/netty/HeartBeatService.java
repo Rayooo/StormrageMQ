@@ -21,7 +21,7 @@ public class HeartBeatService {
         this.gatewayService = gatewayService;
     }
 
-    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "*/20 * * * * *")
     public void sendHeartBeat(){
         Map<String, ClientChannel> map = gatewayService.getChannels();
         map.forEach((s, ClientChannel) -> {

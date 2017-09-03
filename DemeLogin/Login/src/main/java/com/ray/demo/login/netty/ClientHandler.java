@@ -52,9 +52,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
 
 
         //断线重连机制
-        executor.execute(() -> {
-            Thread.currentThread().setName("NettyClientReconnect");
-            nettyClient.reConnect();
-        });
+        nettyClient.reConnect();
     }
 }
