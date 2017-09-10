@@ -1,6 +1,8 @@
 package com.ray.stormragemq.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -118,5 +120,15 @@ public class Message implements Serializable {
 
     public void setClientType(int clientType) {
         this.clientType = clientType;
+    }
+
+    public String toJson(){
+        ObjectMapper om = new ObjectMapper();
+        try {
+            return om.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

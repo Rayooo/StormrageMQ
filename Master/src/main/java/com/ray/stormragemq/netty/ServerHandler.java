@@ -102,7 +102,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                 e.printStackTrace();
                 BaseResponse response = new BaseResponse();
                 response.setError();
-                ctx.writeAndFlush(response);
+                ctx.writeAndFlush(Unpooled.copiedBuffer(response.toJson(), CharsetUtil.UTF_8));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (BaseException e) {
@@ -110,7 +110,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                 BaseResponse response = new BaseResponse();
                 response.setError();
                 response.setMessage(e.getMessage());
-                ctx.writeAndFlush(response);
+                ctx.writeAndFlush(Unpooled.copiedBuffer(response.toJson(), CharsetUtil.UTF_8));
             } finally {
                 in.release();
             }

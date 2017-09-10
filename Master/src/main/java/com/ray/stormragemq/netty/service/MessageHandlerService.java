@@ -6,6 +6,7 @@ import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.util.BaseException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,10 @@ public class MessageHandlerService {
     @Autowired
     private Map<String, QueueEntity> queueMap;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    private static final String MESSAGE_KEY = "MessageKey";
 
     public void handleNotImportantMessage(Message message) throws BaseException {
         String exchangerName = message.getExchangerName();
@@ -53,7 +58,10 @@ public class MessageHandlerService {
                 }
 
                 if(canAdd){
+                    //TODO 改成 QueueMessage
                     bq.offer(message);
+                    redisTemplate.opsForHash().put(MESSAGE_KEY, message.getUuid(), message.toJson());
+
                 }
             }
         });

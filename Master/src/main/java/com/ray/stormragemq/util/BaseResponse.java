@@ -1,5 +1,8 @@
 package com.ray.stormragemq.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.Serializable;
 
 /**
@@ -51,5 +54,14 @@ public class BaseResponse<T> implements Serializable {
         message = BaseResponseCode.ERROR.getDescribe();
     }
 
+    public String toJson(){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
 }
