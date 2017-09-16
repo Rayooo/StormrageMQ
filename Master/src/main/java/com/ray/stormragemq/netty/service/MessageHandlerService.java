@@ -1,14 +1,17 @@
 package com.ray.stormragemq.netty.service;
 
 import com.ray.stormragemq.common.Message;
+import com.ray.stormragemq.constant.ConstantVariable;
 import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.QueueEntity;
+import com.ray.stormragemq.domain.QueueMessageEntity;
 import com.ray.stormragemq.util.BaseException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -25,7 +28,6 @@ public class MessageHandlerService {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    private static final String MESSAGE_KEY = "MessageKey";
 
     public void handleNotImportantMessage(Message message) throws BaseException {
         String exchangerName = message.getExchangerName();
@@ -44,27 +46,37 @@ public class MessageHandlerService {
         }
 
         //为每个队列发送消息
-        queueList.forEach(q -> {
+        Date now = new Date();
+        int count = 0;
+        for (String q : queueList) {
             QueueEntity queue = queueMap.get(q);
-            BlockingQueue<Message> bq = queue.getBlockingQueue();
+            BlockingQueue<QueueMessageEntity> bq = queue.getBlockingQueue();
             boolean canAdd = true;
             //根据id查找有没有重复的消息
             if(bq != null){
-                for (Message inner : bq) {
-                    if(inner.getUuid().equals(id)){
+                for (QueueMessageEntity inner : bq) {
+                    if(inner.getMessageId().equals(id)){
                         canAdd = false;
                         break;
                     }
                 }
 
                 if(canAdd){
-                    //TODO 改成 QueueMessage
-                    bq.offer(message);
-                    redisTemplate.opsForHash().put(MESSAGE_KEY, message.getUuid(), message.toJson());
+                    QueueMessageEntity qm = new QueueMessageEntity();
+                    qm.setId(message.getUuid() + "-" + (++count));
+                    qm.setQueueName(queue.getName());
+                    qm.setMessageId(message.getUuid());
+                    qm.setCreateTime(now);
+                    qm.setReceived(false);
+                    qm.setMessage(message);
+                    bq.offer(qm);
+                    redisTemplate.opsForHash().put(ConstantVariable.MESSAGE_QUEUE_KEY, qm.getId(), qm.toJson());
 
                 }
             }
-        });
+        }
+
+
 
 
         queueMap.forEach((s, queueEntity) -> {

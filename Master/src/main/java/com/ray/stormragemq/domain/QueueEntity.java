@@ -1,6 +1,5 @@
 package com.ray.stormragemq.domain;
 
-import com.ray.stormragemq.common.Message;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class QueueEntity extends BaseEntity implements Serializable {
 
     private ArrayList<String> exchangerList;        //被扫描到的Exchanger，不存到数据库
 
-    private BlockingQueue<Message> blockingQueue = new LinkedBlockingQueue<>();         //存储消息（不序列化）
+    private BlockingQueue<QueueMessageEntity> blockingQueue = new LinkedBlockingQueue<>();         //存储消息（不序列化）
 
     public ArrayList<String> getExchangerList() {
         return exchangerList;
@@ -70,7 +69,7 @@ public class QueueEntity extends BaseEntity implements Serializable {
         this.createUserId = createUserId;
     }
 
-    public BlockingQueue<Message> getBlockingQueue() {
+    public BlockingQueue<QueueMessageEntity> getBlockingQueue() {
         return blockingQueue;
     }
 

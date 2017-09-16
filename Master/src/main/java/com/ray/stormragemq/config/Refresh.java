@@ -1,16 +1,21 @@
 package com.ray.stormragemq.config;
 
+import com.ray.stormragemq.constant.ConstantVariable;
 import com.ray.stormragemq.constant.ExchangerEnum;
 import com.ray.stormragemq.dao.ExchangerDao;
 import com.ray.stormragemq.dao.QueueDao;
 import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.QueueEntity;
+import com.ray.stormragemq.domain.QueueMessageEntity;
 import com.ray.stormragemq.util.MatchQueueUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import sun.jvm.hotspot.utilities.MessageQueue;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -28,12 +33,15 @@ public class Refresh {
 
     private List<QueueEntity> queueEntityList;
 
+    private final StringRedisTemplate redisTemplate;
+
     @Autowired
-    public Refresh(Map<String, ExchangerEntity> exchangerMap, ExchangerDao exchangerDao, QueueDao queueDao, Map<String, QueueEntity> queueMap) {
+    public Refresh(Map<String, ExchangerEntity> exchangerMap, ExchangerDao exchangerDao, QueueDao queueDao, Map<String, QueueEntity> queueMap, StringRedisTemplate redisTemplate) {
         this.exchangerMap = exchangerMap;
         this.exchangerDao = exchangerDao;
         this.queueDao = queueDao;
         this.queueMap = queueMap;
+        this.redisTemplate = redisTemplate;
     }
 
     @EventListener(ContextRefreshedEvent.class)
@@ -41,6 +49,7 @@ public class Refresh {
         initExchanger();
         initQueue();
         initExchangerQueueList();
+        initQueueMessage();
     }
 
     private void initExchanger(){
@@ -99,5 +108,19 @@ public class Refresh {
 
     }
 
+    //从redis中初始化queueMessage
+    private void initQueueMessage(){
+        List list = redisTemplate.opsForHash().values(ConstantVariable.MESSAGE_QUEUE_KEY);
+        if(!CollectionUtils.isEmpty(list)){
+            for (Object o : list) {
+                QueueMessageEntity qm = QueueMessageEntity.parseJson(o);
+                if(qm != null){
+                    QueueEntity queue = queueMap.get(qm.getQueueName());
+                    queue.getBlockingQueue().offer(qm);
+                }
+            }
+        }
+        System.out.println(queueMap);
+    }
 
 }
