@@ -7,8 +7,10 @@ import com.ray.stormragemq.dao.QueueDao;
 import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.domain.QueueMessageEntity;
+import com.ray.stormragemq.util.LogUtil;
 import com.ray.stormragemq.util.MatchQueueUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -104,7 +106,7 @@ public class Refresh {
 
         });
 
-        System.out.println("结束匹配队列");
+        LogUtil.logInfo("结束匹配队列");
 
     }
 
@@ -120,7 +122,6 @@ public class Refresh {
                 }
             }
         }
-        System.out.println(queueMap);
     }
 
 }

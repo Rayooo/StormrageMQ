@@ -6,6 +6,7 @@ import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.domain.QueueMessageEntity;
 import com.ray.stormragemq.util.BaseException;
+import com.ray.stormragemq.util.LogUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -80,7 +81,7 @@ public class MessageHandlerService {
 
 
         queueMap.forEach((s, queueEntity) -> {
-            System.out.println(queueEntity.getBlockingQueue());
+            LogUtil.logInfo(queueEntity.getBlockingQueue().toString());
         });
 
 

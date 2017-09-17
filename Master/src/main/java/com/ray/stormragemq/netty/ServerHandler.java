@@ -7,6 +7,7 @@ import com.ray.stormragemq.netty.service.MessageHandlerService;
 import com.ray.stormragemq.service.UserAccountService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
+import com.ray.stormragemq.util.LogUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -66,15 +67,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                 Message message = mapper.readValue(in.toString(CharsetUtil.UTF_8), Message.class);
                 //普通消息
                 if("1".equals(message.getType())){
-                    System.out.println("普通消息");
-                    System.out.println("Server received: " + message.getContent());
+                    LogUtil.logInfo("普通消息");
+                    LogUtil.logInfo("Server received: " + message.getContent());
                     //处理消息
                     messageHandlerService.handleNotImportantMessage(message);
                 }
 
                 //重要消息
                 if("2".equals(message.getType())){
-                    System.out.println("重要消息");
+                    LogUtil.logInfo("重要消息");
                 }
 
 
