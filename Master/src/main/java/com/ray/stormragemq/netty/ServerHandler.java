@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ray.stormragemq.common.Message;
 import com.ray.stormragemq.netty.service.GatewayService;
 import com.ray.stormragemq.netty.service.MessageHandlerService;
+import com.ray.stormragemq.service.MessageService;
 import com.ray.stormragemq.service.UserAccountService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
@@ -34,12 +35,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 
     private final MessageHandlerService messageHandlerService;
 
+    private final MessageService messageService;
+
     @Autowired
-    public ServerHandler(GatewayService gatewayService, ThreadPoolTaskExecutor executor, UserAccountService userAccountService, MessageHandlerService messageHandlerService) {
+    public ServerHandler(GatewayService gatewayService, ThreadPoolTaskExecutor executor, UserAccountService userAccountService, MessageHandlerService messageHandlerService, MessageService messageService) {
         this.gatewayService = gatewayService;
         this.executor = executor;
         this.userAccountService = userAccountService;
         this.messageHandlerService = messageHandlerService;
+        this.messageService = messageService;
     }
 
     @Override
@@ -65,6 +69,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
             ObjectMapper mapper = new ObjectMapper();
             try {
                 Message message = mapper.readValue(in.toString(CharsetUtil.UTF_8), Message.class);
+                messageService.saveMessage(message);
+
                 //普通消息
                 if("1".equals(message.getType())){
                     LogUtil.logInfo("普通消息");
@@ -98,6 +104,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                         map.put(uuid, clientChannel);
                     }
                 }
+
+
 
             } catch (IOException e) {
                 e.printStackTrace();

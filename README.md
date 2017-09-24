@@ -127,12 +127,16 @@ CREATE TABLE queue (
   createuserid INT                                --创建者id
 );
 
-CREATE TABLE message (
-  id SERIAL PRIMARY KEY,
-  exchangename VARCHAR(100),          --交换机名称
-  producer VARCHAR(100),              --生产者名称或ip地址
-  content TEXT,                       --消息内容
-  createtime TIMESTAMP DEFAULT current_timestamp
+CREATE TABLE message(
+  uuid VARCHAR(50) PRIMARY KEY,
+  content TEXT,                                   --消息主要内容
+  username VARCHAR(30),                           --账号（首次验证使用）
+  exchangername VARCHAR(100),                     --交换器名称
+  createtime TIMESTAMP DEFAULT current_timestamp, --创建时间
+  type VARCHAR(10),                               --消息类型 0初始化消息，1普通消息，2重要消息
+  cls VARCHAR(50),                                --哪个类序列化而来
+  clientname VARCHAR(100),                        --client的名称
+  clienttype INTEGER                              --client的类型，1生产者，2消费者
 );
 
 CREATE TABLE messagequeue (

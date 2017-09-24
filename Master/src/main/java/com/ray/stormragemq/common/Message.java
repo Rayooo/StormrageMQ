@@ -24,7 +24,7 @@ public class Message implements Serializable {
     //密码(首次验证时使用)
     private String password;
 
-    //交换器类型
+    //交换器名称
     private String exchangerName;
 
     //创建时间

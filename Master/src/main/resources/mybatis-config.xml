@@ -11,6 +11,7 @@
         <typeAlias type="com.ray.stormragemq.domain.UserAccountEntity" alias="UserAccountEntity"/>
         <typeAlias type="com.ray.stormragemq.domain.ExchangerEntity" alias="ExchangerEntity"/>
         <typeAlias type="com.ray.stormragemq.domain.QueueEntity" alias="QueueEntity"/>
+        <typeAlias type="com.ray.stormragemq.common.Message" alias="Message"/>
     </typeAliases>
     
 </configuration>

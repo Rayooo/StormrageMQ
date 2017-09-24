@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ray.stormragemq.dao.MessageDao">
+
+    <resultMap id="BaseResultMap" type="Message">
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="username" property="userName" jdbcType="VARCHAR"/>
+        <result column="exchangername" property="exchangerName" jdbcType="VARCHAR"/>
+        <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="cls" property="cls" jdbcType="VARCHAR"/>
+        <result column="clientname" property="clientName" jdbcType="VARCHAR"/>
+        <result column="clienttype" property="clientType" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insertMessage" parameterType="Message">
+        INSERT INTO message (uuid, content, username, exchangername, type, cls, clientname, clienttype) VALUES
+            (#{uuid}, #{content}, #{userName}, #{exchangerName}, #{type}, #{cls}, #{clientName}, #{clientType})
+    </insert>
+
+    <select id="isExist" parameterType="Message" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT 1 FROM message WHERE uuid=#{uuid})
+    </select>
+
+</mapper>
