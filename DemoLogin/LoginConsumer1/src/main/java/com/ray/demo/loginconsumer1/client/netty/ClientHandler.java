@@ -14,6 +14,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @ChannelHandler.Sharable
 public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
@@ -40,11 +42,13 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         Message message = new Message();
+        message.setUuid(UUID.randomUUID().toString());
         message.setType(env.getProperty("message.type"));
         message.setUserName(env.getProperty("message.userName"));
         message.setPassword(env.getProperty("message.password"));
         message.setClientName(env.getProperty("message.clientName"));
         message.setClientType(Integer.parseInt(env.getProperty("message.clientType")));
+        message.setQueueNameList(env.getProperty("message.queueNameList"));
         ObjectMapper mapper = new ObjectMapper();
         ctx.writeAndFlush(Unpooled.copiedBuffer(mapper.writeValueAsString(message), CharsetUtil.UTF_8));
         channelHandlerService.setCtx(ctx);

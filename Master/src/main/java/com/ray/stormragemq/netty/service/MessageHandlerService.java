@@ -1,12 +1,21 @@
 package com.ray.stormragemq.netty.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ray.stormragemq.common.Message;
+import com.ray.stormragemq.constant.ClientTypeEnum;
 import com.ray.stormragemq.constant.ConstantVariable;
 import com.ray.stormragemq.domain.ExchangerEntity;
 import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.domain.QueueMessageEntity;
+import com.ray.stormragemq.netty.ClientChannel;
+import com.ray.stormragemq.service.UserAccountService;
 import com.ray.stormragemq.util.BaseException;
+import com.ray.stormragemq.util.BaseResponse;
 import com.ray.stormragemq.util.LogUtil;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.CharsetUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -28,6 +37,12 @@ public class MessageHandlerService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private UserAccountService userAccountService;
+
+    @Autowired
+    private GatewayService gatewayService;
 
 
     public void handleNotImportantMessage(Message message) throws BaseException {
@@ -91,5 +106,36 @@ public class MessageHandlerService {
 
     }
 
+    //处理消费者认证初始化消息
+    private void handleConsumeInitMessage(Message message) {
+
+    }
+
+    //处理 消费者和生产者 初始化消息
+    public void handleInitMessage(Message message, ChannelHandlerContext ctx) throws JsonProcessingException, InterruptedException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        //密码错误情况下
+        if(!userAccountService.checkUser(message.getUserName(), message.getPassword())){
+            BaseResponse<String> response = new BaseResponse<>();
+            response.setMessage("密码错误");
+            ctx.writeAndFlush(Unpooled.copiedBuffer(mapper.writeValueAsString(response), CharsetUtil.UTF_8)).sync();
+            ctx.close();
+            return;
+        }
+
+        //将channel保存起来，消费者和生产者
+        String uuid = ctx.channel().id().asLongText();
+        ClientChannel clientChannel = gatewayService.getGatewayChannel(uuid);
+        Map<String, ClientChannel> map = gatewayService.getChannels();
+        clientChannel.setName(message.getClientName());
+        clientChannel.setClientType(message.getClientType());
+        map.put(uuid, clientChannel);
+
+        //检查是否为消费者
+        if(ClientTypeEnum.CONSUMER.getType() == (message.getClientType())){
+            handleConsumeInitMessage(message);
+        }
+    }
 
 }

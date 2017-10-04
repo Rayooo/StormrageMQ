@@ -42,6 +42,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         Message message = new Message();
+        message.setUuid(UUID.randomUUID().toString());
         message.setType(env.getProperty("message.type"));
         message.setUserName(env.getProperty("message.userName"));
         message.setPassword(env.getProperty("message.password"));

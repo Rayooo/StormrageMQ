@@ -1,6 +1,7 @@
 package com.ray.stormragemq.controller;
 
 import com.ray.stormragemq.domain.ExchangerEntity;
+import com.ray.stormragemq.domain.QueueDto;
 import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.domain.UserAccountEntity;
 import com.ray.stormragemq.service.QueueService;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 @RestController
 @RequestMapping("/queue")
@@ -33,8 +33,9 @@ public class QueueController {
     }
 
     @RequestMapping("/addQueue")
-    public BaseResponse<String> addQueue(@RequestBody QueueEntity queue, @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
-        queue.setName(StringUtils.deleteWhitespace(queue.getName()));
+    public BaseResponse<String> addQueue(@RequestBody QueueDto queueDto, @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
+        QueueEntity queue = new QueueEntity();
+        queue.setName(StringUtils.deleteWhitespace(queueDto.getName()));
 
         if(StringUtils.isBlank(queue.getName())){
             throw new BaseException("队列名称不可为空");
@@ -50,7 +51,8 @@ public class QueueController {
     }
 
     @RequestMapping("/deleteQueue")
-    public BaseResponse<String> deleteQueue(@RequestBody QueueEntity queue,  @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
+    public BaseResponse<String> deleteQueue(@RequestBody QueueDto queueDto,  @ModelAttribute("userInfo") UserAccountEntity user) throws BaseException {
+        QueueEntity queue = new QueueEntity(queueDto);
         if(queue.getId() != null){
             queueService.deleteQueue(queue, user);
             return new BaseResponse<>("success");
@@ -62,7 +64,9 @@ public class QueueController {
     }
 
     @RequestMapping("/changeQueue")
-    public BaseResponse<String> changeQueue(@RequestBody QueueEntity queue) throws BaseException {
+    public BaseResponse<String> changeQueue(@RequestBody QueueDto queueDto) throws BaseException {
+        QueueEntity queue = new QueueEntity(queueDto);
+
         queue.setName(StringUtils.deleteWhitespace(queue.getName()));
 
         if(StringUtils.isBlank(queue.getName())){
@@ -77,7 +81,9 @@ public class QueueController {
 
     //返回这个队列被哪些交换器扫描到
     @RequestMapping("/getQueueInfo")
-    public BaseResponse<QueueEntity> getQueueInfo(@RequestBody QueueEntity queue){
+    public BaseResponse<QueueEntity> getQueueInfo(@RequestBody QueueDto queueDto){
+        QueueEntity queue = new QueueEntity(queueDto);
+
         ArrayList<String> list = new ArrayList<>();
         exchangerMap.forEach((s, exchangerEntity) -> {
             if(exchangerEntity.getQueueList().contains(queue.getName())){

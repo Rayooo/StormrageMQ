@@ -5,7 +5,6 @@ import com.ray.stormragemq.common.Message;
 import com.ray.stormragemq.netty.service.GatewayService;
 import com.ray.stormragemq.netty.service.MessageHandlerService;
 import com.ray.stormragemq.service.MessageService;
-import com.ray.stormragemq.service.UserAccountService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
 import com.ray.stormragemq.util.LogUtil;
@@ -21,7 +20,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Component
 @ChannelHandler.Sharable
@@ -31,17 +29,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 
     private final ThreadPoolTaskExecutor executor;
 
-    private final UserAccountService userAccountService;
-
     private final MessageHandlerService messageHandlerService;
 
     private final MessageService messageService;
 
     @Autowired
-    public ServerHandler(GatewayService gatewayService, ThreadPoolTaskExecutor executor, UserAccountService userAccountService, MessageHandlerService messageHandlerService, MessageService messageService) {
+    public ServerHandler(GatewayService gatewayService, ThreadPoolTaskExecutor executor, MessageHandlerService messageHandlerService, MessageService messageService) {
         this.gatewayService = gatewayService;
         this.executor = executor;
-        this.userAccountService = userAccountService;
         this.messageHandlerService = messageHandlerService;
         this.messageService = messageService;
     }
@@ -87,24 +82,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 
                 //验证初始化消息
                 if("0".equals(message.getType())){
-                    //密码错误情况下
-                    if(!userAccountService.checkUser(message.getUserName(), message.getPassword())){
-                        BaseResponse<String> response = new BaseResponse<>();
-                        response.setMessage("密码错误");
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(mapper.writeValueAsString(response), CharsetUtil.UTF_8)).sync();
-                        ctx.close();
-                    }
-                    else{
-                        //将channel保存起来，消费者和生产者
-                        String uuid = ctx.channel().id().asLongText();
-                        ClientChannel clientChannel = gatewayService.getGatewayChannel(uuid);
-                        Map<String, ClientChannel> map = gatewayService.getChannels();
-                        clientChannel.setName(message.getClientName());
-                        clientChannel.setClientType(message.getClientType());
-                        map.put(uuid, clientChannel);
-                    }
+                    messageHandlerService.handleInitMessage(message, ctx);
                 }
-
 
 
             } catch (IOException e) {

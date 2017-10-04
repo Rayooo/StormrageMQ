@@ -1,6 +1,8 @@
 package com.ray.stormragemq.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +23,7 @@ public class QueueEntity extends BaseEntity implements Serializable {
 
     private ArrayList<String> exchangerList;        //被扫描到的Exchanger，不存到数据库
 
-    private BlockingQueue<QueueMessageEntity> blockingQueue = new LinkedBlockingQueue<>();         //存储消息（不序列化）
+    private BlockingQueue<QueueMessageEntity> blockingQueue = null;         //存储消息（不序列化）
 
     public ArrayList<String> getExchangerList() {
         return exchangerList;
@@ -35,6 +37,33 @@ public class QueueEntity extends BaseEntity implements Serializable {
 
     public QueueEntity(Integer id) {
         super(id);
+    }
+
+    public QueueEntity(QueueDto queueDto) {
+        if(queueDto.getId() != null){
+            this.setId(queueDto.getId());
+        }
+        if(queueDto.getPageNo() != null){
+            this.setPageNo(queueDto.getPageNo());
+        }
+        if(queueDto.getPageSize() != null){
+            this.setPageSize(queueDto.getPageSize());
+        }
+        if(queueDto.getName() != null){
+            this.name = queueDto.getName();
+        }
+        if(queueDto.getAddressList() != null){
+            this.addressList = queueDto.getAddressList();
+        }
+        if(queueDto.getCreateTime() != null){
+            this.createTime = queueDto.getCreateTime();
+        }
+        if(queueDto.getCreateUserId() != null){
+            this.createUserId = queueDto.getCreateUserId();
+        }
+        if(queueDto.getExchangerList() != null){
+            this.exchangerList = queueDto.getExchangerList();
+        }
     }
 
     public String getName() {
@@ -70,7 +99,12 @@ public class QueueEntity extends BaseEntity implements Serializable {
     }
 
     public BlockingQueue<QueueMessageEntity> getBlockingQueue() {
+        if(blockingQueue == null){
+            blockingQueue = new LinkedBlockingQueue<>();
+        }
         return blockingQueue;
     }
+
+
 
 }

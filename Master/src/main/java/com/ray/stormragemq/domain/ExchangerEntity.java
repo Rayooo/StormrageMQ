@@ -21,6 +21,9 @@ public class ExchangerEntity extends BaseEntity implements Serializable{
     private ArrayList<String> queueList;         //存放扫描到的队列, 不存数据库
 
     public ArrayList<String> getQueueList() {
+        if(queueList == null){
+            queueList = new ArrayList<>();
+        }
         return queueList;
     }
 

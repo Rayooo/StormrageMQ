@@ -8,6 +8,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.CharsetUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class ChannelHandlerService {
 
@@ -28,6 +30,7 @@ public class ChannelHandlerService {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
+            message.setUuid(UUID.randomUUID().toString());
             String s = mapper.writeValueAsString(message);
             ctx.writeAndFlush(Unpooled.copiedBuffer(s, CharsetUtil.UTF_8));
             return true;
