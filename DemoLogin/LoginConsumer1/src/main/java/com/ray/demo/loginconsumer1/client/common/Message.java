@@ -1,4 +1,4 @@
-package com.ray.demo.login.client.common;
+package com.ray.demo.loginconsumer1.client.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;

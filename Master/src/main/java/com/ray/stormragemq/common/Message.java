@@ -24,7 +24,7 @@ public class Message implements Serializable {
     //密码(首次验证时使用)
     private String password;
 
-    //交换器名称
+    //交换器名称,消费者投递消息时使用
     private String exchangerName;
 
     //创建时间
@@ -41,6 +41,9 @@ public class Message implements Serializable {
 
     //client的Type(验证时使用)  1 生产者  2 消费者
     private int clientType;
+
+    //消费者初始化时，监听哪个队列 以,分割
+    private String queueNameList;
 
     public String getUuid() {
         return uuid;
@@ -120,6 +123,14 @@ public class Message implements Serializable {
 
     public void setClientType(int clientType) {
         this.clientType = clientType;
+    }
+
+    public String getQueueNameList() {
+        return queueNameList;
+    }
+
+    public void setQueueNameList(String queueNameList) {
+        this.queueNameList = queueNameList;
     }
 
     public String toJson(){
