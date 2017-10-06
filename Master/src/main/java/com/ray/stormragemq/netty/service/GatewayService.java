@@ -1,9 +1,12 @@
 package com.ray.stormragemq.netty.service;
 
+import com.ray.stormragemq.domain.QueueEntity;
 import com.ray.stormragemq.netty.ClientChannel;
 import io.netty.channel.socket.SocketChannel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,7 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class GatewayService {
 
+    //key为uuid
     private Map<String, ClientChannel> map = new ConcurrentHashMap<>();
+
+    @Autowired
+    private Map<String, QueueEntity> queueMap;
 
     public void addGatewayChannel(String id, ClientChannel channel){
         map.put(id, channel);
@@ -27,6 +34,33 @@ public class GatewayService {
 
     public void removeGatewayChannel(String id){
         map.remove(id);
+    }
+
+    public void removeConsumerUuid(String uuid){
+        queueMap.forEach((s, queueEntity) -> {
+            queueEntity.removeConsumer(uuid);
+        });
+    }
+
+    public void syncConsumerName(){
+        queueMap.forEach((s, queueEntity) -> {
+
+            List<String> uuidList = queueEntity.getConsumerUuidList();
+            StringBuilder sb = new StringBuilder();
+
+            for (String uuid : uuidList) {
+                ClientChannel clientChannel = map.get(uuid);
+                if(clientChannel != null) {
+                    sb.append(clientChannel.getName()).append(",");
+                }
+            }
+            if(sb.length() > 0){
+                sb.deleteCharAt(sb.length() - 1);
+            }
+
+            queueEntity.setAddressList(sb.toString());
+
+        });
     }
 
 }

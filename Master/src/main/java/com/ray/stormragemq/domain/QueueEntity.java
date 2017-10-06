@@ -2,10 +2,12 @@ package com.ray.stormragemq.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -15,7 +17,7 @@ public class QueueEntity extends BaseEntity implements Serializable {
 
     private String name;            //队列名称 唯一
 
-    private String addressList;     //推送的主机名称列表
+    private String addressList;     //推送的主机名称列表  消费者的名称
 
     private Date createTime;        //创建时间
 
@@ -24,6 +26,34 @@ public class QueueEntity extends BaseEntity implements Serializable {
     private ArrayList<String> exchangerList;        //被扫描到的Exchanger，不存到数据库
 
     private BlockingQueue<QueueMessageEntity> blockingQueue = null;         //存储消息（不序列化）
+
+    private List<String> consumerUuidList;               //存储消费者的uuid
+
+    public List<String> getConsumerUuidList() {
+        if(consumerUuidList == null){
+            consumerUuidList = new ArrayList<>();
+        }
+        return consumerUuidList;
+    }
+
+    public void addConsumer(String uuid){
+        if(consumerUuidList == null){
+            consumerUuidList = new ArrayList<>();
+        }
+        if(StringUtils.isNotBlank(uuid)){
+            consumerUuidList.add(uuid);
+        }
+    }
+
+    public void removeConsumer(String uuid){
+        if(consumerUuidList == null){
+            consumerUuidList = new ArrayList<>();
+            return;
+        }
+
+        consumerUuidList.remove(uuid);
+    }
+
 
     public ArrayList<String> getExchangerList() {
         return exchangerList;

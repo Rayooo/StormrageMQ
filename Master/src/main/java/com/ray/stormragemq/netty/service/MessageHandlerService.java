@@ -13,6 +13,7 @@ import com.ray.stormragemq.service.UserAccountService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
 import com.ray.stormragemq.util.LogUtil;
+import com.ray.stormragemq.util.MatchQueueUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.CharsetUtil;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +109,24 @@ public class MessageHandlerService {
     }
 
     //处理消费者认证初始化消息
-    private void handleConsumeInitMessage(Message message) {
+    private void handleConsumeInitMessage(Message message, String channelUuid) {
+        String queueNameListString = message.getQueueNameList();
+        if(StringUtils.isBlank(queueNameListString)){
+            return;
+        }
+
+        List<String> list = Arrays.asList(queueNameListString.split(","));
+
+        for (String queueName : list) {
+            queueMap.forEach((s, queueEntity) -> {
+                if(MatchQueueUtil.match(s, queueName)){
+                    queueEntity.addConsumer(channelUuid);
+                }
+            });
+        }
+
+        gatewayService.syncConsumerName();
+
 
     }
 
@@ -134,7 +153,7 @@ public class MessageHandlerService {
 
         //检查是否为消费者
         if(ClientTypeEnum.CONSUMER.getType() == (message.getClientType())){
-            handleConsumeInitMessage(message);
+            handleConsumeInitMessage(message, ctx.channel().id().asLongText());
         }
     }
 

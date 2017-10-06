@@ -54,6 +54,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         String uuid = ctx.channel().id().asLongText();
         gatewayService.removeGatewayChannel(uuid);
+        gatewayService.removeConsumerUuid(uuid);
+        gatewayService.syncConsumerName();
     }
 
     @Override
