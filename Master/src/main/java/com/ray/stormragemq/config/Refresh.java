@@ -4,22 +4,19 @@ import com.ray.stormragemq.constant.ConstantVariable;
 import com.ray.stormragemq.constant.ExchangerEnum;
 import com.ray.stormragemq.dao.ExchangerDao;
 import com.ray.stormragemq.dao.QueueDao;
-import com.ray.stormragemq.domain.ExchangerEntity;
-import com.ray.stormragemq.domain.QueueEntity;
-import com.ray.stormragemq.domain.QueueMessageEntity;
+import com.ray.stormragemq.entity.ExchangerEntity;
+import com.ray.stormragemq.entity.QueueEntity;
+import com.ray.stormragemq.entity.QueueMessageEntity;
 import com.ray.stormragemq.util.LogUtil;
 import com.ray.stormragemq.util.MatchQueueUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import sun.jvm.hotspot.utilities.MessageQueue;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Component

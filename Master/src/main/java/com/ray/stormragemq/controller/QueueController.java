@@ -1,9 +1,9 @@
 package com.ray.stormragemq.controller;
 
-import com.ray.stormragemq.domain.ExchangerEntity;
-import com.ray.stormragemq.domain.QueueDto;
-import com.ray.stormragemq.domain.QueueEntity;
-import com.ray.stormragemq.domain.UserAccountEntity;
+import com.ray.stormragemq.entity.ExchangerEntity;
+import com.ray.stormragemq.entity.QueueDto;
+import com.ray.stormragemq.entity.QueueEntity;
+import com.ray.stormragemq.entity.UserAccountEntity;
 import com.ray.stormragemq.service.QueueService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;

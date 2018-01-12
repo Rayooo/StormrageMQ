@@ -1,8 +1,7 @@
 package com.ray.stormragemq.netty.service;
 
-import com.ray.stormragemq.domain.QueueEntity;
+import com.ray.stormragemq.entity.QueueEntity;
 import com.ray.stormragemq.netty.ClientChannel;
-import io.netty.channel.socket.SocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

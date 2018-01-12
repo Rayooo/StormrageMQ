@@ -1,7 +1,6 @@
-package com.ray.stormragemq.domain;
+package com.ray.stormragemq.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;

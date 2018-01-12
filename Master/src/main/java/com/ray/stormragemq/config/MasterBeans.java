@@ -1,27 +1,14 @@
 package com.ray.stormragemq.config;
 
-import com.ray.stormragemq.dao.UserAccountDao;
-import com.ray.stormragemq.domain.ExchangerEntity;
-import com.ray.stormragemq.domain.QueueEntity;
-import com.ray.stormragemq.domain.UserAccountEntity;
+import com.ray.stormragemq.entity.ExchangerEntity;
+import com.ray.stormragemq.entity.QueueEntity;
 import io.jsonwebtoken.impl.crypto.MacProvider;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Key;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

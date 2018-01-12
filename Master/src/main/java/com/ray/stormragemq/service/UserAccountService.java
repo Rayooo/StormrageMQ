@@ -1,6 +1,6 @@
 package com.ray.stormragemq.service;
 
-import com.ray.stormragemq.domain.UserAccountEntity;
+import com.ray.stormragemq.entity.UserAccountEntity;
 
 /**
  * Created by Ray on 2017/6/30.

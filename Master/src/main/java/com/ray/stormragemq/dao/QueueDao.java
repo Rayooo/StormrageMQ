@@ -1,9 +1,8 @@
 package com.ray.stormragemq.dao;
 
-import com.ray.stormragemq.domain.QueueEntity;
+import com.ray.stormragemq.entity.QueueEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

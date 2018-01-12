@@ -1,6 +1,6 @@
 package com.ray.stormragemq.controller;
 
-import com.ray.stormragemq.domain.UserAccountEntity;
+import com.ray.stormragemq.entity.UserAccountEntity;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
 import com.ray.stormragemq.util.BaseResponseCode;

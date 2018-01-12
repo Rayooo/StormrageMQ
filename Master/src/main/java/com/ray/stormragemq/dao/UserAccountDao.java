@@ -1,7 +1,6 @@
 package com.ray.stormragemq.dao;
 
-import com.ray.stormragemq.domain.UserAccountEntity;
-import org.springframework.stereotype.Component;
+import com.ray.stormragemq.entity.UserAccountEntity;
 import org.springframework.stereotype.Repository;
 
 /**

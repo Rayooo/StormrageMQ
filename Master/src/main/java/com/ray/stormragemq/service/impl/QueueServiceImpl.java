@@ -2,8 +2,8 @@ package com.ray.stormragemq.service.impl;
 
 import com.ray.stormragemq.config.Refresh;
 import com.ray.stormragemq.dao.QueueDao;
-import com.ray.stormragemq.domain.QueueEntity;
-import com.ray.stormragemq.domain.UserAccountEntity;
+import com.ray.stormragemq.entity.QueueEntity;
+import com.ray.stormragemq.entity.UserAccountEntity;
 import com.ray.stormragemq.service.QueueService;
 import com.ray.stormragemq.util.BaseException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.ray.stormragemq.config;
 
 import com.ray.stormragemq.dao.UserAccountDao;
-import com.ray.stormragemq.domain.UserAccountEntity;
+import com.ray.stormragemq.entity.UserAccountEntity;
 import com.ray.stormragemq.util.BaseException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -18,7 +18,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.security.Key;
 
 @Component

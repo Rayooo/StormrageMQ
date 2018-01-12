@@ -1,7 +1,7 @@
 package com.ray.stormragemq.service.impl;
 
 import com.ray.stormragemq.dao.UserAccountDao;
-import com.ray.stormragemq.domain.UserAccountEntity;
+import com.ray.stormragemq.entity.UserAccountEntity;
 import com.ray.stormragemq.service.UserAccountService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.Password;
@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.UUID;
 
 /**
  * Created by Ray on 2017/6/30.

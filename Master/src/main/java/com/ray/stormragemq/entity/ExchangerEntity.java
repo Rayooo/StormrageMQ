@@ -1,4 +1,4 @@
-package com.ray.stormragemq.domain;
+package com.ray.stormragemq.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;

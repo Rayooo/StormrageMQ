@@ -1,8 +1,8 @@
 package com.ray.stormragemq.controller;
 
 import com.ray.stormragemq.constant.ExchangerEnum;
-import com.ray.stormragemq.domain.ExchangerEntity;
-import com.ray.stormragemq.domain.UserAccountEntity;
+import com.ray.stormragemq.entity.ExchangerEntity;
+import com.ray.stormragemq.entity.UserAccountEntity;
 import com.ray.stormragemq.service.ExchangerService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
