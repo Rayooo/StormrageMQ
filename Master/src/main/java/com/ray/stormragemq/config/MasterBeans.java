@@ -35,7 +35,7 @@ public class MasterBeans {
         return new ConcurrentHashMap<>();
     }
 
-    //缓存Queue
+    //缓存Queue  队列名 队列Entity
     @Bean(name = "queueMap")
     public Map<String, QueueEntity> queueMap(){
         return new ConcurrentHashMap<>();

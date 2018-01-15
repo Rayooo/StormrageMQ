@@ -7,6 +7,8 @@ import com.ray.stormragemq.dao.QueueDao;
 import com.ray.stormragemq.entity.ExchangerEntity;
 import com.ray.stormragemq.entity.QueueEntity;
 import com.ray.stormragemq.entity.QueueMessageEntity;
+import com.ray.stormragemq.thread.ModCount;
+import com.ray.stormragemq.thread.QueueThreadService;
 import com.ray.stormragemq.util.LogUtil;
 import com.ray.stormragemq.util.MatchQueueUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -22,33 +24,34 @@ import java.util.*;
 @Component
 public class Refresh {
 
+    @Autowired
     private Map<String, ExchangerEntity> exchangerMap;
 
-    private final ExchangerDao exchangerDao;
+    @Autowired
+    private ExchangerDao exchangerDao;
 
-    private final QueueDao queueDao;
+    @Autowired
+    private QueueDao queueDao;
 
+    @Autowired
     private Map<String, QueueEntity> queueMap;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private QueueThreadService queueThreadService;
 
     private List<QueueEntity> queueEntityList;
 
-    private final StringRedisTemplate redisTemplate;
-
-    @Autowired
-    public Refresh(Map<String, ExchangerEntity> exchangerMap, ExchangerDao exchangerDao, QueueDao queueDao, Map<String, QueueEntity> queueMap, StringRedisTemplate redisTemplate) {
-        this.exchangerMap = exchangerMap;
-        this.exchangerDao = exchangerDao;
-        this.queueDao = queueDao;
-        this.queueMap = queueMap;
-        this.redisTemplate = redisTemplate;
-    }
-
     @EventListener(ContextRefreshedEvent.class)
     public void contextRefreshEvent(){
+        ModCount.addModCount();
         initExchanger();
         initQueue();
         initExchangerQueueList();
         initQueueMessage();
+        queueThreadService.start();
     }
 
     private void initExchanger(){
@@ -78,7 +81,7 @@ public class Refresh {
                 }
             }
             else if(exchangerEntity.getType() == ExchangerEnum.FANOUT.getType()){
-                String[] a = exchangerEntity.getContent().split(",");
+                String[] a = exchangerEntity.getContent().split(ConstantVariable.SEPARATOR);
                 ArrayList<String> needQueue = new ArrayList<>(Arrays.asList(a));
                 ArrayList<String> add = new ArrayList<>();
                 for (QueueEntity queue : queueEntityList) {

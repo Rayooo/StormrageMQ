@@ -46,7 +46,9 @@ public class MessageHandlerService {
     @Autowired
     private GatewayService gatewayService;
 
-
+    /**
+     * 处理不重要的消息
+     * */
     public void handleNotImportantMessage(Message message) throws BaseException {
         String exchangerName = message.getExchangerName();
         ExchangerEntity exchanger = exchangerMap.get(exchangerName);
@@ -104,6 +106,9 @@ public class MessageHandlerService {
 
     }
 
+    /**
+     * 处理重要的消息
+     * */
     public void handleImpontentMessage(Message message){
 
     }
@@ -115,7 +120,7 @@ public class MessageHandlerService {
             return;
         }
 
-        List<String> list = Arrays.asList(queueNameListString.split(","));
+        List<String> list = Arrays.asList(queueNameListString.split(ConstantVariable.SEPARATOR));
 
         for (String queueName : list) {
             queueMap.forEach((s, queueEntity) -> {

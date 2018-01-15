@@ -1,5 +1,6 @@
 package com.ray.stormragemq.netty.service;
 
+import com.ray.stormragemq.constant.ConstantVariable;
 import com.ray.stormragemq.entity.QueueEntity;
 import com.ray.stormragemq.netty.ClientChannel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,16 @@ public class GatewayService {
         map.remove(id);
     }
 
+    public ClientChannel getClientChannelByConsumerName(String consumerName){
+        for(ClientChannel clientChannel : map.values()){
+            if(clientChannel.getName().equals(consumerName)){
+                return clientChannel;
+            }
+        }
+        return null;
+    }
+
+
     public void removeConsumerUuid(String uuid){
         queueMap.forEach((s, queueEntity) -> {
             queueEntity.removeConsumer(uuid);
@@ -50,11 +61,11 @@ public class GatewayService {
             for (String uuid : uuidList) {
                 ClientChannel clientChannel = map.get(uuid);
                 if(clientChannel != null) {
-                    sb.append(clientChannel.getName()).append(",");
+                    sb.append(clientChannel.getName()).append(ConstantVariable.SEPARATOR);
                 }
             }
             if(sb.length() > 0){
-                sb.deleteCharAt(sb.length() - 1);
+                sb.deleteCharAt(sb.length() - ConstantVariable.SEPARATOR.length());
             }
 
             queueEntity.setAddressList(sb.toString());
