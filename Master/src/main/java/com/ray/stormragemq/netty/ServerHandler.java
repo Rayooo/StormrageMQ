@@ -2,6 +2,7 @@ package com.ray.stormragemq.netty;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ray.stormragemq.common.Message;
+import com.ray.stormragemq.common.MessageTypeConstant;
 import com.ray.stormragemq.netty.service.GatewayService;
 import com.ray.stormragemq.netty.service.MessageHandlerService;
 import com.ray.stormragemq.service.MessageService;
@@ -69,7 +70,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                 messageService.saveMessage(message);
 
                 //普通消息
-                if("1".equals(message.getType())){
+                if(MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(message.getType())){
                     LogUtil.logInfo("普通消息");
                     LogUtil.logInfo("Server received: " + message.getContent());
                     //处理消息
@@ -77,13 +78,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                 }
 
                 //重要消息
-                if("2".equals(message.getType())){
+                if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){
                     LogUtil.logInfo("重要消息");
                 }
 
 
                 //验证初始化消息
-                if("0".equals(message.getType())){
+                if(MessageTypeConstant.INIT_MESSAGE_TYPE.equals(message.getType())){
                     messageHandlerService.handleInitMessage(message, ctx);
                 }
 

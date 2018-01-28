@@ -20,11 +20,11 @@ public class QueueMessageEntity implements Serializable {
 
     private String consumerName;    //消费者的名称
 
-    private String messageId;      //消息id
-
     private Date createTime;       //创建时间
 
     private boolean isReceived;     //是否完成接收
+
+    private String messageId;      //消息id
 
     private Message message;        //消息实体，不序列化
 

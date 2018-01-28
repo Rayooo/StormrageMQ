@@ -1,5 +1,8 @@
 package com.ray.stormragemq.thread;
 
+import com.ray.stormragemq.common.MessageTypeConstant;
+import com.ray.stormragemq.constant.ConstantVariable;
+import com.ray.stormragemq.dao.QueueMessageDao;
 import com.ray.stormragemq.entity.QueueEntity;
 import com.ray.stormragemq.entity.QueueMessageEntity;
 import com.ray.stormragemq.netty.ClientChannel;
@@ -10,6 +13,7 @@ import com.ray.stormragemq.util.RandomUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +29,12 @@ public class QueueThreadService {
 
     @Autowired
     private Map<String, QueueEntity> queueMap;
+
+    @Autowired
+    private QueueMessageDao queueMessageDao;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 每个队列启动一个线程发送消息
@@ -45,6 +55,7 @@ public class QueueThreadService {
     private void startThread(QueueEntity queueEntity){
         new Thread(() -> {
             int modCount = ModCount.getModCount();
+            Thread.currentThread().setName(queueEntity.getName() + "-" + modCount);
 
             BlockingQueue<QueueMessageEntity> q = queueEntity.getBlockingQueue();
             List<String> consumerUuidList = queueEntity.getConsumerUuidList();
@@ -60,6 +71,15 @@ public class QueueThreadService {
                             String messageString = JsonUtil.toJson(queueMessage.getMessage());
                             ClientChannel clientChannel = gatewayService.getGatewayChannel(consumerUuidList.get(RandomUtil.getIntRandom(0, consumerUuidList.size() - 1)));
                             clientChannel.getSocketChannel().writeAndFlush(Unpooled.copiedBuffer(messageString, CharsetUtil.UTF_8));
+
+                            //将不重要的消息直接把状态改为送达
+                            //并将redis中的消息删除
+                            if(queueMessage.getMessage() != null && MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
+                                queueMessage.setReceived(true);
+                                queueMessageDao.insertQueueMessage(queueMessage);
+                                redisTemplate.opsForHash().delete(ConstantVariable.MESSAGE_QUEUE_KEY,  queueMessage.getId());
+                            }
+
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();

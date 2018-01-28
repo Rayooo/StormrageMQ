@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ray.stormragemq.dao.QueueMessageDao">
+
+    <resultMap id="BaseResultMap" type="QueueMessageEntity">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="queuename" property="queueName" jdbcType="VARCHAR"/>
+        <result column="consumername" property="consumerName" jdbcType="VARCHAR"/>
+        <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="isreceived" property="isReceived" jdbcType="BOOLEAN"/>
+        <result column="messageid" property="messageId" jdbcType="VARCHAR"/>
+
+        <association property="message" javaType="Message">
+            <id column="uuid" property="uuid" jdbcType="VARCHAR"/>
+            <result column="content" property="content" jdbcType="VARCHAR"/>
+            <result column="username" property="userName" jdbcType="VARCHAR"/>
+            <result column="exchangername" property="exchangerName" jdbcType="VARCHAR"/>
+            <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="type" property="type" jdbcType="VARCHAR"/>
+            <result column="cls" property="cls" jdbcType="VARCHAR"/>
+            <result column="clientname" property="clientName" jdbcType="VARCHAR"/>
+            <result column="clienttype" property="clientType" jdbcType="INTEGER"/>
+        </association>
+    </resultMap>
+
+
+    <select id="getQueueMessage">
+        SELECT q.*, m.* FROM queuemessage q, message m WHERE q.messageid = m.uuid AND q.id = #{id}
+    </select>
+
+    <insert id="insertQueueMessage">
+        INSERT INTO queuemessage (id, queuename, consumername, createtime, isreceived, messageid)
+        VALUES (#{id}, #{queueName}, #{consumerName}, #{createTime}, #{isReceived}, #{messageId});
+    </insert>
+
+</mapper>

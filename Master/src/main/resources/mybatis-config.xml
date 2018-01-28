@@ -12,6 +12,7 @@
         <typeAlias type="com.ray.stormragemq.entity.ExchangerEntity" alias="ExchangerEntity"/>
         <typeAlias type="com.ray.stormragemq.entity.QueueEntity" alias="QueueEntity"/>
         <typeAlias type="com.ray.stormragemq.common.Message" alias="Message"/>
+        <typeAlias type="com.ray.stormragemq.entity.QueueMessageEntity" alias="QueueMessageEntity"/>
     </typeAliases>
     
 </configuration>

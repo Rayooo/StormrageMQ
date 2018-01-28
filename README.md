@@ -139,12 +139,13 @@ CREATE TABLE message(
   clienttype INTEGER                              --client的类型，1生产者，2消费者
 );
 
-CREATE TABLE messagequeue (
-  id SERIAL PRIMARY KEY,
-  messageid INT,                      --消息id
-  queueid INT,                        --队列id
-  consumer VARCHAR(100),              --消费者地址
-  isreceived INT                      --是否接收
-);
+CREATE TABLE queuemessage(
+  id VARCHAR(50) PRIMARY KEY,                     --id
+  queuename VARCHAR(100),                         --队列名出
+  consumername VARCHAR(100),                      --消费者名称
+  createtime TIMESTAMP DEFAULT current_timestamp, --创建时间
+  isreceived BOOLEAN,                             --是否接收完成
+  messageid VARCHAR(50)                           --消息id
+)
 ```
 
