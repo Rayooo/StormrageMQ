@@ -27,9 +27,25 @@ public class SendMessage {
 
         channelHandlerService.sendMessage(message);
 
-        LogUtil.logInfo("content");
+        LogUtil.logInfo(content);
 
         return "success";
+    }
+
+    @RequestMapping("/netty2")
+    public String netty2(String content){
+
+        Message message = new Message();
+        message.setType("2");
+        message.setExchangerName("qwe");
+        message.setContent(content);
+
+        channelHandlerService.sendMessage(message);
+
+        LogUtil.logInfo(content);
+
+        return "success";
+
     }
 
 

@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 将队列中的消息发送到消费者中
+ * */
 @Service
 public class QueueThreadService {
 
@@ -72,7 +75,7 @@ public class QueueThreadService {
                             ClientChannel clientChannel = gatewayService.getGatewayChannel(consumerUuidList.get(RandomUtil.getIntRandom(0, consumerUuidList.size() - 1)));
                             clientChannel.getSocketChannel().writeAndFlush(Unpooled.copiedBuffer(messageString, CharsetUtil.UTF_8));
 
-                            //将不重要的消息直接把状态改为送达
+                            //将 不重要 的消息直接把状态改为送达
                             //并将redis中的消息删除
                             if(queueMessage.getMessage() != null && MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
                                 queueMessage.setReceived(true);

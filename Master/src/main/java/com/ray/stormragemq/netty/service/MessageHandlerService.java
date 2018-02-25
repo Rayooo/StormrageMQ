@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ray.stormragemq.common.Message;
 import com.ray.stormragemq.constant.ClientTypeEnum;
 import com.ray.stormragemq.constant.ConstantVariable;
+import com.ray.stormragemq.dao.QueueMessageDao;
 import com.ray.stormragemq.entity.ExchangerEntity;
 import com.ray.stormragemq.entity.QueueEntity;
 import com.ray.stormragemq.entity.QueueMessageEntity;
@@ -46,10 +47,13 @@ public class MessageHandlerService {
     @Autowired
     private GatewayService gatewayService;
 
+    @Autowired
+    private QueueMessageDao queueMessageDao;
+
     /**
-     * 处理不重要的消息
+     * 处理消息  isImportant     true 重要消息 , false 不重要的消息
      * */
-    public void handleNotImportantMessage(Message message) throws BaseException {
+    public void handleMessage(Message message, boolean isImportant) throws BaseException {
         String exchangerName = message.getExchangerName();
         ExchangerEntity exchanger = exchangerMap.get(exchangerName);
         if(exchanger == null){
@@ -90,30 +94,32 @@ public class MessageHandlerService {
                     qm.setReceived(false);
                     qm.setMessage(message);
                     bq.offer(qm);
-                    redisTemplate.opsForHash().put(ConstantVariable.MESSAGE_QUEUE_KEY, qm.getId(), qm.toJson());
+
+                    if(!isImportant){
+                        //不重要的消息 放到redis中
+                        redisTemplate.opsForHash().put(ConstantVariable.MESSAGE_QUEUE_KEY, qm.getId(), qm.toJson());
+                    }
+                    else{
+                        //重要的消息 加入到数据库中
+                        queueMessageDao.insertQueueMessage(qm);
+                    }
 
                 }
             }
         }
 
 
-
-
-        queueMap.forEach((s, queueEntity) -> {
-            LogUtil.logInfo(queueEntity.getBlockingQueue().toString());
-        });
+//        queueMap.forEach((s, queueEntity) -> {
+//            LogUtil.logInfo(queueEntity.getBlockingQueue().toString());
+//        });
 
 
     }
+
 
     /**
-     * 处理重要的消息
-     * */
-    public void handleImpontentMessage(Message message){
-
-    }
-
-    //处理消费者认证初始化消息
+     * 处理消费者认证初始化消息
+     */
     private void handleConsumeInitMessage(Message message, String channelUuid) {
         String queueNameListString = message.getQueueNameList();
         if(StringUtils.isBlank(queueNameListString)){
@@ -135,7 +141,9 @@ public class MessageHandlerService {
 
     }
 
-    //处理 消费者和生产者 初始化消息
+    /**
+     * 处理 消费者和生产者 初始化消息
+     */
     public void handleInitMessage(Message message, ChannelHandlerContext ctx) throws JsonProcessingException, InterruptedException {
         ObjectMapper mapper = new ObjectMapper();
 

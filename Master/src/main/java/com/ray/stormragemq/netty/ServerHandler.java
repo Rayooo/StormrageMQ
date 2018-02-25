@@ -43,7 +43,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         String uuid = ctx.channel().id().asLongText();
         ClientChannel clientChannel = new ClientChannel();
         clientChannel.setSocketChannel((SocketChannel)ctx.channel());
@@ -52,7 +52,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         String uuid = ctx.channel().id().asLongText();
         gatewayService.removeGatewayChannel(uuid);
         gatewayService.removeConsumerUuid(uuid);
@@ -60,7 +60,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf in = (ByteBuf) msg;
 
         executor.execute(() -> {
@@ -74,12 +74,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
                     LogUtil.logInfo("普通消息");
                     LogUtil.logInfo("Server received: " + message.getContent());
                     //处理消息
-                    messageHandlerService.handleNotImportantMessage(message);
+                    messageHandlerService.handleMessage(message, false);
                 }
 
                 //重要消息
                 if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){
                     LogUtil.logInfo("重要消息");
+                    LogUtil.logInfo("Server received: " + message.getContent());
+                    //处理消息
+                    messageHandlerService.handleMessage(message, true);
                 }
 
 
@@ -116,7 +119,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();
         ctx.close();
     }
