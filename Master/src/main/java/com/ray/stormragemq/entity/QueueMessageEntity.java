@@ -22,7 +22,7 @@ public class QueueMessageEntity implements Serializable {
 
     private Date createTime;       //创建时间
 
-    private boolean isReceived;     //是否完成接收
+    private boolean received;     //是否完成接收
 
     private String messageId;      //消息id
 
@@ -69,11 +69,11 @@ public class QueueMessageEntity implements Serializable {
     }
 
     public boolean isReceived() {
-        return isReceived;
+        return received;
     }
 
     public void setReceived(boolean received) {
-        isReceived = received;
+        this.received = received;
     }
 
     public Message getMessage() {

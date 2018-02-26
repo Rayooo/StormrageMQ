@@ -7,7 +7,7 @@
         <result column="queuename" property="queueName" jdbcType="VARCHAR"/>
         <result column="consumername" property="consumerName" jdbcType="VARCHAR"/>
         <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="isreceived" property="isReceived" jdbcType="BOOLEAN"/>
+        <result column="isreceived" property="received" jdbcType="BOOLEAN"/>
         <result column="messageid" property="messageId" jdbcType="VARCHAR"/>
 
         <association property="message" javaType="Message">
@@ -24,13 +24,25 @@
     </resultMap>
 
 
-    <select id="getQueueMessage">
+    <select id="getQueueMessage" parameterType="java.util.Map" resultMap="BaseResultMap">
         SELECT q.*, m.* FROM queuemessage q, message m WHERE q.messageid = m.uuid AND q.id = #{id}
     </select>
 
     <insert id="insertQueueMessage">
         INSERT INTO queuemessage (id, queuename, consumername, createtime, isreceived, messageid)
-        VALUES (#{id}, #{queueName}, #{consumerName}, #{createTime}, #{isReceived}, #{messageId});
+        VALUES (#{id}, #{queueName}, #{consumerName}, #{createTime}, #{received}, #{messageId});
     </insert>
+
+    <select id="getAllQueueMessageNotReceived" resultMap="BaseResultMap">
+        SELECT q.*, m.* FROM queuemessage q, message m WHERE q.messageid = m.uuid AND q.isreceived = false
+    </select>
+
+    <update id="updateQueueMessage" parameterType="QueueMessageEntity">
+        UPDATE queuemessage
+        <set>
+            <if test="received != null and received != ''">isreceived = #{received},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
 
 </mapper>

@@ -4,6 +4,7 @@ import com.ray.stormragemq.constant.ConstantVariable;
 import com.ray.stormragemq.constant.ExchangerEnum;
 import com.ray.stormragemq.dao.ExchangerDao;
 import com.ray.stormragemq.dao.QueueDao;
+import com.ray.stormragemq.dao.QueueMessageDao;
 import com.ray.stormragemq.entity.ExchangerEntity;
 import com.ray.stormragemq.entity.QueueEntity;
 import com.ray.stormragemq.entity.QueueMessageEntity;
@@ -41,6 +42,9 @@ public class Refresh {
 
     @Autowired
     private QueueThreadService queueThreadService;
+
+    @Autowired
+    private QueueMessageDao queueMessageDao;
 
     private List<QueueEntity> queueEntityList;
 
@@ -110,8 +114,10 @@ public class Refresh {
 
     }
 
-    //从redis中初始化queueMessage
+    //从redis中和数据库中初始化queueMessage
     private void initQueueMessage(){
+
+        //redis
         List list = redisTemplate.opsForHash().values(ConstantVariable.MESSAGE_QUEUE_KEY);
         if(!CollectionUtils.isEmpty(list)){
             for (Object o : list) {
@@ -122,6 +128,17 @@ public class Refresh {
                 }
             }
         }
+
+        List<QueueMessageEntity> listInDB = queueMessageDao.getAllQueueMessageNotReceived();
+        if(!CollectionUtils.isEmpty(listInDB)){
+            for (QueueMessageEntity qm : listInDB) {
+                if(qm != null){
+                    QueueEntity queue = queueMap.get(qm.getQueueName());
+                    queue.getBlockingQueue().offer(qm);
+                }
+            }
+        }
+
     }
 
 }

@@ -83,6 +83,14 @@ public class QueueThreadService {
                                 redisTemplate.opsForHash().delete(ConstantVariable.MESSAGE_QUEUE_KEY,  queueMessage.getId());
                             }
 
+                            //将 重要 的消息把状态改为送达
+                            //将postgres中的消息改状态
+                            if(queueMessage.getMessage() != null && MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
+                                queueMessage.setReceived(true);
+                                queueMessageDao.updateQueueMessage(queueMessage);
+                            }
+
+
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
