@@ -27,7 +27,8 @@ public class SpringMvcConfig {
             "/exchanger/listExchangerTypes",
             "/constants/*",
             "/userAccount/login",
-            "/userAccount/register"
+            "/userAccount/register",
+            "/consumer/*"
     };
 
     private final UserAccountDao userAccountDao;

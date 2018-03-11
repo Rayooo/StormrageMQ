@@ -69,28 +69,51 @@ public class QueueThreadService {
                 //检查消费者是否存在
                 if(consumerUuidList.size() > 0){
                     try {
-                        queueMessage = q.poll(5, TimeUnit.SECONDS);
+                        queueMessage = q.peek();
                         if(queueMessage != null){
                             String messageString = JsonUtil.toJson(queueMessage.getMessage());
-                            ClientChannel clientChannel = gatewayService.getGatewayChannel(consumerUuidList.get(RandomUtil.getIntRandom(0, consumerUuidList.size() - 1)));
-                            clientChannel.getSocketChannel().writeAndFlush(Unpooled.copiedBuffer(messageString, CharsetUtil.UTF_8));
 
-                            //将 不重要 的消息直接把状态改为送达
-                            //并将redis中的消息删除
-                            if(queueMessage.getMessage() != null && MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
-                                queueMessage.setReceived(true);
-                                queueMessageDao.insertQueueMessage(queueMessage);
-                                redisTemplate.opsForHash().delete(ConstantVariable.MESSAGE_QUEUE_KEY,  queueMessage.getId());
+                            ClientChannel clientChannel = null;
+
+                            //取出具有sendCount的消费者
+                            for (String uuid : consumerUuidList) {
+                                ClientChannel cc = gatewayService.getGatewayChannel(uuid);
+                                if(cc.canSend()){
+                                    clientChannel = cc;
+                                    break;
+                                }
+
                             }
 
-                            //将 重要 的消息把状态改为送达
-                            //将postgres中的消息改状态
-                            if(queueMessage.getMessage() != null && MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
-                                queueMessage.setReceived(true);
-                                queueMessageDao.updateQueueMessage(queueMessage);
+                            //可以发送消息
+                            if(clientChannel != null){
+                                queueMessage = q.poll(5, TimeUnit.SECONDS);
+                                clientChannel.getSocketChannel().writeAndFlush(Unpooled.copiedBuffer(messageString, CharsetUtil.UTF_8));
+
+                                //将 不重要 的消息直接把状态改为送达
+                                //并将redis中的消息删除
+                                if(queueMessage.getMessage() != null && MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
+                                    queueMessage.setReceived(true);
+                                    queueMessageDao.insertQueueMessage(queueMessage);
+                                    redisTemplate.opsForHash().delete(ConstantVariable.MESSAGE_QUEUE_KEY,  queueMessage.getId());
+                                }
+
+                                //将 重要 的消息把状态改为送达
+                                //将postgres中的消息改状态
+                                if(queueMessage.getMessage() != null && MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
+                                    queueMessage.setReceived(true);
+                                    queueMessageDao.updateQueueMessage(queueMessage);
+                                }
                             }
 
-
+                        }
+                        else{
+                            //队列为空，暂停5秒
+                            try {
+                                TimeUnit.SECONDS.sleep(5);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
