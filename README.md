@@ -146,6 +146,14 @@ CREATE TABLE queuemessage(
   createtime TIMESTAMP DEFAULT current_timestamp, --创建时间
   isreceived BOOLEAN,                             --是否接收完成
   messageid VARCHAR(50)                           --消息id
-)
+);
+
+CREATE TABLE messagestatistics(
+  id SERIAL PRIMARY KEY,                          --主键
+  name VARCHAR(100),                              --统计名称
+  count INT,                                      --统计的数量
+  statisticstime TIMESTAMP,                       --哪一天的
+  createtime TIMESTAMP DEFAULT CURRENT_TIMESTAMP  --创建时间
+);
 ```
 

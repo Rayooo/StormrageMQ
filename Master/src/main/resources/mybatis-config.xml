@@ -13,6 +13,7 @@
         <typeAlias type="com.ray.stormragemq.entity.QueueEntity" alias="QueueEntity"/>
         <typeAlias type="com.ray.stormragemq.common.Message" alias="Message"/>
         <typeAlias type="com.ray.stormragemq.entity.QueueMessageEntity" alias="QueueMessageEntity"/>
+        <typeAlias type="com.ray.stormragemq.entity.MessageStatisticsEntity" alias="MessageStatisticsEntity"/>
     </typeAliases>
     
 </configuration>

@@ -23,4 +23,9 @@
         SELECT EXISTS(SELECT 1 FROM message WHERE uuid=#{uuid})
     </select>
 
+    <select id="sendMessageCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM message WHERE createtime BETWEEN #{startTime} AND #{endTime}
+    </select>
+
+
 </mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ray.stormragemq.dao.MessageStatisticsDao">
+
+    <resultMap id="BaseResultMap" type="MessageStatisticsEntity">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+        <result column="statisticstime" property="statisticsTime" jdbcType="TIMESTAMP"/>
+        <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insertStatistics" parameterType="MessageStatisticsEntity">
+        INSERT INTO messagestatistics (name, count, statisticstime) VALUES
+            (#{name}, #{count}, #{statisticsTime})
+    </insert>
+
+    <delete id="deleteStatistics" parameterType="java.util.Map">
+        DELETE FROM messagestatistics WHERE name = #{name} AND
+            statisticstime BETWEEN #{startTime} AND  #{endTime};
+    </delete>
+
+</mapper>
