@@ -5,5 +5,3 @@ services:
     image: stormrage-mq
     ports:
       - "3000:3000"
-    environment:
-      COMMAND: "java -jar /stormrage-mq.jar"

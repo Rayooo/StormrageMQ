@@ -10,8 +10,8 @@
     <groupId>com.ray</groupId>
     <artifactId>StormrageMQ</artifactId>
     <packaging>pom</packaging>
-    <name>StorageMQ Parent</name>
-    <description>StorageMQ</description>
+    <name>StormrageMQ</name>
+    <description>StormrageMQ</description>
     <version>1.0-SNAPSHOT</version>
 
     <modules>
@@ -36,3 +36,4 @@
         </plugins>
     </build>
 </project>
+
