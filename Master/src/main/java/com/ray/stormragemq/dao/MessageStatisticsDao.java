@@ -12,4 +12,9 @@ public interface MessageStatisticsDao {
     void insertStatistics(MessageStatisticsEntity messageStatisticsEntity);
 
     void deleteStatistics(Map<String, Object> param);
+
+    int countSendQueueMessage(Map<String, Date> param);
+
+    int countUnSendQueueMessage(Map<String, Date> param);
+
 }

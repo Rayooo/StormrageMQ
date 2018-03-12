@@ -87,11 +87,6 @@
 			<version>0.7.0</version>
 		</dependency>
 
-		<!--redis-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-redis</artifactId>
-		</dependency>
 
 		<!--Jedis-->
 		<dependency>
@@ -118,6 +113,9 @@
                     <include>**/*Mapper.xml</include>
                 </includes>
             </resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
         </resources>
 
 		<plugins>

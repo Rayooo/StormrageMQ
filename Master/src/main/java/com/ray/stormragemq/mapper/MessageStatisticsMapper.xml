@@ -20,4 +20,12 @@
             statisticstime BETWEEN #{startTime} AND  #{endTime};
     </delete>
 
+    <select id="countSendQueueMessage" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM queuemessage WHERE isreceived = TRUE AND createtime BETWEEN #{startTime} AND #{endTime}
+    </select>
+
+    <select id="countUnSendQueueMessage" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM queuemessage WHERE isreceived = FALSE AND createtime BETWEEN #{startTime} AND #{endTime}
+    </select>
+
 </mapper>
