@@ -20,10 +20,9 @@ cd Master
 mvn install 
 mvn package
 
-#docker 部署
-cd Master
-docker build -t master .
-docker run --name master -d -p 3000:3000 master
+# docker 部署
+mvn clean package
+docker-compose up
 ```
 
 ## 坑点
