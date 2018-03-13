@@ -123,25 +123,26 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-            <!--执行shell脚本-->
-			<!--<plugin>-->
-				<!--<artifactId>exec-maven-plugin</artifactId>-->
-				<!--<groupId>org.codehaus.mojo</groupId>-->
-				<!--<executions>-->
-					<!--<execution>&lt;!&ndash; Run our version calculation script &ndash;&gt;-->
-						<!--<id>Version Calculation</id>-->
-						<!--<phase>generate-sources</phase>-->
-						<!--<goals>-->
-							<!--<goal>exec</goal>-->
-						<!--</goals>-->
-						<!--<configuration>-->
-							<!--<executable>${basedir}/shell/buildFrontEnd.sh</executable>-->
-						<!--</configuration>-->
-					<!--</execution>-->
-				<!--</executions>-->
-			<!--</plugin>-->
-
-
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.3.6</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<repository>stormrage-mq</repository>
+					<buildArgs>
+						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
