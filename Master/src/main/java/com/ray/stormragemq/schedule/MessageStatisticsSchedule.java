@@ -4,7 +4,6 @@ import com.ray.stormragemq.constant.ConstantVariable;
 import com.ray.stormragemq.dao.MessageDao;
 import com.ray.stormragemq.dao.MessageStatisticsDao;
 import com.ray.stormragemq.entity.MessageStatisticsEntity;
-import com.ray.stormragemq.entity.QueueEntity;
 import com.ray.stormragemq.util.LogUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -47,11 +46,11 @@ public class MessageStatisticsSchedule {
      * 每天00:00:01统计消息信息
      * */
 //    @Scheduled(cron = "1 1 1 * * ?")
-    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "* */30 * * * *")
     public void statistics(){
         LogUtil.logInfo("统计消息的任务开始");
 
-        Map<String, Date> param = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
         param.put("startTime", yesterdayStart());
         param.put("endTime", yesterdayEnd());
 

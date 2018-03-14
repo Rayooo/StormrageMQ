@@ -13,5 +13,5 @@ public interface MessageDao {
 
     Boolean isExist(Message message);
 
-    int sendMessageCount(Map<String, Date> param);
+    int sendMessageCount(Map<String, Object> param);
 }

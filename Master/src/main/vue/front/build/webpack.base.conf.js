@@ -35,7 +35,14 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test'), resolve('node_modules/element-ui/packages'), resolve('node_modules/element-ui/src')]
+        include: [
+            resolve('src'),
+            resolve('test'),
+            resolve('node_modules/element-ui/packages'),
+            resolve('node_modules/element-ui/src'),
+            resolve('node_modules/vue-echarts'),
+            resolve('node_modules/resize-detector')
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

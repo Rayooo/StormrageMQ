@@ -4,6 +4,7 @@ import com.ray.stormragemq.entity.MessageStatisticsEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -13,8 +14,9 @@ public interface MessageStatisticsDao {
 
     void deleteStatistics(Map<String, Object> param);
 
-    int countSendQueueMessage(Map<String, Date> param);
+    int countSendQueueMessage(Map<String, Object> param);
 
-    int countUnSendQueueMessage(Map<String, Date> param);
+    int countUnSendQueueMessage(Map<String, Object> param);
 
+    List getMessageByTypeAndTime(Map<String, Object> param);
 }

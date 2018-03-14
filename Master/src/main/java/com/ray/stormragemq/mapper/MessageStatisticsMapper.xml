@@ -28,4 +28,8 @@
         SELECT count(*) FROM queuemessage WHERE isreceived = FALSE AND createtime BETWEEN #{startTime} AND #{endTime}
     </select>
 
+    <select id="getMessageByTypeAndTime" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT * FROM messagestatistics WHERE name = #{name} AND statisticstime BETWEEN #{startTime} AND #{endTime} ORDER BY statisticstime
+    </select>
+
 </mapper>

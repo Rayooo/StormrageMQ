@@ -13,6 +13,17 @@ import Global from "./components/Global.vue"
 Vue.use(ElementUI);
 Vue.use(Resource);
 
+
+import ECharts from 'vue-echarts/components/ECharts'
+// import ECharts modules manually to reduce bundle size
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
+// register component to use
+Vue.component('chart', ECharts)
+
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
