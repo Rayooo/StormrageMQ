@@ -24,3 +24,7 @@ hs_err_pid*
 *.mvn
 mvnw
 mvnw.cmd
+
+# IDEA
+.idea/
+StormrageMQ.iml
