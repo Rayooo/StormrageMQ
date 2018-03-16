@@ -27,9 +27,17 @@
                     title: {
                         text: '每日消息数量折线图'
                     },
-                    tooltip:{},
+                    tooltip:{
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'line',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
                     legend: {
-                        data:['消息数量']
+                        data:['消息数量', '队列剩余消息数量', '队列已发送消息数量']
                     },
                     xAxis: {
                         type: 'category',
@@ -41,15 +49,28 @@
                     series: [{
                         name: '消息数量',
                         data: [],
-                        type: 'line'
-                    }]
+                        type: 'line',
+                        smooth: true
+                    }, {
+                        name: '队列剩余消息数量',
+                        data: [],
+                        type: 'line',
+                        smooth: true
+                    }, {
+                        name: '队列已发送消息数量',
+                        data: [],
+                        type: 'line',
+                        smooth: true
+                    },],
+                    color:['#c23531', '#61a0a8',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3']
 
                 }
 
             }
         },
         mounted() {
-            this.getMessageCount()
+            this.getMessageCount();
+            setInterval(this.getMessageCount, 3000);
         },
         methods:{
             getMessageCount(){
@@ -62,15 +83,37 @@
                             xData.push(moment(list[i].statisticsTime).format("YYYY-MM-DD"));
                             sData.push(list[i].count);
                         }
-
                         this.polar.xAxis.data = xData;
                         this.polar.series[0].data = sData;
+                    }
+                });
 
-                        console.log(xData)
-                        console.log(sData)
-
+                Global.post("/statistic/messageCount", {statisticsType: "EVERY_DAY_QUEUE_MESSAGE_UNSEND"}, (res)=>{
+                    if(res.body.code === 0){
+                        var list = res.body.result;
+                        var xData = [];
+                        var sData = [];
+                        for(var i = 0; i < list.length; i++) {
+                            xData.push(moment(list[i].statisticsTime).format("YYYY-MM-DD"));
+                            sData.push(list[i].count);
+                        }
+                        this.polar.series[1].data = sData;
                     }
                 })
+
+                Global.post("/statistic/messageCount", {statisticsType: "EVERY_DAY_QUEUE_MESSAGE_SEND"}, (res)=>{
+                    if(res.body.code === 0){
+                        var list = res.body.result;
+                        var xData = [];
+                        var sData = [];
+                        for(var i = 0; i < list.length; i++) {
+                            xData.push(moment(list[i].statisticsTime).format("YYYY-MM-DD"));
+                            sData.push(list[i].count);
+                        }
+                        this.polar.series[2].data = sData;
+                    }
+                })
+
             },
         }
     }
