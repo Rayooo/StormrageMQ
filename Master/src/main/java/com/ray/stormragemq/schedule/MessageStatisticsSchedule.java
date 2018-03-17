@@ -140,7 +140,7 @@ public class MessageStatisticsSchedule {
     /**
      * 每5分钟计算一次今天的消息
      * */
-    @Scheduled(cron = "*/3 * * * * *")
+//    @Scheduled(cron = "*/3 * * * * *")
     private void calculateTodayMessage(){
 
         final Calendar cal = Calendar.getInstance();

@@ -28,4 +28,12 @@
     </select>
 
 
+    <select id="getMessagePage" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT * FROM message ORDER BY createtime DESC LIMIT #{pageSize} OFFSET #{start}
+    </select>
+
+    <select id="getMessageCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM message
+    </select>
+
 </mapper>

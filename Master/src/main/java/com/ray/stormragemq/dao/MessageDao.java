@@ -4,6 +4,7 @@ import com.ray.stormragemq.common.Message;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -14,4 +15,9 @@ public interface MessageDao {
     Boolean isExist(Message message);
 
     int sendMessageCount(Map<String, Object> param);
+
+    List getMessagePage(Map<String, Object> param);
+
+    int getMessageCount();
+
 }
