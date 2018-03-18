@@ -102,7 +102,7 @@ public class QueueThreadService {
                             //取出具有sendCount的消费者
                             for (String uuid : consumerUuidList) {
                                 ClientChannel cc = gatewayService.getGatewayChannel(uuid);
-                                if(cc.canSend()){
+                                if(cc != null && cc.canSend()){
                                     clientChannel = cc;
                                     break;
                                 }
@@ -120,6 +120,7 @@ public class QueueThreadService {
                                     LogUtil.logInfo("普通消息，插入数据库并从Redis删除，该消息结束");
                                     queueMessage.setReceived(true);
                                     queueMessage.setSending(true);
+                                    queueMessage.setConsumerName(clientChannel.getName());
                                     queueMessageDao.insertQueueMessage(queueMessage);
                                     redisTemplate.opsForHash().delete(ConstantVariable.MESSAGE_QUEUE_KEY,  queueMessage.getId());
                                 }
@@ -129,6 +130,7 @@ public class QueueThreadService {
                                 if(queueMessage.getMessage() != null && MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
                                     LogUtil.logInfo("重要消息，将状态置为发送中，等待下次检查消息是否送达");
                                     queueMessage.setSending(true);
+                                    queueMessage.setConsumerName(clientChannel.getName());
                                     queueMessageDao.updateQueueMessage(queueMessage);
                                     //并且再将该消息放入末尾
                                     q.offer(queueMessage);

@@ -17,4 +17,9 @@ public interface QueueMessageDao {
 
     void updateQueueMessage(QueueMessageEntity qm);
 
+    /**
+     * 根据消息id查询出队列消息
+     * */
+    List<QueueMessageEntity> getQueueMessageByMessageId(String messageId);
+
 }

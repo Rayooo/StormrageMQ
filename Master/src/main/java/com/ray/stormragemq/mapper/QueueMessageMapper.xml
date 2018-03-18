@@ -29,7 +29,7 @@
         SELECT q.*, m.* FROM queuemessage q, message m WHERE q.messageid = m.uuid AND q.id = #{id}
     </select>
 
-    <insert id="insertQueueMessage">
+    <insert id="insertQueueMessage" parameterType="QueueMessageEntity">
         INSERT INTO queuemessage (id, queuename, consumername, createtime, isreceived, messageid, sending)
         VALUES (#{id}, #{queueName}, #{consumerName}, #{createTime}, #{received}, #{messageId}, #{sending});
     </insert>
@@ -43,8 +43,13 @@
         <set>
             <if test="received != null and received != ''">isreceived = #{received},</if>
             <if test="sending != null and sending != ''">sending = #{sending},</if>
+            <if test="consumerName != null and consumerName != ''">consumername = #{consumerName}</if>
         </set>
         WHERE id = #{id}
     </update>
+
+    <select id="getQueueMessageByMessageId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM queuemessage WHERE messageid = #{messageId}
+    </select>
 
 </mapper>

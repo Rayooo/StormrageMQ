@@ -19,6 +19,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @ChannelHandler.Sharable
@@ -87,7 +88,16 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
         ObjectMapper mapper = new ObjectMapper();
         ctx.writeAndFlush(Unpooled.copiedBuffer(mapper.writeValueAsString(message), CharsetUtil.UTF_8));
         channelHandlerService.setCtx(ctx);
-        sendCount.addSendCount();
+
+        executor.execute(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException ignored) {
+            }
+            sendCount.addSendCount();
+
+        });
+
     }
 
     //断开连接后

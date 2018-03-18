@@ -50,20 +50,89 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="详细信息" :visible.sync="messageDetailVisible">
+        <el-dialog title="详细信息" :visible.sync="messageDetailVisible" >
             <el-form :model="messageDetail">
-                <!--<el-form-item label="交换器名称:" >-->
-                    <!--<span>{{exchangerDetail.name}}</span>-->
-                <!--</el-form-item>-->
+                <el-form-item style="margin-bottom: 0">
+                    <span v-if="messageDetail.type == '1'"><el-tag type="info" >普通消息</el-tag></span>
+                    <span v-if="messageDetail.type == '2'"><el-tag type="danger" >重要消息</el-tag></span>
+                    <span v-if="messageDetail.type == '0'"><el-tag type="warning">认证消息</el-tag></span>
+                </el-form-item>
 
-                <!--<el-form-item label="匹配到的队列:" >-->
-                    <!--<br/>-->
-                    <!--<ul>-->
-                        <!--<li v-for="d in exchangerDetail.queueList">-->
-                            <!--{{ d }}-->
-                        <!--</li>-->
-                    <!--</ul>-->
-                <!--</el-form-item>-->
+
+                <div v-if="messageDetail.type == '0'">
+                    <el-form-item  label="uuid:" style="margin-bottom: 0">
+                        <span>{{messageDetail.uuid}}</span>
+                    </el-form-item>
+
+                    <el-form-item  label="类型:" style="margin-bottom: 0">
+                        <span v-if="messageDetail.clientType == '1'">生产者</span>
+                        <span v-if="messageDetail.clientType == '2'">消费者</span>
+                    </el-form-item>
+
+                    <el-form-item  label="服务器名称:" style="margin-bottom: 0">
+                        <span>{{messageDetail.clientName}}</span>
+                    </el-form-item>
+
+                    <el-form-item  label="时间:" style="margin-bottom: 0">
+                        <span>{{messageDetail.createTimeFormat}}</span>
+                    </el-form-item>
+                    <el-form-item  label="用户名:" style="margin-bottom: 0">
+                        <span>{{messageDetail.userName}}</span>
+                    </el-form-item>
+                </div>
+
+
+                <div v-if="messageDetail.type == '1' || messageDetail.type == '2'">
+                    <el-form-item  label="uuid:" style="margin-bottom: 0">
+                        <span>{{messageDetail.uuid}}</span>
+                    </el-form-item>
+
+                    <el-form-item  label="消息内容:" style="margin-bottom: 0">
+                        <span>{{messageDetail.content}}</span>
+                    </el-form-item>
+
+                    <el-form-item  label="投递的交换器:" style="margin-bottom: 0">
+                        <span>{{messageDetail.exchangerName}}</span>
+                    </el-form-item>
+
+                    <el-form-item  label="时间:" style="margin-bottom: 0">
+                        <span>{{messageDetail.createTimeFormat}}</span>
+                    </el-form-item>
+
+
+                    <div v-for="o in queueMessageList" style="margin-bottom: 5px">
+                        <el-card class="box-card">
+                            <div v-if="o.received === true && o.sending === true">
+                                <el-tag type="success">发送成功</el-tag>
+                            </div>
+
+                            <div v-if="o.received === false && o.sending === true">
+                                <el-tag type="warning">发送中，消费者未接收</el-tag>
+                            </div>
+
+                            <div v-if="o.received === false && o.sending === false">
+                                <el-tag type="info">未发送</el-tag>
+                            </div>
+
+                            <el-form-item  label="id:" style="margin-bottom: 0">
+                                <span>{{o.id}}</span>
+                            </el-form-item>
+
+                            <el-form-item  label="队列名称:" style="margin-bottom: 0">
+                                <span>{{o.queueName}}</span>
+                            </el-form-item>
+
+                            <el-form-item  label="消费者名称:" style="margin-bottom: 0">
+                                <span>{{o.consumerName}}</span>
+                            </el-form-item>
+
+                        </el-card>
+                    </div>
+
+
+
+                </div>
+
 
 
             </el-form>
@@ -88,13 +157,13 @@
                 tableData:[],
                 totalPage:0,
                 messageDetailVisible: false,
-                messageDetail: {}
+                messageDetail: {},
+                queueMessageList:[]
             }
         },
         mounted() {
             Global.post("/message/getMessageList", {pageIndex : 1}, (res)=>{
                 if(res.body.code === 0){
-                    console.log(res.body);
                     this.totalPage = res.body.result.totalRecords;
                     this.tableData = res.body.result.pageData;
                     for(let i = 0; i < this.tableData.length; ++i){
@@ -118,9 +187,21 @@
                 })
             },
             rowClick(row, event, column){
-                console.log(row);
-                //展开row的详细信息
-                this.messageDetailVisible = true
+                this.messageDetail = row;
+                console.log(row)
+                Global.post("/message/getQueueMessageList", {uuid: row.uuid}, (res)=>{
+                    if(res.body.code === 0){
+                        console.log(res.body)
+                        this.queueMessageList = res.body.result;
+                        console.log(this.queueMessageList)
+                        //展开row的详细信息
+                        this.messageDetailVisible = true
+                    }
+                })
+
+
+
+
             }
 
         }
