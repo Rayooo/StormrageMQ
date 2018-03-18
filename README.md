@@ -144,6 +144,7 @@ CREATE TABLE queuemessage(
   consumername VARCHAR(100),                      --消费者名称
   createtime TIMESTAMP DEFAULT current_timestamp, --创建时间
   isreceived BOOLEAN,                             --是否接收完成
+  sending BOOLEAN,                                --是否发送了
   messageid VARCHAR(50)                           --消息id
 );
 

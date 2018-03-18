@@ -1,5 +1,6 @@
 package com.ray.stormragemq.thread;
 
+import com.ray.stormragemq.common.Message;
 import com.ray.stormragemq.common.MessageTypeConstant;
 import com.ray.stormragemq.constant.ConstantVariable;
 import com.ray.stormragemq.dao.QueueMessageDao;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -70,8 +72,30 @@ public class QueueThreadService {
                 if(consumerUuidList.size() > 0){
                     try {
                         queueMessage = q.peek();
+
+                        //如果该消息是重要消息，并且状态为发送中了，那么检查数据库中是否收到，收到就直接放弃了
                         if(queueMessage != null){
-                            String messageString = JsonUtil.toJson(queueMessage.getMessage());
+                            if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(queueMessage.getMessage().getType()) &&
+                                    queueMessage.isSending() == true && queueMessage.isReceived() == false){
+                                //消息状态为发送中
+                                Map<String, String> param = new HashMap<>();
+                                param.put("id", queueMessage.getId());
+                                QueueMessageEntity dbQM = queueMessageDao.getQueueMessage(param);
+                                if(dbQM.isReceived() == true){
+                                    //已送达了
+                                    LogUtil.logInfo(queueMessage.getId() + "  已送达，不发送该消息");
+                                    q.poll(5, TimeUnit.SECONDS);
+                                    continue;
+                                }
+                            }
+
+                        }
+
+
+                        if(queueMessage != null){
+                            Message theMessage = queueMessage.getMessage();
+                            theMessage.setConfirmId(queueMessage.getId());
+                            String messageString = JsonUtil.toJson(theMessage);
 
                             ClientChannel clientChannel = null;
 
@@ -89,20 +113,25 @@ public class QueueThreadService {
                             if(clientChannel != null){
                                 queueMessage = q.poll(5, TimeUnit.SECONDS);
                                 clientChannel.getSocketChannel().writeAndFlush(Unpooled.copiedBuffer(messageString, CharsetUtil.UTF_8));
-
+                                LogUtil.logInfo("向" + clientChannel.getName() + "发送消息， 消息内容:" + JsonUtil.toJson(queueMessage));
                                 //将 不重要 的消息直接把状态改为送达
                                 //并将redis中的消息删除
                                 if(queueMessage.getMessage() != null && MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
+                                    LogUtil.logInfo("普通消息，插入数据库并从Redis删除，该消息结束");
                                     queueMessage.setReceived(true);
+                                    queueMessage.setSending(true);
                                     queueMessageDao.insertQueueMessage(queueMessage);
                                     redisTemplate.opsForHash().delete(ConstantVariable.MESSAGE_QUEUE_KEY,  queueMessage.getId());
                                 }
 
-                                //将 重要 的消息把状态改为送达
+                                //将 重要 的消息把状态改为发送中
                                 //将postgres中的消息改状态
                                 if(queueMessage.getMessage() != null && MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
-                                    queueMessage.setReceived(true);
+                                    LogUtil.logInfo("重要消息，将状态置为发送中，等待下次检查消息是否送达");
+                                    queueMessage.setSending(true);
                                     queueMessageDao.updateQueueMessage(queueMessage);
+                                    //并且再将该消息放入末尾
+                                    q.offer(queueMessage);
                                 }
                             }
 

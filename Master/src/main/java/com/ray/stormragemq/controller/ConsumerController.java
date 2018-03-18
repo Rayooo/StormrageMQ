@@ -1,5 +1,7 @@
 package com.ray.stormragemq.controller;
 
+import com.ray.stormragemq.dao.QueueMessageDao;
+import com.ray.stormragemq.entity.QueueMessageEntity;
 import com.ray.stormragemq.netty.ClientChannel;
 import com.ray.stormragemq.netty.service.GatewayService;
 import com.ray.stormragemq.util.BaseException;
@@ -19,6 +21,8 @@ public class ConsumerController {
     @Autowired
     private GatewayService gatewayService;
 
+    @Autowired
+    private QueueMessageDao queueMessageDao;
 
     /**
      * 消费者确认能够接收下一个消息
@@ -42,6 +46,26 @@ public class ConsumerController {
             throw new BaseException("该消费者不存在");
         }
 
+    }
+
+    /**
+     * 消费者确认接收到了消息
+     * */
+    @RequestMapping("/confirm")
+    public BaseResponse<String> confirm(@RequestBody Map<String, String> param) throws BaseException {
+        if(StringUtils.isBlank(param.get("queueMessageId"))){
+            throw new BaseException("队列消息id为空，确认消息错误");
+        }
+
+        String id = param.get("queueMessageId");
+
+        QueueMessageEntity qm = new QueueMessageEntity();
+        qm.setId(id);
+        qm.setSending(true);
+        qm.setReceived(true);
+        queueMessageDao.updateQueueMessage(qm);
+
+        return new BaseResponse<>("确认" + id + "成功");
     }
 
 

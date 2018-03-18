@@ -46,6 +46,9 @@ public class Message implements Serializable {
     //消费者初始化时，监听哪个队列 以,分割
     private String queueNameList;
 
+    //消费者确认收到消息时需要发送给消息队列的id
+    private String confirmId;
+
     public String getUuid() {
         return uuid;
     }
@@ -132,6 +135,14 @@ public class Message implements Serializable {
 
     public void setQueueNameList(String queueNameList) {
         this.queueNameList = queueNameList;
+    }
+
+    public String getConfirmId() {
+        return confirmId;
+    }
+
+    public void setConfirmId(String confirmId) {
+        this.confirmId = confirmId;
     }
 
     public String toJson(){

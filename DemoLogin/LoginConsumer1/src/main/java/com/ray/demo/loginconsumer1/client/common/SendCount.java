@@ -1,9 +1,6 @@
 package com.ray.demo.loginconsumer1.client.common;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ray.demo.loginconsumer1.client.netty.ChannelHandlerService;
 import com.ray.demo.loginconsumer1.client.util.JsonUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

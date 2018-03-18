@@ -1,4 +1,4 @@
-package com.ray.stormragemq.common;
+package com.ray.demo.loginconsumer1.client.common;
 
 public class MessageTypeConstant {
 

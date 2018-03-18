@@ -1,7 +1,11 @@
 package com.ray.demo.loginconsumer1.client.netty;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ray.demo.loginconsumer1.client.common.ConfirmMessage;
 import com.ray.demo.loginconsumer1.client.common.Message;
+import com.ray.demo.loginconsumer1.client.common.MessageTypeConstant;
+import com.ray.demo.loginconsumer1.client.common.SendCount;
+import com.ray.demo.loginconsumer1.client.util.JsonUtil;
 import com.ray.demo.loginconsumer1.client.util.LogUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -32,9 +36,40 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
     @Autowired
     private ChannelHandlerService channelHandlerService;
 
+    @Autowired
+    private SendCount sendCount;
+
+    @Autowired
+    private ConfirmMessage confirmMessage;
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
         LogUtil.logInfo("Client received: " + msg.toString(CharsetUtil.UTF_8));
+
+        Message message = JsonUtil.toObject(msg.toString(CharsetUtil.UTF_8), Message.class);
+        if(message == null){
+            return;
+        }
+
+        if(MessageTypeConstant.HEARTBEAT_MESSAGE_TYPE.equals(message.getType())){
+            LogUtil.logInfo("收到心跳消息，内容:" + message.getContent());
+        }
+
+        if(MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(message.getType())){
+            //普通消息
+            LogUtil.logInfo(message.getUuid() + "   " + message.getContent());
+            sendCount.addSendCount();
+        }
+
+        if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){
+            LogUtil.logInfo(message.getUuid() + "  " + message.getConfirmId() + "  " + message.getContent());
+            sendCount.addSendCount();
+
+            LogUtil.logInfo("重要消息确认送达 队列消息id" + message.getConfirmId());
+            confirmMessage.confirmMessage(message.getConfirmId());
+        }
+
+
     }
 
 
@@ -52,6 +87,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
         ObjectMapper mapper = new ObjectMapper();
         ctx.writeAndFlush(Unpooled.copiedBuffer(mapper.writeValueAsString(message), CharsetUtil.UTF_8));
         channelHandlerService.setCtx(ctx);
+        sendCount.addSendCount();
     }
 
     //断开连接后

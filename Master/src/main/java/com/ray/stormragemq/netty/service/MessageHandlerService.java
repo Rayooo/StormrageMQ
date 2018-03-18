@@ -92,6 +92,7 @@ public class MessageHandlerService {
                     qm.setMessageId(message.getUuid());
                     qm.setCreateTime(now);
                     qm.setReceived(false);
+                    qm.setSending(false);
                     qm.setMessage(message);
                     bq.offer(qm);
 

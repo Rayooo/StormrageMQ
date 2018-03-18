@@ -9,7 +9,7 @@ import java.util.Map;
 @Repository
 public interface QueueMessageDao {
 
-    List<QueueMessageEntity> getQueueMessage(Map<String, String> param);
+    QueueMessageEntity getQueueMessage(Map<String, String> param);
 
     void insertQueueMessage(QueueMessageEntity queueMessageEntity);
 

@@ -9,6 +9,7 @@
         <result column="createtime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="isreceived" property="received" jdbcType="BOOLEAN"/>
         <result column="messageid" property="messageId" jdbcType="VARCHAR"/>
+        <result column="sending" property="sending" jdbcType="BOOLEAN"/>
 
         <association property="message" javaType="Message">
             <id column="uuid" property="uuid" jdbcType="VARCHAR"/>
@@ -29,8 +30,8 @@
     </select>
 
     <insert id="insertQueueMessage">
-        INSERT INTO queuemessage (id, queuename, consumername, createtime, isreceived, messageid)
-        VALUES (#{id}, #{queueName}, #{consumerName}, #{createTime}, #{received}, #{messageId});
+        INSERT INTO queuemessage (id, queuename, consumername, createtime, isreceived, messageid, sending)
+        VALUES (#{id}, #{queueName}, #{consumerName}, #{createTime}, #{received}, #{messageId}, #{sending});
     </insert>
 
     <select id="getAllQueueMessageNotReceived" resultMap="BaseResultMap">
@@ -41,6 +42,7 @@
         UPDATE queuemessage
         <set>
             <if test="received != null and received != ''">isreceived = #{received},</if>
+            <if test="sending != null and sending != ''">sending = #{sending},</if>
         </set>
         WHERE id = #{id}
     </update>

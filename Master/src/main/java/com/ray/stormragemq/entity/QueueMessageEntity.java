@@ -24,6 +24,8 @@ public class QueueMessageEntity implements Serializable {
 
     private boolean received;     //是否完成接收
 
+    private boolean sending;        //是否发送了
+
     private String messageId;      //消息id
 
     private Message message;        //消息实体，不序列化
@@ -82,6 +84,14 @@ public class QueueMessageEntity implements Serializable {
 
     public void setMessage(Message message) {
         this.message = message;
+    }
+
+    public boolean isSending() {
+        return sending;
+    }
+
+    public void setSending(boolean sending) {
+        this.sending = sending;
     }
 
     public Object toJson() {

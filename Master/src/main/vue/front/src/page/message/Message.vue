@@ -50,6 +50,28 @@
             </el-pagination>
         </div>
 
+        <el-dialog title="详细信息" :visible.sync="messageDetailVisible">
+            <el-form :model="messageDetail">
+                <!--<el-form-item label="交换器名称:" >-->
+                    <!--<span>{{exchangerDetail.name}}</span>-->
+                <!--</el-form-item>-->
+
+                <!--<el-form-item label="匹配到的队列:" >-->
+                    <!--<br/>-->
+                    <!--<ul>-->
+                        <!--<li v-for="d in exchangerDetail.queueList">-->
+                            <!--{{ d }}-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</el-form-item>-->
+
+
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="messageDetailVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
+
     </section>
 </template>
 
@@ -64,7 +86,9 @@
         data() {
             return {
                 tableData:[],
-                totalPage:0
+                totalPage:0,
+                messageDetailVisible: false,
+                messageDetail: {}
             }
         },
         mounted() {
@@ -96,6 +120,7 @@
             rowClick(row, event, column){
                 console.log(row);
                 //展开row的详细信息
+                this.messageDetailVisible = true
             }
 
         }

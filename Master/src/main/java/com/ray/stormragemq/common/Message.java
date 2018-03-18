@@ -30,7 +30,7 @@ public class Message implements Serializable {
     //创建时间
     private Date createTime;
 
-    //消息类型  0 验证初始化消息  1 普通消息->Redis  2 重要消息->postgres
+    //消息类型  0 验证初始化消息  1 普通消息->Redis  2 重要消息->postgres  3 心跳
     private String type;
 
     //消息内容是那个类序列化而来的
@@ -44,6 +44,9 @@ public class Message implements Serializable {
 
     //消费者初始化时，监听哪个队列 以,分割
     private String queueNameList;
+
+    //消费者确认收到消息时需要发送给消息队列的id
+    private String confirmId;
 
     public String getUuid() {
         return uuid;
@@ -131,6 +134,14 @@ public class Message implements Serializable {
 
     public void setQueueNameList(String queueNameList) {
         this.queueNameList = queueNameList;
+    }
+
+    public String getConfirmId() {
+        return confirmId;
+    }
+
+    public void setConfirmId(String confirmId) {
+        this.confirmId = confirmId;
     }
 
     public String toJson(){

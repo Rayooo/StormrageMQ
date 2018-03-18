@@ -1,5 +1,6 @@
 package com.ray.demo.loginconsumer1.client.netty;
 
+import com.ray.demo.loginconsumer1.client.common.SendCount;
 import com.ray.demo.loginconsumer1.client.util.LogUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -15,6 +16,9 @@ public class NettyClient {
 
     @Autowired
     private Bootstrap bootstrap;
+
+    @Autowired
+    private SendCount sendCount;
 
 
     private SocketChannel socketChannel;
