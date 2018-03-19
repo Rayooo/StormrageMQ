@@ -63,6 +63,11 @@ let router = new Router({
             name: "Admin",
             component: view("Admin.vue")
         },
+        {
+            path: "/userInfo",
+            name: "UserInfo",
+            component: view("user/UserInfo.vue")
+        },
         {path: "/error", component: view("Error.vue")},
         {path: "*", component: view("PageNotFound.vue")}
     ]

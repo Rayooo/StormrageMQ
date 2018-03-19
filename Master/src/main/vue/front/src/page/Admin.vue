@@ -1,6 +1,6 @@
 <template>
     <section id="admin">
-        <navigation></navigation>
+        <navigation father-component="admin"></navigation>
 
         <div style="text-align: center;margin-top: 20px">
             <chart :options="polar" style="height: 500px;width: 80%;margin-left: 10%"></chart>

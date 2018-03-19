@@ -9,7 +9,7 @@
 
             <el-submenu index="5" style="float: right;" >
                 <template slot="title" ><span id="userName">{{userInfo.userName}}</span></template>
-                <el-menu-item index="5-1" :route="{}" :disabled="false">用户信息</el-menu-item>
+                <el-menu-item index="5-1" :route="{name: 'UserInfo'}" :disabled="false">用户信息</el-menu-item>
                 <el-menu-item index="5-2" :route="{}" :disabled="false" @click="logout()">退出</el-menu-item>
             </el-submenu>
 
@@ -62,7 +62,7 @@
             else if(this.fatherComponent === "message"){
                 this.activeIndex = '4';
             }
-            else {
+            else if(this.fatherComponent === "admin") {
                 this.activeIndex = '1';
             }
         }
