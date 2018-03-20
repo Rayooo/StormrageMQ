@@ -74,4 +74,33 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         return false;
     }
+
+    @Override
+    public void changePassword(UserAccountEntity user, UserAccountEntity newUser) throws BaseException {
+
+        UserAccountEntity databaseUser = userAccountDao.getUserById(user.getId());
+        if(databaseUser == null){
+            throw new BaseException("不存在此id的用户");
+        }
+
+        try {
+            if(!Password.check(user.getPassword(), databaseUser.getPassword())) {
+                throw new BaseException("原密码错误");
+            }
+        } catch (Exception e) {
+            throw new BaseException("原密码错误");
+        }
+
+        try {
+            newUser.setPassword(Password.getSaltedHash(newUser.getPassword()));
+        } catch (Exception e) {
+            throw new BaseException("设置密码出错");
+        }
+
+        newUser.setUserName(user.getUserName());
+        newUser.setId(user.getId());
+
+        userAccountDao.updateUser(newUser);
+
+    }
 }

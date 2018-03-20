@@ -17,4 +17,5 @@ public interface UserAccountDao {
 
     void updateUser(UserAccountEntity user);
 
+    UserAccountEntity getUserById(Integer id);
 }

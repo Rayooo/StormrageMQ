@@ -9,23 +9,27 @@
             <div slot="header" class="clearfix" style="text-align: center">
                 <span style="font-size: larger">修改密码</span>
             </div>
-            <div  class="text item">
-                <el-form ref="form" :model="form" label-width="80px">
+            <div  class="text item" style="margin-top: 20px">
+                <el-form :model="form" label-width="80px">
 
                     <el-form-item label="用户名">
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="form.userName"></el-input>
                     </el-form-item>
 
                     <el-form-item label="原密码">
-                        <el-input v-model="form.password"></el-input>
+                        <el-input v-model="form.password" type="password"></el-input>
                     </el-form-item>
 
                     <el-form-item label="新密码">
-                        <el-input v-model="form.newPassword"></el-input>
+                        <el-input v-model="form.newPassword" type="password"></el-input>
                     </el-form-item>
 
                     <el-form-item label="重复密码">
-                        <el-input v-model="form.newPassword2"></el-input>
+                        <el-input v-model="form.newPassword2" type="password"></el-input>
+                    </el-form-item>
+
+                    <el-form-item style="text-align: center">
+                        <el-button type="primary" @click="changePassword()">确定</el-button>
                     </el-form-item>
 
 
@@ -59,9 +63,9 @@
 
     .box-card {
         opacity: 0.9;
-        width: 33%;
-        margin-left: 33%;
-        margin-top: 10%;
+        width: 40%;
+        margin-left: 30%;
+        margin-top: 6%;
     }
 
     #canvas{
@@ -84,12 +88,24 @@
         name: "UserInfo",
         data() {
             return {
-                form:{}
+                form:{
+                    id:0,
+                    userName: "",
+                    password: "",
+                    newPassword: "",
+                    newPassword2: ""
+                }
 
             }
         },
         mounted() {
-            this.ribbon()
+            var user = Global.getUserInfoFromSessionStorage();
+            this.form.id = user.id;
+            this.form.userName = user.userName;
+
+            this.ribbon();
+
+
         },
         methods:{
             ribbon(){
@@ -143,9 +159,48 @@
                 while(times-- > 0){
                     i();
                 }
+            },
+
+
+            changePassword(){
+                //检查长度 重复密码
+                if(!this.form.userName){
+                    this.$message.warning("请填写用户名");
+                    return;
+                }
+
+                if(!this.form.password || !this.form.newPassword || !this.form.newPassword2){
+                    this.$message.warning("请填写密码");
+                    return;
+                }
+
+                if(this.form.newPassword.length < 3){
+                    this.$message.warning("密码长度不得小于3位");
+                    return;
+                }
+
+                if(this.form.newPassword !== this.form.newPassword2){
+                    this.$message.warning("重复密码与新密码不同");
+                    return;
+                }
+
+                Global.post("/userAccount/changePassword",this.form, (res)=>{
+                    if(res.body.code === 0){
+                        this.$message.success("修改成功，请重新登录");
+                        setTimeout(()=>{
+                            Global.logout();
+                        }, 3000)
+                    }
+                    else{
+                        this.$message.error(res.body.message);
+                    }
+                }, ()=>{
+                    this.$message.error("服务器异常");
+                })
+
+
+
             }
-
-
 
         }
 

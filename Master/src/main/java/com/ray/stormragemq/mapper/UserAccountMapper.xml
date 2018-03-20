@@ -16,6 +16,9 @@
         SELECT * FROM UserAccount WHERE id = #{id} AND logintoken = #{loginToken}
     </select>
 
+    <select id="getUserById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM useraccount WHERE id = #{id}
+    </select>
 
     <select id="getUserByUserName" parameterType="UserAccountEntity" resultMap="BaseResultMap">
         SELECT * FROM UserAccount WHERE username=#{userName}
@@ -30,10 +33,20 @@
     </insert>
 
     <update id="updateUser" parameterType="UserAccountEntity">
-        UPDATE UserAccount SET
+        UPDATE UserAccount
+        <set>
             <if test="loginToken != null and loginToken != ''">
-                logintoken = #{loginToken}
+                logintoken = #{loginToken},
             </if>
+
+            <if test="userName != null and userName != ''">
+                username = #{userName},
+            </if>
+
+            <if test="password != null and password != ''">
+                password = #{password}
+            </if>
+        </set>
         WHERE id = #{id}
     </update>
 
