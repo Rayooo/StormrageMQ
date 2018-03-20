@@ -155,5 +155,15 @@ CREATE TABLE messagestatistics(
   statisticstime TIMESTAMP,                       --哪一天的
   createtime TIMESTAMP DEFAULT CURRENT_TIMESTAMP  --创建时间
 );
+
+--使用例子
+CREATE TABLE demouser(
+  id SERIAL PRIMARY KEY,           --主键
+  username VARCHAR(100),           --用户名
+  password VARCHAR(255),           --密码
+  lastlogintime TIMESTAMP,         --上次登录时间
+  points INTEGER,                  --积分
+  ticket VARCHAR(255)               --登录时更新的ticket
+);
 ```
 
