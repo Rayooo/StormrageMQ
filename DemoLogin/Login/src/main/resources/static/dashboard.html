@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MQ 示例</title>
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+</head>
+
+<style>
+    body {
+        margin:0;
+        padding:0;
+        background:url("image/Background3.jpg") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+</style>
+
+<body>
+
+<div class="card" style="width: 90%; margin-top: 3%;margin-left: 5%;opacity:0.96;background-color:rgb(242,242,238)" id="app">
+    <div class="card-header" style="text-align: center">
+        <h4>MQ 示例</h4>
+    </div>
+    <div class="card-block">
+        <div style="margin: 20px 20px 20px 20px; height: 35em;" >
+
+            <div class="form-group row" >
+                <label for="userName"  class="col-sm-2 form-control-label" style="text-align: right">用户名</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="userName" v-model="user.userName" readonly>
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <label for="points"  class="col-sm-2 form-control-label" style="text-align: right">积分</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="points" v-model="user.points" readonly>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="loginTime" class="col-sm-2 form-control-label" style="text-align: right">登录时间</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="loginTime" v-model="user.formateLastLoginTime" readonly>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="ticket" class="col-sm-2 form-control-label" style="text-align: right">ticket</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="ticket" v-model="user.ticket" readonly>
+                </div>
+            </div>
+
+            <div class="alert alert-info col-sm-9 offset-1" role="alert">
+                该登录消息将通过消息队列，发送给三个队列，分发送给三个消费者，分别进行增加积分，更新登录时间，更新ticket的操作
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script src="js/jquery-3.3.1.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/moment.js"></script>
+<script src="js/util.js"></script>
+
+<script>
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            user:{}
+        },
+        methods:{
+
+        },
+        mounted(){
+            this.user = getUserInfoFromSessionStorage();
+            if(this.user == null){
+                window.location.href = "/";
+            }
+            this.user.formateLastLoginTime = moment(this.user.lastLoginTime).format("YYYY-MM-DD HH:mm:ss")
+        }
+    })
+
+</script>
+
+</body>
+</html>

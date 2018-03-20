@@ -61,7 +61,7 @@
     </bean>
     <!-- MyBatis 扫描DAO层 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.ray.stormragemq.dao" />
+        <property name="basePackage" value="com.ray.demo.login.dao" />
         <property name="sqlSessionFactoryBeanName" value="commonSqlSessionFactory" />
     </bean>
 

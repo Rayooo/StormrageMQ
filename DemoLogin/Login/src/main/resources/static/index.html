@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MQ 示例</title>
     <link rel="stylesheet" href="css/bootstrap.css"/>
 </head>
 
@@ -19,29 +19,78 @@
 </style>
 
 <body>
-<div class="card" style="width: 30%; margin-top: 12%;margin-left: 60%;opacity:0.9;background-color:rgb(242,242,238)">
+<div class="card" style="width: 30%; margin-top: 12%;margin-left: 60%;opacity:0.9;background-color:rgb(242,242,238)" id="app">
     <div class="card-header" style="text-align: center">
-        登录
+        <h5>登录</h5>
     </div>
     <div class="card-block">
-        <form style="margin: 20px 20px 20px 20px">
+        <div style="margin: 20px 20px 20px 20px" :model="form">
             <fieldset class="form-group">
                 <label for="userName">账号</label>
-                <input type="text" class="form-control" id="userName">
+                <input type="text" class="form-control" id="userName" v-model="form.userName">
             </fieldset>
             <fieldset class="form-group">
                 <label for="password">密码</label>
-                <input type="text" class="form-control" id="password">
+                <input type="password" class="form-control" id="password" v-model="form.password">
             </fieldset>
             <fieldset class="form-group" style="text-align: center">
-                <button class="btn btn-primary">登录</button>
+                <button class="btn btn-primary" v-on:click="login()" >登录</button>
             </fieldset>
-        </form>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="myModal">
+
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">密码错误</h4>
+            </div>
+            <div class="modal-body">
+                请重新输入正确的账号密码
+            </div>
+        </div>
     </div>
 </div>
 
-
 <script src="js/jquery-3.3.1.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="js/vue.js"></script>
+
+<script src="js/util.js"></script>
+
+<script>
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            form: {
+                userName: "",
+                password: ""
+            }
+        },
+        methods:{
+            login: function(){
+                post("/user/login", this.form, function (data) {
+                    if(data.code === 0){
+                        setSessionStorage("user", data.result);
+                        window.location.href = "dashboard.html"
+                    }
+                    else{
+                        $('#myModal').modal('show');
+                        app.form.password = "";
+                    }
+                }, function (err) {
+                    console.log(err);
+                })
+            }
+        }
+    })
+
+</script>
+
+
 </body>
 </html>

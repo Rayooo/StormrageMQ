@@ -57,11 +57,11 @@ public class DemoUser {
         this.points = points;
     }
 
-    public String getToken() {
+    public String getTicket() {
         return ticket;
     }
 
-    public void setToken(String ticket) {
+    public void setTicket(String ticket) {
         this.ticket = ticket;
     }
 }
