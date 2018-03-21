@@ -3,6 +3,7 @@ package com.ray.demo.login.client.netty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ray.demo.login.client.common.Message;
+import com.ray.demo.login.client.util.LogUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.CharsetUtil;
@@ -32,6 +33,7 @@ public class ChannelHandlerService {
         try {
             message.setUuid(UUID.randomUUID().toString());
             String s = mapper.writeValueAsString(message);
+            LogUtil.logInfo("生产者发送消息：" + s);
             ctx.writeAndFlush(Unpooled.copiedBuffer(s, CharsetUtil.UTF_8));
             return true;
         } catch (JsonProcessingException e) {

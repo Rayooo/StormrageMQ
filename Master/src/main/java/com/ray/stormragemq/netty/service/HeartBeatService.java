@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -31,7 +32,11 @@ public class HeartBeatService {
         Message message = new Message();
         message.setType(MessageTypeConstant.HEARTBEAT_MESSAGE_TYPE);
         message.setCreateTime(new Date());
-        message.setContent("HeartBeat");
+
+        Map<String, Object> p = new HashMap<>();
+        p.put("heartBeat", "heartBeat");
+        message.setContent(JsonUtil.toJson(p));
+
         String heartBeatMessage = JsonUtil.toJson(message);
 
         Map<String, ClientChannel> map = gatewayService.getChannels();

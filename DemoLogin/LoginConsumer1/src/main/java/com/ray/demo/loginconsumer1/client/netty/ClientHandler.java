@@ -7,6 +7,7 @@ import com.ray.demo.loginconsumer1.client.common.MessageTypeConstant;
 import com.ray.demo.loginconsumer1.client.common.SendCount;
 import com.ray.demo.loginconsumer1.client.util.JsonUtil;
 import com.ray.demo.loginconsumer1.client.util.LogUtil;
+import com.ray.demo.loginconsumer1.service.UserService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -43,6 +44,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
     @Autowired
     private ConfirmMessage confirmMessage;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
         LogUtil.logInfo("Client received: " + msg.toString(CharsetUtil.UTF_8));
@@ -59,7 +63,14 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
         if(MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(message.getType())){
             //普通消息
             LogUtil.logInfo(message.getUuid() + "   " + message.getContent());
-            sendCount.addSendCount();
+
+            try {
+                userService.addPoint(message);
+            }
+            finally {
+                sendCount.addSendCount();
+            }
+
         }
 
         if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){

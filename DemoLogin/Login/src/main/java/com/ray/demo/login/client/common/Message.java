@@ -17,7 +17,7 @@ public class Message implements Serializable {
     private String uuid;
 
     //消息主要内容
-    private String content;
+    private Object content;
 
     //账号(首次验证时使用)
     private String userName;
@@ -57,11 +57,11 @@ public class Message implements Serializable {
         this.uuid = uuid;
     }
 
-    public String getContent() {
+    public Object getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Object content) {
         this.content = content;
     }
 
