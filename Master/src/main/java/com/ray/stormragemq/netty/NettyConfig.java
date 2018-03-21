@@ -1,8 +1,10 @@
 package com.ray.stormragemq.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.AdaptiveRecvByteBufAllocator;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -52,6 +54,7 @@ public class NettyConfig {
     private Map<ChannelOption, Object> tcpChannelOptions() {
         Map<ChannelOption, Object> options = new HashMap<>();
         options.put(ChannelOption.SO_BACKLOG, backlog);
+        options.put(ChannelOption.SO_RCVBUF, 16384);
         return options;
     }
 
@@ -61,6 +64,7 @@ public class NettyConfig {
         ServerBootstrap b = new ServerBootstrap();
         b.group(bossGroup(), workerGroup())
                 .channel(NioServerSocketChannel.class)
+                .childOption(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator( 16384))
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {

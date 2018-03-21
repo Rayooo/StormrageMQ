@@ -1,13 +1,13 @@
-package com.ray.demo.loginconsumer1.client.netty;
+package com.ray.demo.loginconsumer3.client.netty;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ray.demo.loginconsumer1.client.common.ConfirmMessage;
-import com.ray.demo.loginconsumer1.client.common.Message;
-import com.ray.demo.loginconsumer1.client.common.MessageTypeConstant;
-import com.ray.demo.loginconsumer1.client.common.SendCount;
-import com.ray.demo.loginconsumer1.client.util.JsonUtil;
-import com.ray.demo.loginconsumer1.client.util.LogUtil;
-import com.ray.demo.loginconsumer1.service.UserService;
+import com.ray.demo.loginconsumer3.client.common.ConfirmMessage;
+import com.ray.demo.loginconsumer3.client.common.Message;
+import com.ray.demo.loginconsumer3.client.common.MessageTypeConstant;
+import com.ray.demo.loginconsumer3.client.common.SendCount;
+import com.ray.demo.loginconsumer3.client.util.JsonUtil;
+import com.ray.demo.loginconsumer3.client.util.LogUtil;
+import com.ray.demo.loginconsumer3.service.UserService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -51,42 +51,35 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
         LogUtil.logInfo("Client received: " + msg.toString(CharsetUtil.UTF_8));
 
-        try {
-            Message message = JsonUtil.toObject(msg.toString(CharsetUtil.UTF_8), Message.class);
-            if(message == null){
-                return;
-            }
-
-            if(MessageTypeConstant.HEARTBEAT_MESSAGE_TYPE.equals(message.getType())){
-                LogUtil.logInfo("收到心跳消息");
-            }
-
-            if(MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(message.getType())){
-                //普通消息
-                LogUtil.logInfo(message.getUuid() + "   " + message.getContent());
-
-                try {
-                    userService.addPoint(message);
-                }
-                finally {
-                    sendCount.addSendCount();
-                }
-
-            }
-
-            if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){
-                LogUtil.logInfo(message.getUuid() + "  " + message.getConfirmId() + "  " + message.getContent());
-                sendCount.addSendCount();
-
-                LogUtil.logInfo("重要消息确认送达 队列消息id" + message.getConfirmId());
-                confirmMessage.confirmMessage(message.getConfirmId());
-            }
-
-        } catch (Exception e){
-            e.printStackTrace();
-            sendCount.addSendCount();
+        Message message = JsonUtil.toObject(msg.toString(CharsetUtil.UTF_8), Message.class);
+        if(message == null){
+            return;
         }
 
+        if(MessageTypeConstant.HEARTBEAT_MESSAGE_TYPE.equals(message.getType())){
+            LogUtil.logInfo("收到心跳消息，内容:" + message.getContent());
+        }
+
+        if(MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(message.getType())){
+            //普通消息
+            LogUtil.logInfo(message.getUuid() + "   " + message.getContent());
+
+            try {
+                userService.addPoint(message);
+            }
+            finally {
+                sendCount.addSendCount();
+            }
+
+        }
+
+        if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){
+            LogUtil.logInfo(message.getUuid() + "  " + message.getConfirmId() + "  " + message.getContent());
+            sendCount.addSendCount();
+
+            LogUtil.logInfo("重要消息确认送达 队列消息id" + message.getConfirmId());
+            confirmMessage.confirmMessage(message.getConfirmId());
+        }
 
 
     }

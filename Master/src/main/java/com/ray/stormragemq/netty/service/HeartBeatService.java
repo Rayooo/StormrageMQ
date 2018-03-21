@@ -26,7 +26,7 @@ public class HeartBeatService {
         this.gatewayService = gatewayService;
     }
 
-    @Scheduled(cron = "*/20 * * * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void sendHeartBeat(){
 
         Message message = new Message();
@@ -35,6 +35,12 @@ public class HeartBeatService {
 
         Map<String, Object> p = new HashMap<>();
         p.put("heartBeat", "heartBeat");
+        p.put("uuid", "XbnqKfGvAxuS51US405ZhYhIOtZJcUf4F8nadVInVoU=$J5d1fFuVJxnHhkV+EfO6GkQ7GTcEHLPopVPtHPa+Tn8=");
+        p.put("uuid2", "XbnqKfGvAxuS51US405ZhYhIOtZJcUf4F8nadVInVoU=$J5d1fFuVJxnHhkV+EfO6GkQ7GTcEHLPopVPtHPa+Tn8=");
+        p.put("uuid3", "XbnqKfGvAxuS51US405ZhYhIOtZJcUf4F8nadVInVoU=$J5d1fFuVJxnHhkV+EfO6GkQ7GTcEHLPopVPtHPa+Tn8=");
+        p.put("uuid4", "XbnqKfGvAxuS51US405ZhYhIOtZJcUf4F8nadVInVoU=$J5d1fFuVJxnHhkV+EfO6GkQ7GTcEHLPopVPtHPa+Tn8=");
+        p.put("uuid5", "XbnqKfGvAxuS51US405ZhYhIOtZJcUf4F8nadVInVoU=$J5d1fFuVJxnHhkV+EfO6GkQ7GTcEHLPopVPtHPa+Tn8=");
+        p.put("uuid6", "XbnqKfGvAxuS51US405ZhYhIOtZJcUf4F8nadVInVoU=$J5d1fFuVJxnHhkV+EfO6GkQ7GTcEHLPopVPtHPa+Tn8=");
         message.setContent(JsonUtil.toJson(p));
 
         String heartBeatMessage = JsonUtil.toJson(message);
