@@ -48,39 +48,43 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
     private UserService userService;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-        LogUtil.logInfo("Client received: " + msg.toString(CharsetUtil.UTF_8));
+    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
 
-        Message message = JsonUtil.toObject(msg.toString(CharsetUtil.UTF_8), Message.class);
-        if(message == null){
-            return;
-        }
-
-        if(MessageTypeConstant.HEARTBEAT_MESSAGE_TYPE.equals(message.getType())){
-            LogUtil.logInfo("收到心跳消息，内容:" + message.getContent());
-        }
-
-        if(MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(message.getType())){
-            //普通消息
-            LogUtil.logInfo(message.getUuid() + "   " + message.getContent());
-
-            try {
-                userService.addPoint(message);
+        try {
+            Message message = JsonUtil.toObject(msg.toString(CharsetUtil.UTF_8), Message.class);
+            if(message == null){
+                return;
             }
-            finally {
+
+            if(MessageTypeConstant.HEARTBEAT_MESSAGE_TYPE.equals(message.getType())){
+                LogUtil.logInfo("收到心跳消息");
+            }
+
+            if(MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(message.getType())){
+                //普通消息
+                LogUtil.logInfo("消费者接收消息 " + message.getUuid() + "   " + message.getContent());
+
+                try {
+                    userService.addPoint(message);
+                }
+                finally {
+                    sendCount.addSendCount();
+                }
+
+            }
+
+            if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){
+                LogUtil.logInfo("消费者接收消息 " + message.getUuid() + "  " + message.getConfirmId() + "  " + message.getContent());
                 sendCount.addSendCount();
+
+                LogUtil.logInfo("重要消息确认送达 队列消息id" + message.getConfirmId());
+                confirmMessage.confirmMessage(message.getConfirmId());
             }
 
-        }
-
-        if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){
-            LogUtil.logInfo(message.getUuid() + "  " + message.getConfirmId() + "  " + message.getContent());
+        } catch (Exception e){
+            e.printStackTrace();
             sendCount.addSendCount();
-
-            LogUtil.logInfo("重要消息确认送达 队列消息id" + message.getConfirmId());
-            confirmMessage.confirmMessage(message.getConfirmId());
         }
-
 
     }
 

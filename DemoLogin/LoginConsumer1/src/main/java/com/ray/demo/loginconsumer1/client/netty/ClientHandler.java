@@ -49,7 +49,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-        LogUtil.logInfo("Client received: " + msg.toString(CharsetUtil.UTF_8));
 
         try {
             Message message = JsonUtil.toObject(msg.toString(CharsetUtil.UTF_8), Message.class);
@@ -63,7 +62,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
 
             if(MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(message.getType())){
                 //普通消息
-                LogUtil.logInfo(message.getUuid() + "   " + message.getContent());
+                LogUtil.logInfo("消费者接收消息 " + message.getUuid() + "   " + message.getContent());
 
                 try {
                     userService.addPoint(message);
@@ -75,7 +74,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
             }
 
             if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){
-                LogUtil.logInfo(message.getUuid() + "  " + message.getConfirmId() + "  " + message.getContent());
+                LogUtil.logInfo("消费者接收消息 " + message.getUuid() + "  " + message.getConfirmId() + "  " + message.getContent());
                 sendCount.addSendCount();
 
                 LogUtil.logInfo("重要消息确认送达 队列消息id" + message.getConfirmId());
@@ -86,8 +85,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
             e.printStackTrace();
             sendCount.addSendCount();
         }
-
-
 
     }
 
