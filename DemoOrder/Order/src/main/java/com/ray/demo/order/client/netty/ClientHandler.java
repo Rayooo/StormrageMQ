@@ -1,10 +1,10 @@
-package com.ray.demo.login.client.netty;
+package com.ray.demo.order.client.netty;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ray.demo.login.client.common.Message;
-import com.ray.demo.login.client.common.MessageTypeConstant;
-import com.ray.demo.login.client.util.LogUtil;
-import com.ray.demo.login.util.JsonUtil;
+import com.ray.demo.order.client.common.Message;
+import com.ray.demo.order.client.common.MessageTypeConstant;
+import com.ray.demo.order.client.util.LogUtil;
+import com.ray.demo.order.util.JsonUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -36,6 +36,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+
         try {
             Message message = JsonUtil.toObject(msg.toString(CharsetUtil.UTF_8), Message.class);
             if(message == null){

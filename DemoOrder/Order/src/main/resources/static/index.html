@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MQ 示例</title>
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+</head>
+
+<style>
+    body {
+        margin:0;
+        padding:0;
+        background:url("image/Background3.jpg") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+</style>
+
+<body>
+
+<div class="card" style="width: 90%; margin-top: 3%;margin-left: 5%;opacity:0.96;background-color:rgb(242,242,238);margin-bottom: 3%" id="app">
+    <div class="card-header" style="text-align: center">
+        <h4>MQ 示例</h4>
+    </div>
+    <div class="card-block">
+        <div style="margin: 20px 20px 20px 20px; height: 38em;">
+
+            <div id="main" style="width: 80%;height: 26em;margin-left: 10%"></div>
+
+            <div class="alert alert-info col-sm-8 offset-2" role="alert">
+                生产者将发送一定量的订单给消息队列，但是消费者的处理能力不足，因此，消费者只能按照自己的处理速度依次
+                从消息队列中获取消息，一个个进行处理，这图中显示了订单，队列中的订单，和消费者已处理的订单，这里消息队列
+                起到了削峰和流控的作用。
+            </div>
+
+            <div style="text-align: center">
+                <button class="btn btn-primary" v-on:click="start()">开始演示</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="js/echarts.common.min.js"></script>
+<script src="js/jquery-3.3.1.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/moment.js"></script>
+<script src="js/util.js"></script>
+
+<script>
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            user:{},
+            myChart:{}
+        },
+        methods:{
+            drawChart(){
+                post("/order/getOrderInfo", {}, function (data) {
+                    if(data.code === 0){
+                        var chartData = [];
+                        chartData[0] = data.result.order;
+                        chartData[1] = data.result.sendOrder;
+                        chartData[2] = data.result.finishOne;
+                        chartData[3] = data.result.finishTwo;
+
+                        // 指定图表的配置项和数据
+                        var option = {
+                            title: {
+                                text: '订单数量'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data:['订单数量']
+                            },
+                            xAxis: {
+                                data: ["生产者中的订单","消息队列中的订单","消费者1处理的订单","消费者2处理的订单"]
+                            },
+                            yAxis: {
+                                minInterval: 1
+                            },
+                            series: [{
+                                name: '订单数量',
+                                type: 'bar',
+                                data: chartData
+                            }]
+                        };
+                        // 使用刚指定的配置项和数据显示图表。
+                        app.myChart.setOption(option);
+                    }
+
+                })
+            },
+            start(){
+                post("/order/initOrder");
+            }
+
+        },
+        mounted(){
+            // 基于准备好的dom，初始化echarts实例
+            this.myChart = echarts.init(document.getElementById('main'));
+            this.drawChart()
+            setInterval(this.drawChart, 1000);
+       }
+    })
+
+</script>
+
+</body>
+</html>
