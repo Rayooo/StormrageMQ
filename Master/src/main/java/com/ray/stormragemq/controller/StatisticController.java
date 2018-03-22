@@ -57,7 +57,7 @@ public class StatisticController {
 
     private Date tenDaysBefore() {
         final Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -10);
+        cal.add(Calendar.DATE, -9);
 
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);

@@ -3,6 +3,8 @@ package com.ray.stormragemq.netty;
 import com.ray.stormragemq.constant.ClientTypeEnum;
 import io.netty.channel.socket.SocketChannel;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 //封装了socketChannel
 public class ClientChannel {
 
@@ -12,7 +14,7 @@ public class ClientChannel {
 
     private int clientType;
 
-    private int sendCount = 0;      //消费者的可剩余发送次数
+    private volatile AtomicInteger sendCount = new AtomicInteger(0);      //消费者的可剩余发送次数
 
     public SocketChannel getSocketChannel() {
         return socketChannel;
@@ -38,21 +40,21 @@ public class ClientChannel {
         this.clientType = clientType;
     }
 
-    public int getSendCount() {
+    public AtomicInteger getSendCount() {
         return sendCount;
     }
 
-    public void setSendCount(int sendCount) {
+    public void setSendCount(AtomicInteger sendCount) {
         this.sendCount = sendCount;
     }
 
     public void addSendCount(int count){
-        sendCount += count;
+        sendCount.incrementAndGet();
     }
 
     public boolean canSend(){
-        if(sendCount > 0){
-            sendCount --;
+        if(sendCount.intValue() > 0){
+            sendCount.decrementAndGet();
             return true;
         }
         else {

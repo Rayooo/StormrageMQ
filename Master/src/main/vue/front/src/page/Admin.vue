@@ -70,7 +70,7 @@
         },
         mounted() {
             this.getMessageCount();
-            setInterval(this.getMessageCount, 3000);
+            setInterval(this.getMessageCount, 5000);
         },
         methods:{
             getMessageCount(){

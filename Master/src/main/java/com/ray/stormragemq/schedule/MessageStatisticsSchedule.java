@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -45,8 +46,8 @@ public class MessageStatisticsSchedule {
     /**
      * 每天00:00:01统计消息信息
      * */
-//    @Scheduled(cron = "1 1 1 * * ?")
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "1 1 1 * * ?")
+//    @Scheduled(cron = "0 */30 * * * *")
     public void statistics(){
         LogUtil.logInfo("统计消息的任务开始");
 
@@ -138,10 +139,11 @@ public class MessageStatisticsSchedule {
 
 
     /**
-     * 每5分钟计算一次今天的消息
+     * 每5秒计算一次今天的消息
      * */
-//    @Scheduled(cron = "*/3 * * * * *")
-    private void calculateTodayMessage(){
+    @Scheduled(cron = "*/5 * * * * *")
+    @Transactional
+    public void calculateTodayMessage(){
 
         final Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);

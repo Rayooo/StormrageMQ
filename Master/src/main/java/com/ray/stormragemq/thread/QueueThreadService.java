@@ -87,6 +87,11 @@ public class QueueThreadService {
                                     q.poll(5, TimeUnit.SECONDS);
                                     continue;
                                 }
+
+                                if(dbQM.isSending() && !dbQM.isReceived()){
+                                    //未送达重发
+                                    LogUtil.logInfo("消息未送达，重发消息：" + dbQM.getId());
+                                }
                             }
 
                         }
@@ -113,7 +118,7 @@ public class QueueThreadService {
                             if(clientChannel != null){
                                 queueMessage = q.poll(5, TimeUnit.SECONDS);
                                 clientChannel.getSocketChannel().writeAndFlush(Unpooled.copiedBuffer(messageString, CharsetUtil.UTF_8));
-                                LogUtil.logInfo("向" + clientChannel.getName() + "发送消息， 消息内容:" + JsonUtil.toJson(queueMessage));
+                                LogUtil.logInfo("向 " + clientChannel.getName() + " 发送消息， 消息内容: " + JsonUtil.toJson(queueMessage));
                                 //将 不重要 的消息直接把状态改为送达
                                 //并将redis中的消息删除
                                 if(queueMessage.getMessage() != null && MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(queueMessage.getMessage().getType())){
@@ -134,6 +139,13 @@ public class QueueThreadService {
                                     queueMessageDao.updateQueueMessage(queueMessage);
                                     //并且再将该消息放入末尾
                                     q.offer(queueMessage);
+                                }
+                            }else {
+                                //消费者为空，暂停1秒
+                                try {
+                                    TimeUnit.SECONDS.sleep(1);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
                             }
 

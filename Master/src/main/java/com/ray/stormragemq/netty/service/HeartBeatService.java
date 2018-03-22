@@ -26,7 +26,7 @@ public class HeartBeatService {
         this.gatewayService = gatewayService;
     }
 
-    @Scheduled(cron = "*/10 * * * * *")
+//    @Scheduled(cron = "*/10 * * * * *")
     public void sendHeartBeat(){
 
         Message message = new Message();

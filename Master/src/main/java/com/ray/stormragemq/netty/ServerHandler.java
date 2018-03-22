@@ -71,16 +71,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 
                 //普通消息
                 if(MessageTypeConstant.NORMAL_MESSAGE_TYPE.equals(message.getType())){
-                    LogUtil.logInfo("普通消息");
-                    LogUtil.logInfo("Server received: " + message.getContent());
+                    LogUtil.logInfo("消息队列收到普通消息: " + message.getContent());
                     //处理消息
                     messageHandlerService.handleMessage(message, false);
                 }
 
                 //重要消息
                 if(MessageTypeConstant.IMPORTANT_MESSAGE_TYPE.equals(message.getType())){
-                    LogUtil.logInfo("重要消息");
-                    LogUtil.logInfo("Server received: " + message.getContent());
+                    LogUtil.logInfo("消息队列收到重要消息: " + message.getContent());
                     //处理消息
                     messageHandlerService.handleMessage(message, true);
                 }
