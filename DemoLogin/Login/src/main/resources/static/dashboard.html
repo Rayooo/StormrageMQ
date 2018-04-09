@@ -87,6 +87,18 @@
                 window.location.href = "/";
             }
             this.user.formateLastLoginTime = moment(this.user.lastLoginTime).format("YYYY-MM-DD HH:mm:ss")
+
+            post("/user/getUser", {userName: this.user.userName}, function (data) {
+                console.log(data);
+                if(data.code === 0){
+                    app.user = data.result;
+                    app.user.formateLastLoginTime = moment(app.user.lastLoginTime).format("YYYY-MM-DD HH:mm:ss")
+
+                }
+            }, function (err) {
+                console.log(err);
+            })
+
         }
     })
 

@@ -24,4 +24,16 @@ public class UserController {
     }
 
 
+    @RequestMapping("/getUser")
+    public BaseResponse<DemoUser> getUser(DemoUser demoUser) throws BaseException {
+
+        DemoUser user = userService.getUserInfo(demoUser);
+        if(user == null){
+            throw new BaseException("用户不存在");
+        }
+
+        return new BaseResponse<>(user);
+
+    }
+
 }

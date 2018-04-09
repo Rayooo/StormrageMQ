@@ -48,4 +48,8 @@ public class UserService {
 
     }
 
+    public DemoUser getUserInfo(DemoUser user){
+        return demoUserDao.getUserByUserName(user);
+    }
+
 }
