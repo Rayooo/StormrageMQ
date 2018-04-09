@@ -173,7 +173,7 @@ public class MessageStatisticsSchedule {
         int unsendQueueMessageCount = messageStatisticsDao.countUnSendQueueMessage(param);
         List list = redisTemplate.opsForHash().values(ConstantVariable.MESSAGE_QUEUE_KEY);
         unsendQueueMessageCount += list.size();
-        LogUtil.logInfo("今天发送的队列消息" + sendQueueMessageCount + "   今天未发送的队列消息" + unsendQueueMessageCount);
+//        LogUtil.logInfo("今天发送的队列消息" + sendQueueMessageCount + "   今天未发送的队列消息" + unsendQueueMessageCount);
 
         param.put("name", MessageStatisticsSchedule.EVERY_DAY_QUEUE_MESSAGE_SEND);
         messageStatisticsDao.deleteStatistics(param);

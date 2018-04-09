@@ -168,6 +168,10 @@ public class MessageHandlerService {
         //检查是否为消费者
         if(ClientTypeEnum.CONSUMER.getType() == (message.getClientType())){
             handleConsumeInitMessage(message, ctx.channel().id().asLongText());
+            LogUtil.logInfo("消费者连接成功，消费者名称: " + message.getClientName());
+        }
+        else{
+            LogUtil.logInfo("生产者连接成功，生产者名称： " + message.getClientName());
         }
     }
 

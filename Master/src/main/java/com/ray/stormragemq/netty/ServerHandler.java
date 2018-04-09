@@ -3,6 +3,7 @@ package com.ray.stormragemq.netty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ray.stormragemq.common.Message;
 import com.ray.stormragemq.common.MessageTypeConstant;
+import com.ray.stormragemq.constant.ClientTypeEnum;
 import com.ray.stormragemq.netty.service.GatewayService;
 import com.ray.stormragemq.netty.service.MessageHandlerService;
 import com.ray.stormragemq.service.MessageService;
@@ -54,6 +55,17 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         String uuid = ctx.channel().id().asLongText();
+
+        ClientChannel clientChannel = gatewayService.getGatewayChannel(uuid);
+        if(clientChannel != null){
+            if(ClientTypeEnum.CONSUMER.getType() == clientChannel.getClientType()){
+                LogUtil.logInfo("消费者断开连接, 消费者名称: " + clientChannel.getName());
+            }
+            else{
+                LogUtil.logInfo("生产者断开连接, 生产者名称: " + clientChannel.getName());
+            }
+        }
+
         gatewayService.removeGatewayChannel(uuid);
         gatewayService.removeConsumerUuid(uuid);
         gatewayService.syncConsumerName();
