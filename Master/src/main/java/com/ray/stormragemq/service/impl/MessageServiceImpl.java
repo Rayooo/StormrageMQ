@@ -50,6 +50,9 @@ public class MessageServiceImpl implements MessageService {
         //如果超过最大页数
         if(pageIndex > pageBean.getTotalPages()){
             pageIndex = pageBean.getTotalPages();
+            if(pageIndex <= 0){
+                pageIndex = 1;
+            }
         }
 
         Map<String, Object> param = new HashMap<>();

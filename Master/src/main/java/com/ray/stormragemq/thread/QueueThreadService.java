@@ -66,6 +66,12 @@ public class QueueThreadService {
             List<String> consumerUuidList = queueEntity.getConsumerUuidList();
 
             while (true){
+                //检查modCount
+                if(modCount != ModCount.getModCount()){
+                    LogUtil.logInfo("ModCount被修改，线程结束，modCount = " + ModCount.getModCount());
+                    break;
+                }
+
                 QueueMessageEntity queueMessage = null;
 
                 //检查消费者是否存在
@@ -90,7 +96,23 @@ public class QueueThreadService {
 
                                 if(dbQM.isSending() && !dbQM.isReceived()){
                                     //未送达重发
-                                    LogUtil.logInfo("消息未送达，重发消息：" + dbQM.getId());
+                                    //等待3秒重新检查数据库
+                                    try {
+                                        TimeUnit.SECONDS.sleep(3);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    dbQM = queueMessageDao.getQueueMessage(param);
+                                    if(dbQM.isReceived()){
+                                        //已送达了
+                                        LogUtil.logInfo(queueMessage.getId() + "  已送达，不发送该消息");
+                                        q.poll(5, TimeUnit.SECONDS);
+                                        continue;
+                                    }
+                                    else{
+                                        LogUtil.logInfo("消息未送达，等待重发：" + dbQM.getId());
+                                    }
+
                                 }
                             }
 
@@ -169,12 +191,6 @@ public class QueueThreadService {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
-
-                //检查modCount
-                if(modCount != ModCount.getModCount()){
-                    LogUtil.logInfo("ModCount被修改，线程结束，modCount = " + ModCount.getModCount());
-                    break;
                 }
 
             }

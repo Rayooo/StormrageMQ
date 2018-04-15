@@ -6,6 +6,7 @@ import com.ray.stormragemq.netty.ClientChannel;
 import com.ray.stormragemq.netty.service.GatewayService;
 import com.ray.stormragemq.util.BaseException;
 import com.ray.stormragemq.util.BaseResponse;
+import com.ray.stormragemq.util.LogUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,7 +65,7 @@ public class ConsumerController {
         qm.setSending(true);
         qm.setReceived(true);
         queueMessageDao.updateQueueMessage(qm);
-
+        LogUtil.logInfo("ACK 消费者确认消费消息 " + id + " 成功");
         return new BaseResponse<>("确认" + id + "成功");
     }
 

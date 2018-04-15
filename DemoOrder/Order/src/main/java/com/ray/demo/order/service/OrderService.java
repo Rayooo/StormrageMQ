@@ -35,7 +35,7 @@ public class OrderService {
     @Autowired
     private ChannelHandlerService channelHandlerService;
 
-    private final static Integer ORDER_NUM = 100;
+    private final static Integer ORDER_NUM = 40;
 
     public void initOrder(){
 
