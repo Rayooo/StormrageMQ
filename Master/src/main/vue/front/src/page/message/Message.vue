@@ -8,9 +8,9 @@
 
         <el-table v-if="tableData.length > 0" :data="tableData" stripe style="width: 100%" v-on:row-click="rowClick">
 
-            <el-table-column prop="uuid" label="UUID" ></el-table-column>
+            <el-table-column min-width="10" prop="uuid" label="UUID" ></el-table-column>
 
-            <el-table-column prop="type" label="消息类型" >
+            <el-table-column min-width="10" prop="type" label="消息类型" >
                 <template scope="scope">
                     <span v-if="scope.row.type == '1'">普通消息</span>
                     <span v-if="scope.row.type == '2'">重要消息</span>
@@ -18,21 +18,21 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="content" label="内容" >
+            <el-table-column min-width="60" prop="content" label="内容" >
                 <template scope="scope">
                     <span v-if="scope.row.type == '1' || scope.row.type == '2'">{{scope.row.content}}</span>
                     <span v-if="scope.row.type == '0'">/</span>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="exchangerName" label="交换器名称" >
+            <el-table-column min-width="10" prop="exchangerName" label="交换器名称" >
                 <template scope="scope">
                     <span v-if="scope.row.type == '1' || scope.row.type == '2'">{{scope.row.exchangerName}}</span>
                     <span v-if="scope.row.type == '0'">/</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="创建时间">
+            <el-table-column min-width="20" label="创建时间">
                 <template scope="scope">
                     <el-icon name="time"></el-icon>
                     <span style="margin-left: 10px">{{scope.row.createTimeFormat}}</span>
@@ -88,7 +88,7 @@
                     </el-form-item>
 
                     <el-form-item  label="消息内容:" style="margin-bottom: 0">
-                        <span>{{messageDetail.content}}</span>
+                        <span>{{messageDetail.contentFormat}}</span>
                     </el-form-item>
 
                     <el-form-item  label="投递的交换器:" style="margin-bottom: 0">
@@ -188,12 +188,11 @@
             },
             rowClick(row, event, column){
                 this.messageDetail = row;
-                console.log(row)
                 Global.post("/message/getQueueMessageList", {uuid: row.uuid}, (res)=>{
                     if(res.body.code === 0){
                         console.log(res.body)
                         this.queueMessageList = res.body.result;
-                        console.log(this.queueMessageList)
+                        this.messageDetail.contentFormat = this.insertFlg(this.messageDetail.content, "\n", 80);
                         //展开row的详细信息
                         this.messageDetailVisible = true
                     }
@@ -202,6 +201,14 @@
 
 
 
+            },
+            insertFlg(str, flg, sn){
+                var newstr="";
+                for(var i = 0; i < str.length; i+=sn){
+                    var tmp = str.substring(i, i + sn);
+                    newstr += tmp + flg;
+                }
+                return newstr;
             }
 
         }
